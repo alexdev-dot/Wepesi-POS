@@ -61,9 +61,28 @@ const stats = [
   },
 ]
 
+export function BusinessStatsSkeleton() {
+  return (
+    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full font-sans">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div key={index} className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+          <div className="flex items-start justify-between mb-3 sm:mb-4">
+            <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+            <div className="h-6 w-16 rounded-full bg-muted/70 animate-pulse" />
+          </div>
+          <div className="h-4 bg-muted/70 rounded w-1/2 mb-2 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 mb-2 animate-pulse" />
+          <div className="h-7 bg-muted/70 rounded w-2/3 mb-2 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/4 animate-pulse" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function BusinessStats() {
   return (
-    <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 font-sans">
+    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full font-sans">
       {stats.map((stat, index) => (
         <motion.div
           key={stat.title}

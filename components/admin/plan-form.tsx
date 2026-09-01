@@ -107,25 +107,25 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-        <div>
-          <h2 className="text-lg font-semibold text-slate-800">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-800">
             {mode === "create" ? "Create New Plan" : "Edit Plan"}
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-xs sm:text-sm text-slate-500">
             {mode === "create" ? "Add a new subscription plan" : "Update plan details"}
           </p>
         </div>
         <button
           onClick={onCancel}
-          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+          className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all shrink-0"
         >
           <X className="h-5 w-5" />
         </button>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Plan Name */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -144,7 +144,7 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
         </div>
 
         {/* Price and Period */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Price <span className="text-red-500">*</span>
@@ -200,14 +200,14 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
 
         {/* Features */}
         <div>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 mb-2">
             <label className="block text-sm font-medium text-slate-700">
               Features <span className="text-red-500">*</span>
             </label>
             <button
               type="button"
               onClick={addFeature}
-              className="flex items-center gap-1 text-xs font-medium text-green-600 hover:text-green-700 transition-colors"
+              className="flex items-center gap-1 text-xs font-medium text-green-600 hover:text-green-700 transition-colors self-start sm:self-auto"
             >
               <Plus className="h-3 w-3" />
               Add Feature
@@ -222,13 +222,13 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
                   value={feature}
                   onChange={(e) => updateFeature(index, e.target.value)}
                   placeholder="e.g., Up to 25 users"
-                  className="flex-1 px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm"
+                  className="flex-1 min-w-0 px-3 sm:px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm"
                 />
                 {formData.features.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeFeature(index)}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all shrink-0"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -244,13 +244,13 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
           <label className="block text-sm font-medium text-slate-700 mb-2">
             Plan Color
           </label>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {colorOptions.map((option) => (
               <button
                 key={option.value}
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, color: option.value }))}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 transition-all ${
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border-2 transition-all flex-1 sm:flex-none ${
                   formData.color === option.value
                     ? "border-green-500 bg-green-50"
                     : "border-slate-200 hover:border-slate-300"
@@ -259,7 +259,7 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
                 <div className={`p-1.5 rounded ${option.bgColor} ${option.textColor}`}>
                   <option.icon className="h-4 w-4" />
                 </div>
-                <span className="text-sm font-medium text-slate-700">{option.label}</span>
+                <span className="text-xs sm:text-sm font-medium text-slate-700">{option.label}</span>
                 {formData.color === option.value && (
                   <CheckCircle className="h-4 w-4 text-green-600" />
                 )}
@@ -269,15 +269,15 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
         </div>
 
         {/* Popular Toggle */}
-        <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
-          <div>
+        <div className="flex items-center justify-between p-3 sm:p-4 bg-slate-50 rounded-lg border border-slate-200">
+          <div className="flex-1 min-w-0">
             <h3 className="text-sm font-medium text-slate-800">Mark as Popular</h3>
             <p className="text-xs text-slate-500">Highlight this plan as the most popular choice</p>
           </div>
           <button
             type="button"
             onClick={() => setFormData(prev => ({ ...prev, popular: !prev.popular }))}
-            className={`relative w-12 h-6 rounded-full transition-colors ${
+            className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${
               formData.popular ? "bg-green-500" : "bg-slate-300"
             }`}
           >
@@ -290,17 +290,17 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 pt-4 border-t border-slate-200">
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2.5 text-sm font-medium text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all"
+            className="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-green-500 to-emerald-600 text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-linear-to-r from-green-500 to-emerald-600 text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-green-500/30 transition-all"
           >
             <Save className="h-4 w-4" />
             {mode === "create" ? "Create Plan" : "Save Changes"}

@@ -288,6 +288,7 @@ export default function SalesHistoryPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [mobileDetailsOpen, setMobileDetailsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading, setLoading] = useState(true)
   const itemsPerPage = 10
 
   useEffect(() => {
@@ -295,6 +296,12 @@ export default function SalesHistoryPage() {
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    // Simulate initial loading
+    const timer = setTimeout(() => setLoading(false), 800)
+    return () => clearTimeout(timer)
   }, [])
 
   const toggleSidebar = () => {
@@ -351,118 +358,146 @@ export default function SalesHistoryPage() {
           >
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <motion.div
-                  whileHover={{ rotate: 5, scale: 1.1 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm"
-                >
-                  <Receipt className="h-5 w-5" strokeWidth={2} />
-                </motion.div>
-                <div>
-                  <motion.h1 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    className="text-lg sm:text-xl font-semibold text-slate-900"
-                  >
-                    Sales History
-                  </motion.h1>
-                  <motion.p 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.15 }}
-                    className="text-sm text-slate-500 mt-0.5"
-                  >
-                    View and manage all sales transactions
-                  </motion.p>
-                </div>
+                {loading ? (
+                  <>
+                    <div className="h-11 w-11 bg-muted/70 rounded-xl animate-pulse" />
+                    <div>
+                      <div className="h-6 w-32 bg-muted/70 rounded animate-pulse mb-1" />
+                      <div className="h-4 w-48 bg-muted/70 rounded animate-pulse" />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <motion.div
+                      whileHover={{ rotate: 5, scale: 1.1 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm"
+                    >
+                      <Receipt className="h-5 w-5" strokeWidth={2} />
+                    </motion.div>
+                    <div>
+                      <motion.h1
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                        className="text-lg sm:text-xl font-semibold text-slate-900"
+                      >
+                        Sales History
+                      </motion.h1>
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3, delay: 0.15 }}
+                        className="text-sm text-slate-500 mt-0.5"
+                      >
+                        View and manage all sales transactions
+                      </motion.p>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Filters Section */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.2 }}
-                className="flex flex-col sm:flex-row gap-3"
-              >
-                {/* Date Range */}
+              {loading ? (
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="h-10 w-48 bg-muted/70 rounded-lg animate-pulse" />
+                  <div className="flex flex-wrap gap-2">
+                    <div className="h-10 w-32 bg-muted/70 rounded-lg animate-pulse" />
+                    <div className="h-10 w-40 bg-muted/70 rounded-lg animate-pulse" />
+                    <div className="h-10 w-32 bg-muted/70 rounded-lg animate-pulse" />
+                  </div>
+                  <div className="flex flex-wrap gap-2 ml-auto">
+                    <div className="h-10 w-28 bg-muted/70 rounded-lg animate-pulse" />
+                    <div className="h-10 w-24 bg-muted/70 rounded-lg animate-pulse" />
+                    <div className="h-10 w-20 bg-muted/70 rounded-lg animate-pulse" />
+                  </div>
+                </div>
+              ) : (
                 <motion.div
-                  whileHover={{ scale: 1.01 }}
-                  className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white shadow-sm"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="flex flex-col sm:flex-row gap-3"
                 >
-                  <Calendar className="h-4 w-4 text-slate-500" />
-                  <span className="text-sm text-slate-700">{dateRange}</span>
+                  {/* Date Range */}
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white shadow-sm"
+                  >
+                    <Calendar className="h-4 w-4 text-slate-500" />
+                    <span className="text-sm text-slate-700">{dateRange}</span>
+                  </motion.div>
+
+                  {/* Filter Dropdowns Row */}
+                  <div className="flex flex-wrap gap-2">
+                    {/* Cashier Dropdown */}
+                    <motion.select
+                      whileHover={{ scale: 1.01 }}
+                      value={cashier}
+                      onChange={(e) => setCashier(e.target.value)}
+                      className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
+                    >
+                      <option>All Cashiers</option>
+                      <option>Alex Kariuki</option>
+                      <option>John Doe</option>
+                    </motion.select>
+
+                    {/* Payment Method Dropdown */}
+                    <motion.select
+                      whileHover={{ scale: 1.01 }}
+                      value={paymentMethod}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
+                    >
+                      <option>All Payment Methods</option>
+                      <option>Cash</option>
+                      <option>M-Pesa</option>
+                      <option>Card</option>
+                    </motion.select>
+
+                    {/* Status Dropdown */}
+                    <motion.select
+                      whileHover={{ scale: 1.01 }}
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                      className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
+                    >
+                      <option>All Status</option>
+                      <option>Completed</option>
+                      <option>Refunded</option>
+                      <option>Voided</option>
+                    </motion.select>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-wrap gap-2 ml-auto">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
+                    >
+                      <Filter className="h-4 w-4" />
+                      <span className="hidden sm:inline">More Filters</span>
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
+                    >
+                      <Download className="h-4 w-4" />
+                      <span className="hidden sm:inline">Export</span>
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
+                    >
+                      <Printer className="h-4 w-4" />
+                      <span className="hidden sm:inline">Print</span>
+                    </motion.button>
+                  </div>
                 </motion.div>
-
-                {/* Filter Dropdowns Row */}
-                <div className="flex flex-wrap gap-2">
-                  {/* Cashier Dropdown */}
-                  <motion.select
-                    whileHover={{ scale: 1.01 }}
-                    value={cashier}
-                    onChange={(e) => setCashier(e.target.value)}
-                    className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
-                  >
-                    <option>All Cashiers</option>
-                    <option>Alex Kariuki</option>
-                    <option>John Doe</option>
-                  </motion.select>
-
-                  {/* Payment Method Dropdown */}
-                  <motion.select
-                    whileHover={{ scale: 1.01 }}
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
-                  >
-                    <option>All Payment Methods</option>
-                    <option>Cash</option>
-                    <option>M-Pesa</option>
-                    <option>Card</option>
-                  </motion.select>
-
-                  {/* Status Dropdown */}
-                  <motion.select
-                    whileHover={{ scale: 1.01 }}
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
-                  >
-                    <option>All Status</option>
-                    <option>Completed</option>
-                    <option>Refunded</option>
-                    <option>Voided</option>
-                  </motion.select>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-2 ml-auto">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    <Filter className="h-4 w-4" />
-                    <span className="hidden sm:inline">More Filters</span>
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    <Download className="h-4 w-4" />
-                    <span className="hidden sm:inline">Export</span>
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
-                  >
-                    <Printer className="h-4 w-4" />
-                    <span className="hidden sm:inline">Print</span>
-                  </motion.button>
-                </div>
-              </motion.div>
+              )}
             </div>
           </motion.div>
 
@@ -477,6 +512,7 @@ export default function SalesHistoryPage() {
               currentPage={currentPage}
               onPageChange={setCurrentPage}
               totalPages={totalPages}
+              loading={loading}
             />
           </div>
         </main>

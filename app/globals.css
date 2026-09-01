@@ -94,36 +94,36 @@
 .dark {
   color-scheme: dark;
   /* Deep charcoal backgrounds for dark mode */
-  --background: oklch(0.15 0.01 265);
-  --foreground: oklch(0.95 0.005 265);
-  --card: oklch(0.18 0.012 265);
-  --card-foreground: oklch(0.95 0.005 265);
-  --popover: oklch(0.18 0.012 265);
-  --popover-foreground: oklch(0.95 0.005 265);
-  --primary: oklch(0.55 0.15 250);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.22 0.015 265);
-  --secondary-foreground: oklch(0.95 0.005 265);
-  --muted: oklch(0.22 0.015 265);
-  --muted-foreground: oklch(0.6 0.02 265);
-  --accent: oklch(0.25 0.02 265);
-  --accent-foreground: oklch(0.95 0.005 265);
-  --destructive: oklch(0.6 0.2 25);
-  --border: oklch(0.28 0.02 265);
-  --input: oklch(0.28 0.02 265);
-  --ring: oklch(0.55 0.15 250);
-  --success: oklch(0.6 0.18 155);
-  --success-foreground: oklch(0.98 0 0);
-  --navy: oklch(0.12 0.02 265);
-  --navy-foreground: oklch(0.98 0 0);
-  --sidebar: oklch(0.18 0.012 265);
-  --sidebar-foreground: oklch(0.95 0.005 265);
-  --sidebar-primary: oklch(0.55 0.15 250);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.22 0.015 265);
-  --sidebar-accent-foreground: oklch(0.95 0.005 265);
-  --sidebar-border: oklch(0.28 0.02 265);
-  --sidebar-ring: oklch(0.55 0.15 250);
+  --background: #1e293b;
+  --foreground: #f8fafc;
+  --card: #334155;
+  --card-foreground: #f8fafc;
+  --popover: #334155;
+  --popover-foreground: #f8fafc;
+  --primary: #30B54A;
+  --primary-foreground: #ffffff;
+  --secondary: #475569;
+  --secondary-foreground: #f8fafc;
+  --muted: #475569;
+  --muted-foreground: #94a3b8;
+  --accent: #64748b;
+  --accent-foreground: #f8fafc;
+  --destructive: #ef4444;
+  --border: #475569;
+  --input: #475569;
+  --ring: #30B54A;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --navy: #0f172a;
+  --navy-foreground: #ffffff;
+  --sidebar: #334155;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #30B54A;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #475569;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #475569;
+  --sidebar-ring: #30B54A;
 }
 
 @layer base {
@@ -198,7 +198,7 @@ body {
 
 /* Focus visible styles for better keyboard navigation */
 *:focus-visible {
-  outline: 2px solid oklch(0.55 0.22 264);
+  outline: 2px solid #30B54A;
   outline-offset: 2px;
 }
 
@@ -207,44 +207,44 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid oklch(0.55 0.22 264);
+  outline: 2px solid #30B54A;
   outline-offset: 2px;
 }
 
 /* Dark Mode Styles */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: oklch(0.15 0.015 247);
-    --color-foreground: oklch(0.98 0.002 247);
+    --color-background: #1e293b;
+    --color-foreground: #f8fafc;
     
-    --color-card: oklch(0.18 0.015 247);
-    --color-card-foreground: oklch(0.98 0.002 247);
+    --color-card: #334155;
+    --color-card-foreground: #f8fafc;
     
-    --color-popover: oklch(0.18 0.015 247);
-    --color-popover-foreground: oklch(0.98 0.002 247);
+    --color-popover: #334155;
+    --color-popover-foreground: #f8fafc;
     
-    --color-primary: oklch(0.65 0.22 264);
-    --color-primary-foreground: oklch(0.15 0.015 247);
+    --color-primary: #30B54A;
+    --color-primary-foreground: #1e293b;
     
-    --color-secondary: oklch(0.25 0.015 247);
-    --color-secondary-foreground: oklch(0.98 0.002 247);
+    --color-secondary: #475569;
+    --color-secondary-foreground: #f8fafc;
     
-    --color-muted: oklch(0.25 0.015 247);
-    --color-muted-foreground: oklch(0.65 0.02 247);
+    --color-muted: #475569;
+    --color-muted-foreground: #94a3b8;
     
-    --color-accent: oklch(0.25 0.015 247);
-    --color-accent-foreground: oklch(0.98 0.002 247);
+    --color-accent: #475569;
+    --color-accent-foreground: #f8fafc;
     
-    --color-destructive: oklch(0.7 0.2 25);
-    --color-destructive-foreground: oklch(0.98 0.002 247);
+    --color-destructive: #ef4444;
+    --color-destructive-foreground: #f8fafc;
     
-    --color-border: oklch(0.25 0.015 247);
-    --color-input: oklch(0.25 0.015 247);
-    --color-ring: oklch(0.65 0.22 264);
+    --color-border: #475569;
+    --color-input: #475569;
+    --color-ring: #30B54A;
   }
   
   *:focus-visible {
-    outline: 2px solid oklch(0.65 0.22 264);
+    outline: 2px solid #30B54A;
     outline-offset: 2px;
   }
   
@@ -253,7 +253,7 @@ textarea:focus-visible {
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid oklch(0.65 0.22 264);
+    outline: 2px solid #30B54A;
     outline-offset: 2px;
   }
 }
@@ -285,10 +285,97 @@ textarea:focus-visible {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: oklch(0.7 0.02 247);
+  background: #64748b;
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.6 0.02 247);
+  background: #475569;
+}
+
+/* Mobile & Tablet Font Size Improvements */
+@media (max-width: 768px) {
+  /* Base font size increase for mobile */
+  html {
+    font-size: 16px;
+  }
+  
+  /* Increase text-sm to be more readable on mobile */
+  .text-sm {
+    font-size: 0.95rem !important;
+    line-height: 1.5;
+  }
+  
+  /* Increase text-xs for better readability */
+  .text-xs {
+    font-size: 0.85rem !important;
+    line-height: 1.4;
+  }
+  
+  /* Increase text-base for headings and important text */
+  .text-base {
+    font-size: 1.1rem !important;
+    line-height: 1.5;
+  }
+  
+  /* Increase text-lg for section headings */
+  .text-lg {
+    font-size: 1.25rem !important;
+    line-height: 1.5;
+  }
+  
+  /* Increase button font sizes */
+  button, .btn {
+    font-size: 1rem !important;
+    min-height: 44px !important; /* Better touch targets */
+  }
+  
+  /* Increase input font sizes */
+  input, select, textarea {
+    font-size: 1rem !important;
+    min-height: 44px !important;
+  }
+  
+  /* Improve spacing for mobile */
+  .p-4 {
+    padding: 1rem !important;
+  }
+  
+  .p-6 {
+    padding: 1.25rem !important;
+  }
+  
+  /* Increase icon sizes for better visibility */
+  .h-4.w-4, .w-4.h-4 {
+    height: 1.125rem !important;
+    width: 1.125rem !important;
+  }
+  
+  .h-5.w-5, .w-5.h-5 {
+    height: 1.25rem !important;
+    width: 1.25rem !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Tablet improvements */
+  html {
+    font-size: 15px;
+  }
+  
+  .text-sm {
+    font-size: 0.9rem !important;
+  }
+  
+  .text-xs {
+    font-size: 0.8rem !important;
+  }
+  
+  button, .btn {
+    min-height: 42px !important;
+  }
+  
+  input, select, textarea {
+    min-height: 42px !important;
+  }
 }

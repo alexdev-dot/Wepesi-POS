@@ -234,33 +234,33 @@ export default function SupportPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-lg bg-primary/10 text-primary">
-            <Ticket className="h-6 w-6" />
+          <div className="p-3 sm:p-4 rounded-lg bg-primary/10 text-primary">
+            <Ticket className="h-6 w-6 sm:h-7 sm:w-7" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Support Tickets</h1>
-            <p className="text-slate-600">Manage and respond to support requests</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Support Tickets</h1>
+            <p className="text-sm sm:text-base text-slate-600">Manage and respond to support requests</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all font-medium">
-          <MessageCircle className="h-4 w-4" />
+        <button className="flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all font-medium text-sm sm:text-base">
+          <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
           New Ticket
         </button>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 mb-1">{stat.title}</p>
-                <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
+                <p className="text-xs sm:text-sm font-medium text-slate-500 mb-1">{stat.title}</p>
+                <p className="text-lg sm:text-2xl font-bold text-slate-800">{stat.value}</p>
                 <div className="flex items-center gap-1 mt-2">
                   {stat.trend === 'up' ? (
                     <ArrowUpRight className="h-4 w-4 text-green-600" />
@@ -288,7 +288,7 @@ export default function SupportPage() {
       {/* Tickets Table */}
       <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
         {/* Filters and Search */}
-        <div className="p-6 border-b border-slate-200">
+        <div className="p-4 sm:p-6 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
@@ -298,7 +298,7 @@ export default function SupportPage() {
                 placeholder="Search tickets by ID, subject, or tenant..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base"
               />
             </div>
 
@@ -308,7 +308,7 @@ export default function SupportPage() {
               <select
                 value={statusFilter}
                 onChange={handleStatusFilterChange}
-                className="px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-white"
+                className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-white"
               >
                 <option value="all">All Status</option>
                 <option value="open">Open</option>
@@ -322,7 +322,7 @@ export default function SupportPage() {
             <select
               value={priorityFilter}
               onChange={handlePriorityFilterChange}
-              className="px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-white"
+              className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-white"
             >
               <option value="all">All Priority</option>
               <option value="high">High</option>
@@ -331,54 +331,54 @@ export default function SupportPage() {
             </select>
 
             {/* Export Button */}
-            <button className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all text-sm font-medium text-slate-700">
+            <button className="flex items-center gap-2 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all text-sm sm:text-base font-medium text-slate-700">
               <Download className="h-4 w-4" />
               Export
             </button>
           </div>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Ticket ID</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Subject</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Tenant</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Priority</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Assigned To</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Last Update</th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Ticket ID</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Subject</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Tenant</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Priority</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Category</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Assigned To</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Last Update</th>
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
               {filteredTickets.map((ticket) => (
                 <tr key={ticket.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm font-medium text-slate-800">{ticket.id}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <p className="text-sm font-medium text-slate-800 max-w-xs truncate">{ticket.subject}</p>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div>
                       <p className="text-sm font-medium text-slate-800">{ticket.tenant}</p>
                       <p className="text-xs text-slate-500">{ticket.email}</p>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     {getPriorityBadge(ticket.priority)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     {getStatusBadge(ticket.status)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm text-slate-600">{ticket.category}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center gap-2">
                       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-600 text-xs font-medium">
                         {ticket.assignedTo === "Unassigned" ? "?" : ticket.assignedTo.split(" ").map(n => n[0]).join("")}
@@ -386,10 +386,10 @@ export default function SupportPage() {
                       <span className="text-sm text-slate-600">{ticket.assignedTo}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm text-slate-600">{ticket.lastUpdate}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center justify-end gap-1">
                       <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View">
                         <Eye className="h-4 w-4" />
@@ -413,22 +413,61 @@ export default function SupportPage() {
           </table>
         </div>
 
+        {/* Mobile Card View */}
+        <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+          {filteredTickets.map((ticket) => (
+            <div key={ticket.id} className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-600 font-semibold text-sm shrink-0">
+                  {ticket.id.slice(-2)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-slate-900">{ticket.id}</span>
+                    {getPriorityBadge(ticket.priority)}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1 truncate">{ticket.subject}</p>
+                </div>
+                {getStatusBadge(ticket.status)}
+              </div>
+              
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <p className="text-xs text-slate-500">Tenant</p>
+                    <p className="text-sm font-semibold text-slate-900 truncate max-w-25">{ticket.tenant}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">Assigned</p>
+                    <p className="text-sm font-semibold text-slate-900 truncate max-w-20">{ticket.assignedTo}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                    <MoreVertical className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Pagination */}
-        <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-          <p className="text-sm text-slate-600">
+        <div className="px-4 sm:px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm sm:text-base text-slate-600">
             Showing <span className="font-medium text-slate-800">1</span> to <span className="font-medium text-slate-800">{filteredTickets.length}</span> of <span className="font-medium text-slate-800">{tickets.length}</span> tickets
           </p>
           <div className="flex items-center gap-2">
-            <button className="px-3 py-1.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
               Previous
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-all">
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-all">
               1
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
               2
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
               Next
             </button>
           </div>

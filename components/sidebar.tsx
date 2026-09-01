@@ -60,6 +60,7 @@ const navItems = [
 export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = false, onMobileClose = () => {}, hideByDefault = false }: { collapsed?: boolean; currentPath?: string; mobileOpen?: boolean; onMobileClose?: () => void; hideByDefault?: boolean }) {
   const router = useRouter()
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [collapsedDropdown, setCollapsedDropdown] = useState<{ label: string; x: number; y: number } | null>(null)
 
   // Auto-open dropdown based on current path
   useEffect(() => {
@@ -80,6 +81,32 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
     setOpenDropdown(openDropdown === label ? null : label)
   }
 
+  const handleCollapsedClick = (label: string, event: React.MouseEvent) => {
+    if (collapsed) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      setCollapsedDropdown({
+        label,
+        x: rect.right + 8,
+        y: rect.top
+      })
+    }
+  }
+
+  const closeCollapsedDropdown = () => {
+    setCollapsedDropdown(null)
+  }
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (collapsedDropdown && !(event.target as Element).closest('.sidebar-dropdown')) {
+        closeCollapsedDropdown()
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [collapsedDropdown])
+
   return (
     <>
       {/* Mobile Overlay */}
@@ -94,31 +121,36 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
       <aside className={cn(
         "z-50 flex h-screen flex-col bg-slate-100 text-slate-800 transition-all duration-300 ease-in-out font-sans shadow-xl border-r border-slate-200",
         hideByDefault ? (mobileOpen ? "lg:relative" : "fixed") : "lg:relative",
-        collapsed ? "w-20" : "w-52",
-        hideByDefault ? (mobileOpen ? "translate-x-0" : "-translate-x-full") : (mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"),
-        !hideByDefault && "lg:translate-x-0"
+        collapsed ? "lg:w-20 w-72 sm:w-80" : "lg:w-52 w-72 sm:w-80",
+        !mobileOpen && "hidden lg:flex",
+        mobileOpen && "fixed lg:flex",
+        "-translate-x-full lg:translate-x-0",
+        mobileOpen && "translate-x-0"
       )}>
         {/* Logo */}
         <div className={cn(
           "flex items-center border-b border-slate-200 bg-white/50 backdrop-blur-sm",
-          collapsed ? "justify-center py-5" : "gap-3 px-6 py-5"
+          collapsed ? "lg:justify-center justify-between px-4 sm:px-6 py-5" : "gap-3 px-6 py-5"
         )}>
           <div className="relative flex items-center justify-center">
             <div className="absolute inset-0 bg-green-500/20 blur-xl rounded-full"></div>
-            <ShoppingBag className="h-8 w-8 shrink-0 text-green-600 relative z-10" strokeWidth={2} />
+            <ShoppingBag className="h-8 w-8 sm:h-9 sm:w-9 shrink-0 text-green-600 relative z-10" strokeWidth={2} />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-base font-bold tracking-wide text-slate-900">POS System</span>
-              <span className="text-xs text-slate-500 font-medium">v2.0</span>
+              <span className="text-base sm:text-lg font-bold tracking-wide text-slate-900">POS System</span>
+              <span className="text-xs sm:text-sm text-slate-500 font-medium">v2.0</span>
             </div>
           )}
           {/* Mobile Close Button */}
           <button
             onClick={onMobileClose}
-            className="lg:hidden ml-auto p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-all"
+            className={cn(
+              "p-2 sm:p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-all",
+              collapsed ? "lg:hidden" : "lg:hidden ml-auto"
+            )}
           >
-            <X className="h-5 w-5" strokeWidth={2} />
+            <X className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
           </button>
         </div>
 
@@ -136,9 +168,15 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                   {hasChildren ? (
                     <>
                       <button
-                        onClick={() => toggleDropdown(item.label)}
+                        onClick={(e) => {
+                          if (collapsed) {
+                            handleCollapsedClick(item.label, e)
+                          } else {
+                            toggleDropdown(item.label)
+                          }
+                        }}
                         className={cn(
-                          "flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 w-full group",
+                          "flex items-center rounded-lg px-3 py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-all duration-200 w-full group",
                           (isActive || isChildActive)
                             ? "bg-green-100 text-green-700 shadow-sm"
                             : "text-slate-600 hover:bg-slate-200 hover:text-slate-800",
@@ -147,14 +185,14 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                         title={collapsed ? item.label : undefined}
                       >
                         <item.icon className={cn(
-                          "h-5 w-5 shrink-0",
+                          "h-5 w-5 sm:h-6 sm:w-6 shrink-0",
                           (isActive || isChildActive) ? "text-green-600" : "text-slate-400 group-hover:text-slate-600 transition-colors"
                         )} strokeWidth={2} />
                         {!collapsed && (
                           <>
                             <span className="flex-1 text-left">{item.label}</span>
                             <ChevronDown className={cn(
-                              "h-4 w-4 shrink-0 transition-transform text-slate-400 group-hover:text-slate-600",
+                              "h-4 w-4 sm:h-5 sm:w-5 shrink-0 transition-transform text-slate-400 group-hover:text-slate-600",
                               isDropdownOpen ? "rotate-180" : ""
                             )} strokeWidth={2} />
                           </>
@@ -170,7 +208,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                                   href={child.href}
                                   onClick={onMobileClose}
                                   className={cn(
-                                    "flex items-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 group",
+                                    "flex items-center rounded-md px-3 py-2 sm:py-2.5 text-sm sm:text-base font-medium transition-all duration-200 group",
                                     childIsActive
                                       ? "bg-green-50 text-green-600"
                                       : "text-slate-500 hover:bg-slate-200 hover:text-slate-700",
@@ -178,7 +216,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                                   )}
                                 >
                                   <child.icon className={cn(
-                                    "h-3.5 w-3.5 shrink-0",
+                                    "h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0",
                                     childIsActive ? "text-green-500" : "text-slate-400 group-hover:text-slate-500 transition-colors"
                                   )} strokeWidth={2} />
                                   <span>{child.label}</span>
@@ -188,13 +226,52 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                           })}
                         </ul>
                       )}
+                      {/* Collapsed Dropdown Popup */}
+                      {collapsed && collapsedDropdown?.label === item.label && (
+                        <div 
+                          className="sidebar-dropdown fixed left-20 top-0 z-50 w-64 bg-white rounded-xl shadow-2xl border border-slate-200 py-2"
+                          style={{ top: collapsedDropdown.y }}
+                        >
+                          <div className="px-4 py-2 border-b border-slate-100 bg-slate-50">
+                            <span className="text-sm font-semibold text-slate-900">{item.label}</span>
+                          </div>
+                          <ul className="py-1">
+                            {item.children?.map((child) => {
+                              const childIsActive = currentPath === child.href
+                              return (
+                                <li key={child.label}>
+                                  <a
+                                    href={child.href}
+                                    onClick={() => {
+                                      closeCollapsedDropdown()
+                                      onMobileClose()
+                                    }}
+                                    className={cn(
+                                      "flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors",
+                                      childIsActive
+                                        ? "bg-green-50 text-green-600"
+                                        : "text-slate-700 hover:bg-slate-100"
+                                    )}
+                                  >
+                                    <child.icon className={cn(
+                                      "h-4 w-4 shrink-0",
+                                      childIsActive ? "text-green-500" : "text-slate-400"
+                                    )} strokeWidth={2} />
+                                    <span>{child.label}</span>
+                                  </a>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        </div>
+                      )}
                     </>
                   ) : (
                     <a
                       href={item.href}
                       onClick={onMobileClose}
                       className={cn(
-                        "flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 w-full group",
+                        "flex items-center rounded-lg px-3 py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-all duration-200 w-full group",
                         isActive
                           ? "bg-green-100 text-green-700 shadow-sm"
                           : "text-slate-600 hover:bg-slate-200 hover:text-slate-800",
@@ -203,7 +280,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                       title={collapsed ? item.label : undefined}
                     >
                       <item.icon className={cn(
-                        "h-5 w-5 shrink-0",
+                        "h-5 w-5 sm:h-6 sm:w-6 shrink-0",
                         isActive ? "text-green-600" : "text-slate-400 group-hover:text-slate-600 transition-colors"
                       )} strokeWidth={2} />
                       {!collapsed && <span className="flex-1 text-left">{item.label}</span>}

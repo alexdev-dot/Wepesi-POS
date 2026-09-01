@@ -55,11 +55,11 @@ export default function ReportsPage() {
   ]
 
   const topProducts = [
-    { name: "Coca Cola 500ml", sales: 456, revenue: "KSh 54,720", growth: "+15%" },
-    { name: "Bread Loaf", sales: 389, revenue: "KSh 31,120", growth: "+8%" },
-    { name: "Milk 1L", sales: 312, revenue: "KSh 37,440", growth: "+12%" },
-    { name: "Lays Chips", sales: 245, revenue: "KSh 24,500", growth: "-3%" },
-    { name: "Colgate Toothpaste", sales: 198, revenue: "KSh 29,700", growth: "+5%" },
+    { name: "Coca Cola 500ml", sales: 456, revenue: "KSh 54,720", growth: "+15%", image: "/products/Coca cola 500ml.jpg" },
+    { name: "Bread Loaf", sales: 389, revenue: "KSh 31,120", growth: "+8%", image: "/products/bread loaf.avif" },
+    { name: "Milk 1L", sales: 312, revenue: "KSh 37,440", growth: "+12%", image: "/products/Milk 1l.avif" },
+    { name: "Lays Chips", sales: 245, revenue: "KSh 24,500", growth: "-3%", image: "/products/Lays crips.jpg" },
+    { name: "Colgate Toothpaste", sales: 198, revenue: "KSh 29,700", growth: "+5%", image: "/products/colgate toothpaste.avif" },
   ]
 
   const renderReportContent = () => {
@@ -112,7 +112,9 @@ export default function ReportsPage() {
             {/* Top Products */}
             <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
               <h3 className="text-base font-semibold text-slate-900 mb-4">Top Selling Products</h3>
-              <div className="overflow-x-auto">
+              
+              {/* Desktop Table */}
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-200">
@@ -125,7 +127,18 @@ export default function ReportsPage() {
                   <tbody className="divide-y divide-slate-100">
                     {topProducts.map((product, index) => (
                       <tr key={index} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-4 py-3 text-sm font-medium text-slate-900">{product.name}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-lg overflow-hidden bg-slate-100 shrink-0">
+                              <img
+                                src={product.image}
+                                alt={product.name}
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                            <span className="text-sm font-medium text-slate-900">{product.name}</span>
+                          </div>
+                        </td>
                         <td className="px-4 py-3 text-sm text-slate-700">{product.sales}</td>
                         <td className="px-4 py-3 text-sm font-semibold text-slate-900">{product.revenue}</td>
                         <td className="px-4 py-3">
@@ -137,6 +150,31 @@ export default function ReportsPage() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-3">
+                {topProducts.map((product, index) => (
+                  <div key={index} className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 bg-slate-50">
+                    <div className="h-12 w-12 rounded-lg overflow-hidden bg-slate-100 shrink-0">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-slate-900 truncate">{product.name}</p>
+                      <div className="flex items-center gap-3 mt-1">
+                        <span className="text-xs text-slate-500">{product.sales} sales</span>
+                        <span className="text-xs font-semibold text-slate-900">{product.revenue}</span>
+                      </div>
+                    </div>
+                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${product.growth.startsWith('+') ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                      {product.growth}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

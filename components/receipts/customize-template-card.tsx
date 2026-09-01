@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Eye, Copy, Check, X, Upload, Building2, FileText, Settings, Layout, Palette, Image as ImageIcon } from "lucide-react"
+import { getReceiptSettings, saveReceiptSettings, ReceiptSettings } from "@/lib/receipt-settings"
 
 interface CustomizeTemplateCardProps {
   onPreviewClick: (backReceiptData: {
@@ -15,18 +16,47 @@ interface CustomizeTemplateCardProps {
 }
 
 export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardProps) {
-  const [showContactInfo, setShowContactInfo] = useState(true)
-  const [showBarcode, setShowBarcode] = useState(true)
+  const [settings, setSettings] = useState<ReceiptSettings | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-  const [fontSize, setFontSize] = useState("Medium")
-  const [backReceiptTitle, setBackReceiptTitle] = useState("Return Policy")
-  const [backReceiptText, setBackReceiptText] = useState("Returns accepted within 7 days with original receipt")
-  const [backContactEmail, setBackContactEmail] = useState("support@mybusiness.com")
-  const [backContactWebsite, setBackContactWebsite] = useState("www.mybusiness.com")
+  const [isDraggingLogo, setIsDraggingLogo] = useState(false)
+  const [isDraggingBackImage, setIsDraggingBackImage] = useState(false)
+
+  useEffect(() => {
+    setSettings(getReceiptSettings())
+  }, [])
 
   const handleSaveChanges = () => {
-    setShowSuccessMessage(true)
-    setTimeout(() => setShowSuccessMessage(false), 3000)
+    if (settings) {
+      saveReceiptSettings(settings)
+      setShowSuccessMessage(true)
+      setTimeout(() => setShowSuccessMessage(false), 3000)
+    }
+  }
+
+  const handleImageUpload = (file: File, type: 'logo' | 'backImage') => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      if (type === 'logo') {
+        settings && setSettings({ ...settings, logo: reader.result as string })
+      } else {
+        settings && setSettings({ ...settings, backImage: reader.result as string })
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleDrop = (e: React.DragEvent, type: 'logo' | 'backImage') => {
+    e.preventDefault()
+    if (type === 'logo') {
+      setIsDraggingLogo(false)
+    } else {
+      setIsDraggingBackImage(false)
+    }
+    
+    const file = e.dataTransfer.files?.[0]
+    if (file && file.type.startsWith('image/')) {
+      handleImageUpload(file, type)
+    }
   }
 
   return (
@@ -48,11 +78,11 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
               variant="outline"
               size="sm"
               className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all"
-              onClick={() => onPreviewClick({
-                title: backReceiptTitle,
-                text: backReceiptText,
-                email: backContactEmail,
-                website: backContactWebsite
+              onClick={() => settings && onPreviewClick({
+                title: settings.backReceiptTitle,
+                text: settings.backReceiptText,
+                email: settings.backContactEmail,
+                website: settings.backContactWebsite
               })}
             >
               <Eye className="h-4 w-4 mr-2" />
@@ -77,10 +107,39 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
             {/* Logo Upload */}
             <div className="col-span-full sm:col-span-1">
               <label className="block text-sm font-medium text-slate-700 mb-2">Logo</label>
-              <div className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-300 hover:bg-blue-50/50 transition-all cursor-pointer group">
-                <Upload className="h-10 w-10 text-slate-400 mx-auto mb-3 group-hover:text-blue-500 transition-colors" />
-                <p className="text-sm font-medium text-slate-600">Click to upload logo</p>
+              <div 
+                className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer group ${
+                  isDraggingLogo 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
+                }`}
+                onClick={() => document.getElementById('logo-upload')?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setIsDraggingLogo(true)
+                }}
+                onDragLeave={() => setIsDraggingLogo(false)}
+                onDrop={(e) => handleDrop(e, 'logo')}
+              >
+                {settings?.logo ? (
+                  <img src={settings.logo} alt="Logo" className="h-16 w-auto mx-auto mb-2" />
+                ) : (
+                  <Upload className="h-10 w-10 text-slate-400 mx-auto mb-3 group-hover:text-blue-500 transition-colors" />
+                )}
+                <p className="text-sm font-medium text-slate-600">{settings?.logo ? 'Change logo' : 'Click or drag to upload logo'}</p>
                 <p className="text-xs text-slate-400 mt-1">PNG, JPG up to 2MB</p>
+                <input
+                  id="logo-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      handleImageUpload(file, 'logo')
+                    }
+                  }}
+                />
               </div>
             </div>
 
@@ -91,7 +150,8 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
                 <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   type="text"
-                  defaultValue="My Business"
+                  value={settings?.businessName || ''}
+                  onChange={(e) => settings && setSettings({ ...settings, businessName: e.target.value })}
                   className="h-11 pl-10 pr-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
                 />
               </div>
@@ -104,10 +164,55 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
                 <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   type="text"
-                  defaultValue="Thank you for your business!"
+                  value={settings?.footerText || ''}
+                  onChange={(e) => settings && setSettings({ ...settings, footerText: e.target.value })}
                   className="h-11 pl-10 pr-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
                 />
               </div>
+            </div>
+
+            {/* Address */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Address</label>
+              <Input
+                type="text"
+                value={settings?.address || ''}
+                onChange={(e) => settings && setSettings({ ...settings, address: e.target.value })}
+                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+              />
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Phone</label>
+              <Input
+                type="text"
+                value={settings?.phone || ''}
+                onChange={(e) => settings && setSettings({ ...settings, phone: e.target.value })}
+                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+              <Input
+                type="text"
+                value={settings?.email || ''}
+                onChange={(e) => settings && setSettings({ ...settings, email: e.target.value })}
+                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+              />
+            </div>
+
+            {/* Website */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Website</label>
+              <Input
+                type="text"
+                value={settings?.website || ''}
+                onChange={(e) => settings && setSettings({ ...settings, website: e.target.value })}
+                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+              />
             </div>
           </div>
         </div>
@@ -126,14 +231,14 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
                 <p className="text-xs text-slate-500 mt-0.5">Show business contact details</p>
               </div>
               <button
-                onClick={() => setShowContactInfo(!showContactInfo)}
+                onClick={() => settings && setSettings({ ...settings, showContactInfo: !settings.showContactInfo })}
                 className={`relative h-6 w-11 rounded-full transition-colors ${
-                  showContactInfo ? "bg-blue-600" : "bg-slate-300"
+                  settings?.showContactInfo ? "bg-blue-600" : "bg-slate-300"
                 }`}
               >
                 <span
                   className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
-                    showContactInfo ? "translate-x-5" : "translate-x-0"
+                    settings?.showContactInfo ? "translate-x-5" : "translate-x-0"
                   }`}
                 />
               </button>
@@ -146,14 +251,14 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
                 <p className="text-xs text-slate-500 mt-0.5">Include transaction barcode</p>
               </div>
               <button
-                onClick={() => setShowBarcode(!showBarcode)}
+                onClick={() => settings && setSettings({ ...settings, showBarcode: !settings.showBarcode })}
                 className={`relative h-6 w-11 rounded-full transition-colors ${
-                  showBarcode ? "bg-blue-600" : "bg-slate-300"
+                  settings?.showBarcode ? "bg-blue-600" : "bg-slate-300"
                 }`}
               >
                 <span
                   className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
-                    showBarcode ? "translate-x-5" : "translate-x-0"
+                    settings?.showBarcode ? "translate-x-5" : "translate-x-0"
                   }`}
                 />
               </button>
@@ -163,13 +268,27 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Font Size</label>
               <select 
-                value={fontSize}
-                onChange={(e) => setFontSize(e.target.value)}
+                value={settings?.fontSize || 'medium'}
+                onChange={(e) => settings && setSettings({ ...settings, fontSize: e.target.value as 'small' | 'medium' | 'large' })}
                 className="w-full h-11 px-4 text-sm rounded-xl bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all cursor-pointer hover:border-slate-300"
               >
-                <option>Small</option>
-                <option>Medium</option>
-                <option>Large</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+              </select>
+            </div>
+
+            {/* Template Type */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Receipt Template</label>
+              <select 
+                value={settings?.templateType || 'classic'}
+                onChange={(e) => settings && setSettings({ ...settings, templateType: e.target.value as 'classic' | 'compact' | 'modern' })}
+                className="w-full h-11 px-4 text-sm rounded-xl bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all cursor-pointer hover:border-slate-300"
+              >
+                <option value="classic">🧾 Classic Thermal</option>
+                <option value="compact">🧾 Compact</option>
+                <option value="modern">🛒 Modern Retail</option>
               </select>
             </div>
           </div>
@@ -185,10 +304,39 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
             {/* Back Image Upload */}
             <div className="col-span-full sm:col-span-2">
               <label className="block text-sm font-medium text-slate-700 mb-2">Back Image</label>
-              <div className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-300 hover:bg-blue-50/50 transition-all cursor-pointer group">
-                <ImageIcon className="h-10 w-10 text-slate-400 mx-auto mb-3 group-hover:text-blue-500 transition-colors" />
-                <p className="text-sm font-medium text-slate-600">Upload back of receipt image</p>
+              <div 
+                className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer group ${
+                  isDraggingBackImage 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
+                }`}
+                onClick={() => document.getElementById('back-image-upload')?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setIsDraggingBackImage(true)
+                }}
+                onDragLeave={() => setIsDraggingBackImage(false)}
+                onDrop={(e) => handleDrop(e, 'backImage')}
+              >
+                {settings?.backImage ? (
+                  <img src={settings.backImage} alt="Back Image" className="h-24 w-auto mx-auto mb-2 rounded" />
+                ) : (
+                  <ImageIcon className="h-10 w-10 text-slate-400 mx-auto mb-3 group-hover:text-blue-500 transition-colors" />
+                )}
+                <p className="text-sm font-medium text-slate-600">{settings?.backImage ? 'Change back image' : 'Click or drag to upload back image'}</p>
                 <p className="text-xs text-slate-400 mt-1">PNG, JPG up to 5MB (appears on reverse side of receipt)</p>
+                <input
+                  id="back-image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      handleImageUpload(file, 'backImage')
+                    }
+                  }}
+                />
               </div>
             </div>
 
@@ -197,8 +345,8 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
               <label className="block text-sm font-medium text-slate-700 mb-2">Section Title</label>
               <Input
                 type="text"
-                value={backReceiptTitle}
-                onChange={(e) => setBackReceiptTitle(e.target.value)}
+                value={settings?.backReceiptTitle || ''}
+                onChange={(e) => settings && setSettings({ ...settings, backReceiptTitle: e.target.value })}
                 className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
               />
             </div>
@@ -208,8 +356,8 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
               <label className="block text-sm font-medium text-slate-700 mb-2">Policy Text</label>
               <Input
                 type="text"
-                value={backReceiptText}
-                onChange={(e) => setBackReceiptText(e.target.value)}
+                value={settings?.backReceiptText || ''}
+                onChange={(e) => settings && setSettings({ ...settings, backReceiptText: e.target.value })}
                 className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
               />
             </div>
@@ -219,8 +367,8 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
               <label className="block text-sm font-medium text-slate-700 mb-2">Contact Email</label>
               <Input
                 type="text"
-                value={backContactEmail}
-                onChange={(e) => setBackContactEmail(e.target.value)}
+                value={settings?.backContactEmail || ''}
+                onChange={(e) => settings && setSettings({ ...settings, backContactEmail: e.target.value })}
                 className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
               />
             </div>
@@ -230,8 +378,8 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
               <label className="block text-sm font-medium text-slate-700 mb-2">Website</label>
               <Input
                 type="text"
-                value={backContactWebsite}
-                onChange={(e) => setBackContactWebsite(e.target.value)}
+                value={settings?.backContactWebsite || ''}
+                onChange={(e) => settings && setSettings({ ...settings, backContactWebsite: e.target.value })}
                 className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
               />
             </div>

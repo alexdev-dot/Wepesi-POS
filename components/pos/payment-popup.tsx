@@ -172,7 +172,6 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
           </Button>
           <Button
             onClick={handleCompletePayment}
-            disabled={amountReceived < total}
             className="flex-1 h-11 bg-green-600 hover:bg-green-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all"
           >
             <CreditCard className="h-4 w-4 mr-2" />

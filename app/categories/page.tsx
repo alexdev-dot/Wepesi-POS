@@ -89,8 +89,8 @@ export default function CategoriesPage() {
                   <FolderTree className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Categories & Brands</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Manage product categories and brands</p>
+                  <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">Categories & Brands</h1>
+                  <p className="text-sm sm:text-base text-slate-500 mt-0.5">Manage product categories and brands</p>
                 </div>
               </div>
 
@@ -98,7 +98,7 @@ export default function CategoriesPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setActiveTab("categories")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-4 py-2 sm:py-2.5 rounded-lg text-sm sm:text-base font-medium transition-all ${
                     activeTab === "categories"
                       ? "bg-purple-600 text-white shadow-sm"
                       : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm"
@@ -109,7 +109,7 @@ export default function CategoriesPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab("brands")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`px-4 py-2 sm:py-2.5 rounded-lg text-sm sm:text-base font-medium transition-all ${
                     activeTab === "brands"
                       ? "bg-purple-600 text-white shadow-sm"
                       : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm"
@@ -134,14 +134,14 @@ export default function CategoriesPage() {
                     <Input
                       type="text"
                       placeholder={`Search ${activeTab}...`}
-                      className="h-10 pl-9 sm:pl-10 text-sm border bg-slate-50 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                      className="h-10 sm:h-11 pl-9 sm:pl-10 text-sm sm:text-base border bg-slate-50 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
                     />
                   </div>
 
                   {/* Filters and Actions */}
                   <div className="flex flex-col sm:flex-row gap-3">
                     {/* Status Filter */}
-                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all min-w-35">
+                    <select className="h-10 sm:h-11 px-3 sm:px-4 text-sm sm:text-base border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all min-w-35">
                       <option>All Status</option>
                       <option>Active</option>
                       <option>Inactive</option>
@@ -149,16 +149,16 @@ export default function CategoriesPage() {
 
                     {/* Action Buttons */}
                     <div className="flex gap-2 sm:ml-auto">
-                      <Button variant="outline" size="sm" className="h-10 text-sm border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                      <Button variant="outline" size="sm" className="h-10 sm:h-11 text-sm sm:text-base border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
                         <Upload className="h-4 w-4 mr-2" />
                         Import
                       </Button>
-                      <Button variant="outline" size="sm" className="h-10 text-sm border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                      <Button variant="outline" size="sm" className="h-10 sm:h-11 text-sm sm:text-base border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
                         <Download className="h-4 w-4 mr-2" />
                         Export
                       </Button>
                       <Button 
-                        className="h-10 bg-purple-600 hover:bg-purple-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all"
+                        className="h-10 sm:h-11 bg-purple-600 hover:bg-purple-700 text-sm sm:text-base font-semibold shadow-sm hover:shadow-md transition-all"
                         onClick={() => activeTab === "categories" ? setIsCategoryFormOpen(true) : setIsBrandFormOpen(true)}
                       >
                         <Plus className="h-4 w-4 mr-2" />
@@ -171,60 +171,109 @@ export default function CategoriesPage() {
 
               {/* Table */}
               <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                        <input type="checkbox" className="rounded border-slate-300" />
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                        {activeTab === "categories" ? "Category Name" : "Brand Name"}
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                        Product Count
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {(activeTab === "categories" ? categories : brands).map((item) => (
-                      <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-4 sm:px-6 py-4">
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-slate-50 border-b border-slate-200">
+                      <tr>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">
                           <input type="checkbox" className="rounded border-slate-300" />
-                        </td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <span className="text-sm font-medium text-slate-900">{item.name}</span>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 text-sm text-slate-600">{item.description}</td>
-                        <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{item.productCount}</td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
-                            item.status === "Active"
-                              ? "bg-green-100 text-green-700 border-green-200"
-                              : "bg-slate-100 text-slate-700 border-slate-200"
-                          }`}>
-                            {item.status}
-                          </span>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <div className="flex items-center gap-1">
-                            <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
-                              <Edit className="h-4 w-4" />
-                            </button>
-                            <button className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                            <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
-                              <MoreVertical className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </td>
+                        </th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                          {activeTab === "categories" ? "Category Name" : "Brand Name"}
+                        </th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">Description</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                          Product Count
+                        </th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {(activeTab === "categories" ? categories : brands).map((item) => (
+                        <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-4 sm:px-6 py-4">
+                            <input type="checkbox" className="rounded border-slate-300" />
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <span className="text-sm sm:text-base font-medium text-slate-900">{item.name}</span>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4 text-sm sm:text-base text-slate-600">{item.description}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm sm:text-base text-slate-700">{item.productCount}</td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
+                              item.status === "Active"
+                                ? "bg-green-100 text-green-700 border-green-200"
+                                : "bg-slate-100 text-slate-700 border-slate-200"
+                            }`}>
+                              {item.status}
+                            </span>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <div className="flex items-center gap-1">
+                              <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                                <Edit className="h-4 w-4" />
+                              </button>
+                              <button className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                              <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                                <MoreVertical className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+                  {(activeTab === "categories" ? categories : brands).map((item) => (
+                    <div key={item.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 text-purple-600 font-semibold text-sm shrink-0">
+                          {item.name.charAt(0)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm sm:text-base font-semibold text-slate-900 truncate">{item.name}</span>
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs sm:text-sm font-medium border shrink-0 ${
+                              item.status === "Active"
+                                ? "bg-green-100 text-green-700 border-green-200"
+                                : "bg-slate-100 text-slate-700 border-slate-200"
+                            }`}>
+                              {item.status}
+                            </span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-slate-500 mt-1 truncate">{item.description}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                        <div className="flex items-center gap-4">
+                          <div>
+                            <p className="text-xs sm:text-sm text-slate-500">Products</p>
+                            <p className="text-sm sm:text-base font-semibold text-slate-900">{item.productCount}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                            <Edit className="h-4 w-4" />
+                          </button>
+                          <button className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                            <MoreVertical className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

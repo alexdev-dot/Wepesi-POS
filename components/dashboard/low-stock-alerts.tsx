@@ -11,6 +11,36 @@ const lowStockItems = [
   { name: "Dettol Soap 175g", sku: "DT-175", stock: 60, minStock: 80, image: "/products/dettol soap 170g.jpg" },
 ]
 
+export function LowStockAlertsSkeleton() {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+        <div className="flex-1">
+          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+        </div>
+        <div className="h-4 bg-muted/70 rounded w-12 animate-pulse" />
+      </div>
+      <div className="space-y-2 flex-1">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="flex items-center gap-3 rounded-lg p-2">
+            <div className="h-10 w-10 rounded-lg bg-muted/70 animate-pulse shrink-0" />
+            <div className="flex-1">
+              <div className="h-3 bg-muted/70 rounded w-3/4 mb-1 animate-pulse" />
+              <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+            </div>
+            <div className="text-right shrink-0">
+              <div className="h-3 bg-muted/70 rounded w-8 mb-1 animate-pulse" />
+              <div className="h-3 bg-muted/70 rounded w-12 animate-pulse" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function LowStockAlerts() {
   return (
     <motion.div
@@ -63,7 +93,7 @@ export function LowStockAlerts() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.9 }}
-        className="space-y-2 flex-1"
+        className="space-y-2 flex-1 overflow-y-auto max-h-64"
       >
         {lowStockItems.map((item, index) => (
           <motion.div
@@ -72,11 +102,11 @@ export function LowStockAlerts() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.95 + index * 0.05 }}
             whileHover={{ x: 4, backgroundColor: "#f8fafc" }}
-            className="flex items-center gap-3 rounded-lg p-2 transition-colors cursor-pointer"
+            className="flex items-center gap-2 sm:gap-3 rounded-lg p-2 sm:p-2.5 transition-colors cursor-pointer"
           >
             <motion.div
               whileHover={{ scale: 1.1 }}
-              className="h-10 w-10 shrink-0 rounded-lg bg-slate-100 overflow-hidden"
+              className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-lg bg-slate-100 overflow-hidden"
             >
               {item.image ? (
                 <Image
@@ -92,15 +122,15 @@ export function LowStockAlerts() {
             </motion.div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-slate-900 truncate">{item.name}</p>
-              <p className="text-xs text-slate-500">SKU: {item.sku}</p>
+              <p className="text-xs text-slate-500 truncate">SKU: {item.sku}</p>
             </div>
             <div className="text-right shrink-0">
-              <p className="text-xs font-semibold text-slate-900">{item.stock} left</p>
+              <p className="text-xs font-semibold text-slate-900">{item.stock}</p>
               <motion.p
                 whileHover={{ scale: 1.05 }}
                 className="text-xs text-red-600 font-medium"
               >
-                Low Stock
+                Low
               </motion.p>
             </div>
           </motion.div>

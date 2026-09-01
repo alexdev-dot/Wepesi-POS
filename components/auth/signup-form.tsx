@@ -71,126 +71,126 @@ export function SignupForm() {
   }
 
   return (
-    <div className="flex h-full flex-col justify-center px-8 py-12 lg:px-12">
+    <div className="flex h-full flex-col justify-center px-4 sm:px-6 lg:px-12 py-8 sm:py-12">
       {/* Back to Home */}
-      <Link href="/" className="flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors w-fit mb-8">
+      <Link href="/" className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors w-fit mb-4 sm:mb-8">
         <ArrowLeft className="h-4 w-4" />
         Back to Home
       </Link>
 
       {/* Logo */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <img 
           src="/logo.png" 
           alt="POS Logo" 
-          className="h-20 w-20 object-contain"
+          className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
         />
       </div>
 
       {/* Heading */}
-      <h2 className="text-3xl font-bold text-slate-900 mb-2">
+      <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
         Create Account
       </h2>
-      <p className="text-base text-slate-600 mb-8">
+      <p className="text-sm sm:text-base text-slate-600 mb-6 sm:mb-8">
         Sign up to get started with your POS dashboard
       </p>
 
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600 mb-6">
+        <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-xs sm:text-sm text-red-600 mb-4 sm:mb-6">
           <AlertCircle className="h-4 w-4" />
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
         {/* Full Name */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="name" className="text-sm font-semibold text-slate-900">
+          <Label htmlFor="name" className="text-xs sm:text-sm font-semibold text-slate-900">
             Full Name
           </Label>
           <div className="relative">
-            <User className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <User className="pointer-events-none absolute left-3 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-slate-400" />
             <Input
               id="name"
               type="text"
               placeholder="Enter your full name"
               autoComplete="name"
-              className="h-12 rounded-xl border-slate-200 bg-white pl-12 text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
+              className="h-10 sm:h-12 rounded-xl border-slate-200 bg-white pl-10 sm:pl-12 text-xs sm:text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
             />
           </div>
         </div>
 
         {/* Email */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-sm font-semibold text-slate-900">
+          <Label htmlFor="email" className="text-xs sm:text-sm font-semibold text-slate-900">
             Email Address
           </Label>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <Mail className="pointer-events-none absolute left-3 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-slate-400" />
             <Input
               id="email"
               type="email"
               placeholder="Enter your email address"
               autoComplete="email"
-              className="h-12 rounded-xl border-slate-200 bg-white pl-12 text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
+              className="h-10 sm:h-12 rounded-xl border-slate-200 bg-white pl-10 sm:pl-12 text-xs sm:text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
             />
           </div>
         </div>
 
         {/* Password */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password" className="text-sm font-semibold text-slate-900">
+          <Label htmlFor="password" className="text-xs sm:text-sm font-semibold text-slate-900">
             Password
           </Label>
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <Lock className="pointer-events-none absolute left-3 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-slate-400" />
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="Create a password"
               autoComplete="new-password"
-              className="h-12 rounded-xl border-slate-200 bg-white px-12 text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
+              className="h-10 sm:h-12 rounded-xl border-slate-200 bg-white pl-10 sm:pl-12 pr-10 sm:pr-12 text-xs sm:text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
+              className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
             >
-              {showPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+              {showPassword ? <Eye className="h-4 w-4 sm:h-5 sm:w-5" /> : <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />}
             </button>
           </div>
         </div>
 
         {/* Confirm Password */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="confirmPassword" className="text-sm font-semibold text-slate-900">
+          <Label htmlFor="confirmPassword" className="text-xs sm:text-sm font-semibold text-slate-900">
             Confirm Password
           </Label>
           <div className="relative">
-            <Lock className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <Lock className="pointer-events-none absolute left-3 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-slate-400" />
             <Input
               id="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm your password"
               autoComplete="new-password"
-              className="h-12 rounded-xl border-slate-200 bg-white px-12 text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
+              className="h-10 sm:h-12 rounded-xl border-slate-200 bg-white pl-10 sm:pl-12 pr-10 sm:pr-12 text-xs sm:text-sm focus:ring-2 focus:ring-[#30B54A] shadow-sm"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword((v) => !v)}
               aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
+              className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
             >
-              {showConfirmPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+              {showConfirmPassword ? <Eye className="h-4 w-4 sm:h-5 sm:w-5" /> : <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />}
             </button>
           </div>
         </div>
 
         {/* Terms */}
-        <div className="flex items-center gap-2">
-          <Checkbox id="terms" className="h-4 w-4 rounded border-slate-300" />
-          <Label htmlFor="terms" className="text-sm font-medium text-slate-700">
+        <div className="flex items-start gap-2 sm:gap-3">
+          <Checkbox id="terms" className="h-4 w-4 rounded border-slate-300 mt-0.5 shrink-0" />
+          <Label htmlFor="terms" className="text-xs sm:text-sm font-medium text-slate-700 leading-relaxed">
             I agree to the{" "}
             <a href="#" className="font-semibold text-[#30B54A] hover:text-[#25913b] transition-colors">
               Terms of Service
@@ -203,7 +203,7 @@ export function SignupForm() {
         </div>
 
         {/* Submit */}
-        <Button type="submit" className="group h-12 rounded-full bg-[#30B54A] hover:bg-[#25913b] text-base font-semibold shadow-sm transition-all">
+        <Button type="submit" className="group h-10 sm:h-12 rounded-full bg-[#30B54A] hover:bg-[#25913b] text-sm sm:text-base font-semibold shadow-sm transition-all">
           Create Account
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </Button>
@@ -219,22 +219,22 @@ export function SignupForm() {
         <Button
           type="button"
           variant="outline"
-          className="h-12 rounded-full border-slate-200 bg-white text-base font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all"
+          className="h-10 sm:h-12 rounded-full border-slate-200 bg-white text-sm sm:text-base font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all"
         >
-          <GoogleIcon className="mr-2 h-5 w-5" />
+          <GoogleIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
           Sign up with Google
         </Button>
       </form>
 
       {/* Login Link */}
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-slate-600">
         Already have an account?{" "}
         <a href="/login" className="font-semibold text-[#30B54A] hover:text-[#25913b] transition-colors">
           Sign in
         </a>
       </p>
 
-      <p className="mt-4 text-center text-xs text-slate-500">
+      <p className="mt-3 sm:mt-4 text-center text-[10px] sm:text-xs text-slate-500">
         © 2025 POS System. All rights reserved.
       </p>
     </div>

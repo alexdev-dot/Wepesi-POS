@@ -95,8 +95,8 @@ export default function CashRegisterPage() {
                   <Landmark className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Cash Register</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Manage cash flow and transactions</p>
+                  <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">Cash Register</h1>
+                  <p className="text-sm sm:text-base text-slate-500 mt-0.5">Manage cash flow and transactions</p>
                 </div>
               </div>
 
@@ -105,28 +105,28 @@ export default function CashRegisterPage() {
                 {/* Date Range */}
                 <div className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white shadow-sm">
                   <Calendar className="h-4 w-4 text-slate-500" />
-                  <span className="text-sm text-slate-700">Today, 31 May 2025</span>
+                  <span className="text-sm sm:text-base text-slate-700">Today, 31 May 2025</span>
                 </div>
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 ml-auto">
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm sm:text-base text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
                     <Filter className="h-4 w-4" />
                     <span className="hidden sm:inline">More Filters</span>
                   </button>
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm sm:text-base text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
                     <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </button>
                   <Button 
-                    className="h-10 bg-blue-600 hover:bg-blue-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all"
+                    className="h-10 sm:h-11 bg-blue-600 hover:bg-blue-700 text-sm sm:text-base font-semibold shadow-sm hover:shadow-md transition-all"
                     onClick={() => setIsCashInOpen(true)}
                   >
                     <ArrowUpRight className="h-4 w-4 mr-2" />
                     Cash In
                   </Button>
                   <Button 
-                    className="h-10 bg-red-600 hover:bg-red-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all"
+                    className="h-10 sm:h-11 bg-red-600 hover:bg-red-700 text-sm sm:text-base font-semibold shadow-sm hover:shadow-md transition-all"
                     onClick={() => setIsCashOutOpen(true)}
                   >
                     <ArrowDownRight className="h-4 w-4 mr-2" />
@@ -157,7 +157,7 @@ export default function CashRegisterPage() {
                       )}
                     </div>
                     <div>
-                      <h4 className="text-xs sm:text-sm font-semibold text-slate-900">{stat.title}</h4>
+                      <h4 className="text-sm sm:text-base font-semibold text-slate-900">{stat.title}</h4>
                       <p className="mt-2 text-lg sm:text-xl font-bold text-slate-900">{stat.value}</p>
                     </div>
                   </div>
@@ -167,19 +167,21 @@ export default function CashRegisterPage() {
               {/* Transaction History */}
               <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                 <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-                  <h3 className="text-base font-semibold text-slate-900">Transaction History</h3>
-                  <span className="text-sm text-slate-500">6 transactions today</span>
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900">Transaction History</h3>
+                  <span className="text-sm sm:text-base text-slate-500">6 transactions today</span>
                 </div>
-                <div className="overflow-x-auto">
+                
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-200">
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Type</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Description</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Amount</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Time</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Cashier</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Actions</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Type</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Description</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Amount</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Time</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Cashier</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
@@ -188,15 +190,15 @@ export default function CashRegisterPage() {
                           <td className="px-4 sm:px-6 py-4">
                             <div className="flex items-center gap-2">
                               {getTransactionIcon(transaction.type)}
-                              <span className="text-sm font-medium capitalize text-slate-700">{transaction.type.replace('-', ' ')}</span>
+                              <span className="text-sm sm:text-base font-medium capitalize text-slate-700">{transaction.type.replace('-', ' ')}</span>
                             </div>
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-900">{transaction.description}</td>
-                          <td className={`px-4 sm:px-6 py-4 text-sm font-semibold ${getTransactionColor(transaction.type)}`}>
+                          <td className="px-4 sm:px-6 py-4 text-sm sm:text-base text-slate-900">{transaction.description}</td>
+                          <td className={`px-4 sm:px-6 py-4 text-sm sm:text-base font-semibold ${getTransactionColor(transaction.type)}`}>
                             {transaction.type === 'cash-out' ? '-' : '+'}KSh {transaction.amount.toLocaleString()}
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{transaction.time}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{transaction.cashier}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm sm:text-base text-slate-700">{transaction.time}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm sm:text-base text-slate-700">{transaction.cashier}</td>
                           <td className="px-4 sm:px-6 py-4">
                             <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
                               <MoreVertical className="h-4 w-4" />
@@ -207,11 +209,43 @@ export default function CashRegisterPage() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+                  {transactions.map((transaction) => (
+                    <div key={transaction.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 shrink-0">
+                          {getTransactionIcon(transaction.type)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm sm:text-base font-semibold text-slate-900 capitalize">{transaction.type.replace('-', ' ')}</span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{transaction.description}</p>
+                        </div>
+                        <span className={`text-sm sm:text-base font-bold ${getTransactionColor(transaction.type)}`}>
+                          {transaction.type === 'cash-out' ? '-' : '+'}KSh {transaction.amount.toLocaleString()}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs sm:text-sm text-slate-600">
+                        <div className="flex items-center gap-4">
+                          <span>{transaction.time}</span>
+                          <span>{transaction.cashier}</span>
+                        </div>
+                        <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                          <MoreVertical className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Quick Actions */}
               <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
-                <h3 className="text-base font-semibold text-slate-900 mb-4">Quick Actions</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                   <Button variant="outline" className="h-12 border-slate-200 text-slate-700 hover:bg-slate-50">
                     <Receipt className="h-4 w-4 mr-2" />
@@ -248,8 +282,8 @@ export default function CashRegisterPage() {
                     <ArrowUpRight className="h-5 w-5" strokeWidth={2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-slate-900">Cash In</h3>
-                    <p className="text-xs text-slate-500">Add cash to register</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-900">Cash In</h3>
+                    <p className="text-xs sm:text-sm text-slate-500">Add cash to register</p>
                   </div>
                 </div>
                 <button onClick={() => setIsCashInOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
@@ -258,16 +292,16 @@ export default function CashRegisterPage() {
               </div>
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Amount</label>
-                  <Input type="number" placeholder="Enter amount" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all" />
+                  <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Amount</label>
+                  <Input type="number" placeholder="Enter amount" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Description</label>
-                  <Input type="text" placeholder="e.g., Cash deposit" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all" />
+                  <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Description</label>
+                  <Input type="text" placeholder="e.g., Cash deposit" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all" />
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={() => setIsCashInOpen(false)} className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
-                  <Button className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all">Add Cash</Button>
+                  <Button variant="outline" onClick={() => setIsCashInOpen(false)} className="flex-1 h-10 sm:h-11 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
+                  <Button className="flex-1 h-10 sm:h-11 bg-blue-600 hover:bg-blue-700 text-sm sm:text-base font-semibold shadow-sm hover:shadow-md transition-all">Add Cash</Button>
                 </div>
               </div>
             </div>
@@ -287,8 +321,8 @@ export default function CashRegisterPage() {
                     <ArrowDownRight className="h-5 w-5" strokeWidth={2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-slate-900">Cash Out</h3>
-                    <p className="text-xs text-slate-500">Remove cash from register</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-900">Cash Out</h3>
+                    <p className="text-xs sm:text-sm text-slate-500">Remove cash from register</p>
                   </div>
                 </div>
                 <button onClick={() => setIsCashOutOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
@@ -297,16 +331,16 @@ export default function CashRegisterPage() {
               </div>
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Amount</label>
-                  <Input type="number" placeholder="Enter amount" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all" />
+                  <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Amount</label>
+                  <Input type="number" placeholder="Enter amount" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Description</label>
-                  <Input type="text" placeholder="e.g., Petty cash withdrawal" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all" />
+                  <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Description</label>
+                  <Input type="text" placeholder="e.g., Petty cash withdrawal" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all" />
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={() => setIsCashOutOpen(false)} className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
-                  <Button className="flex-1 h-10 bg-red-600 hover:bg-red-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all">Remove Cash</Button>
+                  <Button variant="outline" onClick={() => setIsCashOutOpen(false)} className="flex-1 h-10 sm:h-11 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
+                  <Button className="flex-1 h-10 sm:h-11 bg-red-600 hover:bg-red-700 text-sm sm:text-base font-semibold shadow-sm hover:shadow-md transition-all">Remove Cash</Button>
                 </div>
               </div>
             </div>

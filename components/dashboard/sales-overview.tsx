@@ -19,6 +19,32 @@ const chartData = [
 
 const maxValue = Math.max(...chartData.map((d) => d.value))
 
+export function SalesOverviewSkeleton() {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm font-sans">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+        <div className="flex-1">
+          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+        </div>
+        <div className="h-8 bg-muted/70 rounded w-20 animate-pulse" />
+      </div>
+      <div className="flex gap-4 border-b border-slate-200 mb-5">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="h-4 bg-muted/70 rounded w-16 animate-pulse" />
+        ))}
+      </div>
+      <div className="h-52 bg-muted/30 rounded-lg animate-pulse" />
+      <div className="mt-2 flex justify-between">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <div key={index} className="h-3 bg-muted/70 rounded w-12 animate-pulse" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function SalesOverview() {
   return (
     <motion.div
@@ -103,9 +129,9 @@ export function SalesOverview() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.7 }}
-        className="mt-5 h-52"
+        className="mt-5 h-48 sm:h-52 overflow-hidden"
       >
-        <svg className="h-full w-full" viewBox="0 0 800 250" preserveAspectRatio="none">
+        <svg className="h-full w-full" viewBox="0 0 800 250" preserveAspectRatio="xMidYMid meet">
           {/* Grid lines */}
           {[0, 25, 50, 75, 100].map((percent) => (
             <line
@@ -177,10 +203,10 @@ export function SalesOverview() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 1.2 }}
-          className="mt-2 flex justify-between text-xs text-slate-500"
+          className="mt-2 flex justify-between text-xs text-slate-500 overflow-x-auto pb-1"
         >
           {chartData.map((d) => (
-            <span key={d.time}>{d.time}</span>
+            <span key={d.time} className="shrink-0 px-1">{d.time}</span>
           ))}
         </motion.div>
       </motion.div>

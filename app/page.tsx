@@ -213,25 +213,25 @@ export default function LandingPage() {
             />
           </div>
           <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="#features" className="text-sm font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
+            <div className="hidden md:flex items-center gap-6 lg:gap-8">
+              <Link href="#features" className="text-sm sm:text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
                 Features
               </Link>
-              <Link href="#pricing" className="text-sm font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
+              <Link href="#pricing" className="text-sm sm:text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
                 Pricing
               </Link>
-              <Link href="#support" className="text-sm font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
+              <Link href="#support" className="text-sm sm:text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
                 Support
               </Link>
             </div>
             <div className="hidden md:flex items-center gap-3">
               <Link href="/login">
-                <Button variant="ghost" className="text-sm font-medium text-navy-foreground hover:bg-white/10 h-10 px-5">
+                <Button variant="ghost" className="text-sm sm:text-base font-medium text-navy-foreground hover:bg-white/10 h-10 sm:h-11 px-4 sm:px-5">
                   Login
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button className="text-sm font-medium bg-primary hover:bg-primary/90 h-10 px-5 rounded-full">
+                <Button className="text-sm sm:text-base font-medium bg-primary hover:bg-primary/90 h-10 sm:h-11 px-4 sm:px-5 rounded-full">
                   Get Started
                 </Button>
               </Link>
@@ -282,33 +282,33 @@ export default function LandingPage() {
               <div className="container mx-auto px-6 py-6 space-y-4">
                 <Link 
                   href="#features" 
-                  className="block text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-2"
+                  className="block text-lg font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-3"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Features
                 </Link>
                 <Link 
                   href="#pricing" 
-                  className="block text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-2"
+                  className="block text-lg font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-3"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Pricing
                 </Link>
                 <Link 
                   href="#support" 
-                  className="block text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-2"
+                  className="block text-lg font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-3"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Support
                 </Link>
                 <div className="pt-4 space-y-3">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full text-base font-medium text-navy-foreground hover:bg-white/10 h-11">
+                    <Button variant="ghost" className="w-full text-lg font-medium text-navy-foreground hover:bg-white/10 h-12">
                       Login
                     </Button>
                   </Link>
                   <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full text-base font-medium bg-primary hover:bg-primary/90 h-11 rounded-full">
+                    <Button className="w-full text-lg font-medium bg-primary hover:bg-primary/90 h-12 rounded-full">
                       Get Started
                     </Button>
                   </Link>
@@ -329,12 +329,12 @@ export default function LandingPage() {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="max-w-2xl"
             >
-              <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-slate-900">
+              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6 text-slate-900">
                 Smart POS.
                 <br />
                 Simplify <span className="text-primary">Sales.</span>
               </h1>
-              <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed max-w-lg">
+              <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-8 leading-relaxed max-w-lg">
                 Manage your sales, inventory, customers and reports — all in one powerful point of sale solution designed for modern businesses.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -354,7 +354,7 @@ export default function LandingPage() {
                   </motion.div>
                 </Link>
               </div>
-              <div className="flex items-center gap-6 text-sm text-slate-600">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-sm sm:text-base text-slate-600">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-primary" />
                   <span>No credit card required</span>
@@ -391,10 +391,10 @@ export default function LandingPage() {
       <section id="features" className="py-20 md:py-24 lg:py-28 bg-white">
         <div className="container mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-slate-900">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-slate-900">
               Everything You Need to Run Your Business
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
               Powerful features designed to help you manage sales, inventory, and customers with ease.
             </p>
           </ScrollReveal>
@@ -414,8 +414,8 @@ export default function LandingPage() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{feature.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">{feature.description}</p>
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">{feature.title}</h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{feature.description}</p>
                 </motion.div>
               )
             })}
@@ -428,10 +428,10 @@ export default function LandingPage() {
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal variants={fadeInLeft}>
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
+              <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
                 Why Choose Our POS System?
               </h2>
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
+              <p className="text-base sm:text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
                 Built for businesses of all sizes, our POS system helps you streamline operations, increase efficiency, and grow your revenue.
               </p>
               <ul className="space-y-4">
@@ -445,7 +445,7 @@ export default function LandingPage() {
                     className="flex items-start gap-3"
                   >
                     <CheckCircle className="h-6 w-6 text-primary shrink-0 mt-0.5" />
-                    <span className="text-base text-slate-700">{benefit}</span>
+                    <span className="text-sm sm:text-base text-slate-700">{benefit}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -460,10 +460,10 @@ export default function LandingPage() {
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
                   >
-                    <div className="text-5xl md:text-6xl font-bold text-primary mb-2">
+                    <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary mb-2">
                       <AnimatedCounter end={10000} duration={2.5} suffix="+" />
                     </div>
-                    <div className="text-base text-slate-600">Active Businesses</div>
+                    <div className="text-sm sm:text-base text-slate-600">Active Businesses</div>
                   </motion.div>
                   <div className="grid grid-cols-2 gap-8">
                     <motion.div 
@@ -473,7 +473,7 @@ export default function LandingPage() {
                       viewport={{ once: true }}
                       transition={{ delay: 0.3 }}
                     >
-                      <div className="text-3xl font-bold text-slate-900 mb-1">99.9%</div>
+                      <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">99.9%</div>
                       <div className="text-sm text-slate-600">Uptime</div>
                     </motion.div>
                     <motion.div 
@@ -483,7 +483,7 @@ export default function LandingPage() {
                       viewport={{ once: true }}
                       transition={{ delay: 0.4 }}
                     >
-                      <div className="text-3xl font-bold text-slate-900 mb-1">24/7</div>
+                      <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">24/7</div>
                       <div className="text-sm text-slate-600">Support</div>
                     </motion.div>
                   </div>
@@ -498,10 +498,10 @@ export default function LandingPage() {
       <section id="pricing" className="py-20 md:py-24 lg:py-28 bg-white">
         <div className="container mx-auto px-6 lg:px-8">
           <ScrollReveal className="text-center mb-16">
-            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-slate-900">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-slate-900">
               Choose Your Plan
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-6">
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-6">
               Select the subscription that fits your business needs
             </p>
             <motion.div
@@ -512,7 +512,7 @@ export default function LandingPage() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full"
             >
               <CheckCircle className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold text-primary">14-day free trial on all paid plans</span>
+              <span className="text-sm sm:text-base font-semibold text-primary">14-day free trial on all paid plans</span>
             </motion.div>
           </ScrollReveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -560,8 +560,8 @@ export default function LandingPage() {
                     `}>
                       <Icon className="h-7 w-7" />
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
-                    <p className={`text-sm ${plan.popular ? 'text-white/80' : 'text-slate-600'}`}>{plan.description}</p>
+                    <h3 className="text-lg sm:text-xl font-bold mb-2">{plan.name}</h3>
+                    <p className={`text-sm sm:text-base ${plan.popular ? 'text-white/80' : 'text-slate-600'}`}>{plan.description}</p>
                   </motion.div>
                   <div className="text-center mb-6">
                     <motion.div 
@@ -569,11 +569,11 @@ export default function LandingPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.3 + index * 0.1 }}
-                      className="text-4xl font-bold mb-1"
+                      className="text-3xl sm:text-4xl font-bold mb-1"
                     >
                       {plan.price}
                     </motion.div>
-                    {plan.period && <div className={`text-sm ${plan.popular ? 'text-white/80' : 'text-slate-600'}`}>{plan.period}</div>}
+                    {plan.period && <div className={`text-sm sm:text-base ${plan.popular ? 'text-white/80' : 'text-slate-600'}`}>{plan.period}</div>}
                   </div>
                   <ul className="space-y-3 mb-8">
                     {plan.features.map((feature, featureIndex) => (
@@ -586,7 +586,7 @@ export default function LandingPage() {
                         className="flex items-center gap-3"
                       >
                         <CheckCircle className={`h-5 w-5 ${plan.popular ? 'text-white' : 'text-primary'}`} />
-                        <span className={`text-sm ${plan.popular ? 'text-white/90' : 'text-slate-700'}`}>{feature}</span>
+                        <span className={`text-sm sm:text-base ${plan.popular ? 'text-white/90' : 'text-slate-700'}`}>{feature}</span>
                       </motion.li>
                     ))}
                   </ul>
@@ -594,7 +594,7 @@ export default function LandingPage() {
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       <Button
                         className={`
-                          w-full h-12 rounded-full text-sm font-semibold
+                          w-full h-12 rounded-full text-sm sm:text-base font-semibold
                           ${plan.popular
                             ? 'bg-white text-primary hover:bg-white/90'
                             : 'bg-primary text-white hover:bg-primary/90'
@@ -620,7 +620,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
+            className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
           >
             Ready to Transform Your Business?
           </motion.h2>
@@ -629,7 +629,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8"
+            className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8"
           >
             Join thousands of businesses already using our POS system to streamline operations and boost sales.
           </motion.p>
@@ -676,11 +676,11 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Contact</h3>
+              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Contact</h3>
               <ul className="space-y-3">
-                <li className="text-sm text-slate-600">wepesipos@gmail.com</li>
-                <li className="text-sm text-slate-600">+254 712345678</li>
-                <li className="text-sm text-slate-600">+254 712345678</li>
+                <li className="text-sm sm:text-base text-slate-600">wepesipos@gmail.com</li>
+                <li className="text-sm sm:text-base text-slate-600">+254 712345678</li>
+                <li className="text-sm sm:text-base text-slate-600">+254 712345678</li>
               </ul>
             </motion.div>
 
@@ -691,11 +691,11 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
             >
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Support</h3>
+              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Support</h3>
               <ul className="space-y-3">
-                <li className="text-sm text-slate-600">24/7 Customer Support</li>
-                <li className="text-sm text-slate-600">Free Setup & Training</li>
-                <li className="text-sm text-slate-600">Video Tutorials</li>
+                <li className="text-sm sm:text-base text-slate-600">24/7 Customer Support</li>
+                <li className="text-sm sm:text-base text-slate-600">Free Setup & Training</li>
+                <li className="text-sm sm:text-base text-slate-600">Video Tutorials</li>
               </ul>
             </motion.div>
 
@@ -706,11 +706,11 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
             >
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Features</h3>
+              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Features</h3>
               <ul className="space-y-3">
-                <li className="text-sm text-slate-600">Point of Sale</li>
-                <li className="text-sm text-slate-600">Inventory Management</li>
-                <li className="text-sm text-slate-600">M-PESA Payments</li>
+                <li className="text-sm sm:text-base text-slate-600">Point of Sale</li>
+                <li className="text-sm sm:text-base text-slate-600">Inventory Management</li>
+                <li className="text-sm sm:text-base text-slate-600">M-PESA Payments</li>
               </ul>
             </motion.div>
 
@@ -721,16 +721,16 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
             >
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Company</h3>
+              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Company</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="#" className="text-sm text-slate-600 hover:text-primary transition-colors">About Us</Link>
+                  <Link href="#" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">About Us</Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm text-slate-600 hover:text-primary transition-colors">Privacy Policy</Link>
+                  <Link href="#" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Privacy Policy</Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm text-slate-600 hover:text-primary transition-colors">Terms of Service</Link>
+                  <Link href="#" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Terms of Service</Link>
                 </li>
               </ul>
             </motion.div>
@@ -744,7 +744,7 @@ export default function LandingPage() {
             transition={{ delay: 0.7 }}
             className="border-t border-slate-200 pt-8"
           >
-            <div className="text-sm text-slate-600 text-center">
+            <div className="text-sm sm:text-base text-slate-600 text-center">
               © 2026 POS System. All rights reserved.
             </div>
           </motion.div>

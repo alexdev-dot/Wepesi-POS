@@ -213,7 +213,9 @@ export default function ExpensesPage() {
                   <h3 className="text-base font-semibold text-slate-900">Recent Expenses</h3>
                   <span className="text-sm text-slate-500">8 expenses this month</span>
                 </div>
-                <div className="overflow-x-auto">
+                
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-200">
@@ -254,6 +256,39 @@ export default function ExpensesPage() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+                  {expenses.map((expense) => (
+                    <div key={expense.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600 shrink-0">
+                          {getCategoryIcon(expense.category)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-slate-900">{expense.category}</span>
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${getStatusColor(expense.status)}`}>
+                              {expense.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1 truncate">{expense.description}</p>
+                        </div>
+                        <span className="text-sm font-bold text-slate-900">KSh {expense.amount.toLocaleString()}</span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                        <div className="flex items-center gap-4">
+                          <span>{expense.date}</span>
+                          <span className="truncate">{expense.vendor}</span>
+                        </div>
+                        <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                          <MoreVertical className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -264,8 +299,8 @@ export default function ExpensesPage() {
       {isAddExpenseOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setIsAddExpenseOpen(false)} />
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
               <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-600 shadow-sm">
@@ -280,7 +315,7 @@ export default function ExpensesPage() {
                   <X className="h-5 w-5 text-slate-400" />
                 </button>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">Category</label>
                   <select className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">

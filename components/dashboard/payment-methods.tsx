@@ -12,6 +12,37 @@ const paymentMethods = [
 
 const totalAmount = "KSh 45,678"
 
+export function PaymentMethodsSkeleton() {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm font-sans">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+        <div>
+          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+        </div>
+      </div>
+      <div className="mt-5 flex items-center gap-6">
+        <div className="h-36 w-36 sm:h-44 sm:w-44 rounded-full bg-muted/30 animate-pulse shrink-0" />
+        <div className="flex-1 space-y-2">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="flex items-center justify-between rounded-lg px-3 py-2">
+              <div className="flex items-center gap-3">
+                <div className="h-3.5 w-3.5 rounded-full bg-muted/70 animate-pulse shrink-0" />
+                <div className="h-3 bg-muted/70 rounded w-12 animate-pulse" />
+              </div>
+              <div className="text-right ml-4">
+                <div className="h-3 bg-muted/70 rounded w-16 mb-1 animate-pulse" />
+                <div className="h-3 bg-muted/70 rounded w-8 animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function PaymentMethods() {
   let cumulativePercentage = 0
 
@@ -56,10 +87,10 @@ export function PaymentMethods() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.65 }}
-        className="mt-5 flex items-center gap-6"
+        className="mt-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-6"
       >
         {/* Donut Chart */}
-        <div className="relative h-36 w-36 sm:h-44 sm:w-44 shrink-0">
+        <div className="relative h-32 w-32 sm:h-36 sm:w-36 md:h-44 md:w-44 shrink-0">
           <svg className="h-full w-full" viewBox="0 0 100 100">
             {paymentMethods.map((method, index) => {
               const startAngle = cumulativePercentage * 3.6
@@ -119,7 +150,7 @@ export function PaymentMethods() {
         </div>
 
         {/* Legend */}
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 w-full space-y-2">
           {paymentMethods.map((method, index) => (
             <motion.div
               key={method.name}

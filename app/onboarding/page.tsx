@@ -125,19 +125,19 @@ function OnboardingContent() {
   }
 
   return (
-    <main className="flex min-h-svh items-stretch justify-center bg-background p-2 sm:p-4 lg:p-4">
+    <main className="flex min-h-svh items-stretch justify-center bg-background p-2 sm:p-3 md:p-4 lg:p-6">
       <div className="grid w-full max-w-352 overflow-hidden rounded-2xl md:rounded-3xl bg-card shadow-lg lg:grid-cols-2">
-        <div className="hidden md:block bg-slate-50">
+        <div className="hidden lg:block bg-slate-50">
           <OnboardingBrandPanel currentStep={currentStep} />
         </div>
         
-        <div className="flex flex-col p-4 sm:p-6 lg:p-10 overflow-y-auto">
+        <div className="flex flex-col p-3 sm:p-4 md:p-6 lg:p-10 overflow-y-auto">
           {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6">
-            <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <span className="text-lg sm:text-xl">🛒</span>
+          <div className="lg:hidden flex items-center gap-2 sm:gap-2.5 mb-3 sm:mb-4 md:mb-6">
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <span className="text-base sm:text-lg md:text-xl">🛒</span>
             </div>
-            <span className="font-heading text-xs sm:text-sm font-bold tracking-[0.15em]">POS SYSTEM</span>
+            <span className="font-heading text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.15em]">POS SYSTEM</span>
           </div>
 
           {/* Step Navigation */}

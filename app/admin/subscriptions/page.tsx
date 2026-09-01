@@ -318,23 +318,24 @@ export default function SubscriptionsPage() {
             <p className="text-slate-600">Manage subscription plans and pricing</p>
           </div>
         </div>
-        <button onClick={handleOpenCreateModal} className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all font-medium">
-          <Plus className="h-4 w-4" />
-          Create New Plan
+        <button onClick={handleOpenCreateModal} className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all font-medium text-xs sm:text-sm whitespace-nowrap">
+          <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Create New Plan</span>
+          <span className="sm:hidden">New Plan</span>
         </button>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 mb-1">{stat.title}</p>
-                <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
+                <p className="text-xs sm:text-sm font-medium text-slate-500 mb-1">{stat.title}</p>
+                <p className="text-lg sm:text-2xl font-bold text-slate-800">{stat.value}</p>
                 <div className="flex items-center gap-1 mt-2">
                   {stat.trend === 'up' ? (
                     <ArrowUpRight className={`h-4 w-4 ${stat.title === 'Churn Rate' ? 'text-red-600' : 'text-green-600'}`} />
@@ -365,8 +366,8 @@ export default function SubscriptionsPage() {
 
       {/* Plan Cards */}
       <div>
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">Available Plans</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">Available Plans</h2>
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => (
             <div
               key={plan.id}
@@ -481,53 +482,53 @@ export default function SubscriptionsPage() {
           </div>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Tenant</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Plan</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Billing Cycle</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Next Billing</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Auto Renew</th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Tenant</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Plan</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Billing Cycle</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Amount</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Next Billing</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Auto Renew</th>
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
               {filteredSubscriptions.map((subscription) => (
                 <tr key={subscription.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div>
                       <p className="text-sm font-medium text-slate-800">{subscription.tenant}</p>
                       <p className="text-xs text-slate-500">{subscription.email}</p>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     {getPlanBadge(subscription.plan)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     {getStatusBadge(subscription.status)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm text-slate-600 capitalize">{subscription.billingCycle}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm font-medium text-slate-800">{subscription.amount}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm text-slate-600">{subscription.nextBilling}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     {subscription.autoRenew ? (
                       <CheckCircle className="h-4 w-4 text-green-500" />
                     ) : (
                       <XCircle className="h-4 w-4 text-slate-300" />
                     )}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center justify-end gap-1">
                       <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View">
                         <Eye className="h-4 w-4" />
@@ -547,6 +548,50 @@ export default function SubscriptionsPage() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+          {filteredSubscriptions.map((subscription) => (
+            <div key={subscription.id} className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold text-sm shrink-0">
+                  {subscription.tenant.charAt(0)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-slate-900 truncate">{subscription.tenant}</span>
+                    {getStatusBadge(subscription.status)}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1 truncate">{subscription.email}</p>
+                </div>
+                <span className="text-sm font-bold text-slate-900">{subscription.amount}</span>
+              </div>
+              
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <p className="text-xs text-slate-500">Plan</p>
+                    {getPlanBadge(subscription.plan)}
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">Cycle</p>
+                    <p className="text-sm font-semibold text-slate-900 capitalize">{subscription.billingCycle}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {subscription.autoRenew ? (
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <XCircle className="h-4 w-4 text-slate-300" />
+                  )}
+                  <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                    <MoreVertical className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Pagination */}
@@ -573,8 +618,8 @@ export default function SubscriptionsPage() {
 
       {/* Plan Form Modal */}
       {isPlanModalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl flex flex-col">
             <PlanForm
               mode={editingPlan ? "edit" : "create"}
               initialData={editingPlan || undefined}

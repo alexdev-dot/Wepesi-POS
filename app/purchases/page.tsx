@@ -176,47 +176,111 @@ export default function PurchasesPage() {
 
               {/* Purchases Table */}
               <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                        <input type="checkbox" className="rounded border-slate-300" />
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">PO Number</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Supplier</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Items</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Amount</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Payment</th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {purchases.map((purchase) => (
-                      <tr key={purchase.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-4 sm:px-6 py-4">
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-slate-50 border-b border-slate-200">
+                      <tr>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                           <input type="checkbox" className="rounded border-slate-300" />
-                        </td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <span className="text-sm font-medium text-green-600 hover:text-green-700">{purchase.id}</span>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.date}</td>
-                        <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.supplier}</td>
-                        <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.items}</td>
-                        <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-slate-900">KSh {(purchase.total || 0).toLocaleString()}</td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
-                            purchase.status === "Completed" ? "bg-green-100 text-green-700 border-green-200" :
-                            purchase.status === "In Transit" ? "bg-blue-100 text-blue-700 border-blue-200" :
-                            purchase.status === "Pending" ? "bg-orange-100 text-orange-700 border-orange-200" :
-                            "bg-slate-100 text-slate-700 border-slate-200"
-                          }`}>
-                            {purchase.status}
-                          </span>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
+                        </th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">PO Number</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Supplier</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Items</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Amount</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Payment</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {purchases.map((purchase) => (
+                        <tr key={purchase.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-4 sm:px-6 py-4">
+                            <input type="checkbox" className="rounded border-slate-300" />
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <span className="text-sm font-medium text-green-600 hover:text-green-700">{purchase.id}</span>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.date}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.supplier}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.items}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-slate-900">KSh {(purchase.total || 0).toLocaleString()}</td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
+                              purchase.status === "Completed" ? "bg-green-100 text-green-700 border-green-200" :
+                              purchase.status === "In Transit" ? "bg-blue-100 text-blue-700 border-blue-200" :
+                              purchase.status === "Pending" ? "bg-orange-100 text-orange-700 border-orange-200" :
+                              "bg-slate-100 text-slate-700 border-slate-200"
+                            }`}>
+                              {purchase.status}
+                            </span>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
+                              purchase.paymentStatus === "Paid" ? "bg-green-100 text-green-700 border-green-200" :
+                              purchase.paymentStatus === "Partial" ? "bg-blue-100 text-blue-700 border-blue-200" :
+                              purchase.paymentStatus === "Unpaid" ? "bg-red-100 text-red-700 border-red-200" :
+                              "bg-slate-100 text-slate-700 border-slate-200"
+                            }`}>
+                              {purchase.paymentStatus}
+                            </span>
+                          </td>
+                          <td className="px-4 sm:px-6 py-4">
+                            <div className="flex items-center gap-1">
+                              <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                                <Eye className="h-4 w-4" />
+                              </button>
+                              <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                                <MoreVertical className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+                  {purchases.map((purchase) => (
+                    <div key={purchase.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 font-semibold text-sm shrink-0">
+                          {purchase.id.slice(-2)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-green-600">{purchase.id}</span>
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${
+                              purchase.status === "Completed" ? "bg-green-100 text-green-700 border-green-200" :
+                              purchase.status === "In Transit" ? "bg-blue-100 text-blue-700 border-blue-200" :
+                              purchase.status === "Pending" ? "bg-orange-100 text-orange-700 border-orange-200" :
+                              "bg-slate-100 text-slate-700 border-slate-200"
+                            }`}>
+                              {purchase.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1">{purchase.supplier}</p>
+                        </div>
+                        <span className="text-sm font-bold text-slate-900">KSh {(purchase.total || 0).toLocaleString()}</span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                        <div className="flex items-center gap-4">
+                          <div>
+                            <p className="text-xs text-slate-500">Date</p>
+                            <p className="text-sm font-semibold text-slate-900">{purchase.date}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-500">Items</p>
+                            <p className="text-sm font-semibold text-slate-900">{purchase.items}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
                             purchase.paymentStatus === "Paid" ? "bg-green-100 text-green-700 border-green-200" :
                             purchase.paymentStatus === "Partial" ? "bg-blue-100 text-blue-700 border-blue-200" :
                             purchase.paymentStatus === "Unpaid" ? "bg-red-100 text-red-700 border-red-200" :
@@ -224,21 +288,14 @@ export default function PurchasesPage() {
                           }`}>
                             {purchase.paymentStatus}
                           </span>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <div className="flex items-center gap-1">
-                            <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
-                              <Eye className="h-4 w-4" />
-                            </button>
-                            <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
-                              <MoreVertical className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                            <MoreVertical className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

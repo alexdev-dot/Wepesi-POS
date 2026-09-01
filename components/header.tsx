@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { Bell, ChevronDown, Menu, Mail, LogOut } from "lucide-react"
+import { Bell, ChevronDown, Menu, Mail, LogOut, User, Building, Moon, Sun, HelpCircle } from "lucide-react"
 import { logout } from "@/lib/auth"
 import { useRouter } from "next/navigation"
 
 export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
   const router = useRouter()
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [currentTime, setCurrentTime] = useState<Date | null>(null)
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -37,17 +40,73 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
       document.removeEventListener('fullscreenchange', handleFullscreenChange)
     }
   }, [])
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode)
+    // TODO: Implement actual theme switching logic
+  }
+
+  const handleLogout = () => {
+    logout()
+    router.push("/login")
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      const dropdown = document.getElementById('profile-dropdown')
+      const profileButton = document.getElementById('profile-button')
+      
+      if (isProfileDropdownOpen && dropdown && !dropdown.contains(target) && profileButton && !profileButton.contains(target)) {
+        setIsProfileDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isProfileDropdownOpen])
+
+  useEffect(() => {
+    setCurrentTime(new Date())
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const formatDateTime = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    }
+    return date.toLocaleDateString('en-US', options)
+  }
   return (
-    <header className="flex h-16 items-center justify-between border-b border-border bg-card px-4 font-sans">
+    <header className="flex h-16 sm:h-18 items-center justify-between border-b border-border bg-card px-4 font-sans">
       {/* Left Side - Hamburger */}
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="rounded-lg p-2.5 text-muted-foreground hover:bg-muted hover:text-card-foreground transition-all shrink-0"
+          className="rounded-lg p-2.5 sm:p-3 text-muted-foreground hover:bg-muted hover:text-card-foreground transition-all shrink-0"
           aria-label="Toggle menu"
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
+      </div>
+
+      {/* Center - Time Display */}
+      <div className="hidden md:flex flex-col items-center">
+        {currentTime && (
+          <p className="text-sm sm:text-base font-semibold text-card-foreground">{formatDateTime(currentTime)}</p>
+        )}
       </div>
 
       {/* Right Side - Icons */}
@@ -55,7 +114,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
         {/* Fullscreen Toggle */}
         <button
           onClick={toggleFullscreen}
-          className="rounded-lg p-2.5 text-muted-foreground hover:bg-muted hover:text-card-foreground transition-all shrink-0"
+          className="rounded-lg p-2.5 sm:p-3 text-muted-foreground hover:bg-muted hover:text-card-foreground transition-all shrink-0"
           aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
         >
           <Image
@@ -63,7 +122,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
             alt={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
             width={20}
             height={20}
-            className={`h-5 w-5 object-contain transition-transform ${isFullscreen ? 'rotate-180' : ''}`}
+            className={`h-5 w-5 sm:h-6 sm:w-6 object-contain transition-transform ${isFullscreen ? 'rotate-180' : ''}`}
           />
         </button>
 
@@ -71,25 +130,29 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
         <div className="h-6 w-px bg-border shrink-0 mx-1" />
 
         {/* Notifications */}
-        <button className="relative rounded-lg p-2.5 text-muted-foreground hover:bg-muted hover:text-card-foreground transition-all group shrink-0" aria-label="Notifications">
-          <Bell className="h-5 w-5" />
+        <button className="relative rounded-lg p-2.5 sm:p-3 text-muted-foreground hover:bg-muted hover:text-card-foreground transition-all group shrink-0" aria-label="Notifications">
+          <Bell className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
 
         {/* Divider */}
         <div className="h-6 w-px bg-border shrink-0 mx-1" />
 
         {/* Mail */}
-        <button className="p-2 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors" aria-label="Messages">
-          <Mail className="h-5 w-5" />
+        <button className="p-2 sm:p-2.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors" aria-label="Messages">
+          <Mail className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
 
         {/* Divider */}
         <div className="h-6 w-px bg-border shrink-0 mx-1" />
 
         {/* User Profile */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2 hover:bg-muted transition-all cursor-pointer">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-500 text-white shadow-sm overflow-hidden">
+        <div className="relative">
+          <div 
+            id="profile-button"
+            className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2 hover:bg-muted transition-all cursor-pointer"
+            onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+          >
+            <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-blue-500 text-white shadow-sm overflow-hidden">
               <img 
                 src="/Profile-pos.jpg" 
                 alt="Profile" 
@@ -97,23 +160,67 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
               />
             </div>
             <div className="hidden sm:block">
-              <p className="text-sm font-medium text-card-foreground">Alex Kariuki</p>
-              <p className="text-xs text-muted-foreground">Administrator</p>
+              <p className="text-sm sm:text-base font-medium text-card-foreground">Alex Kariuki</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">Administrator</p>
             </div>
-            <ChevronDown className="h-4 w-4 text-muted-foreground hidden sm:block" />
+            <ChevronDown className={`h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground hidden sm:block transition-transform ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
           </div>
 
-          {/* Logout Button */}
-          <button
-            onClick={() => {
-              logout()
-              router.push("/login")
-            }}
-            className="rounded-lg p-2.5 text-muted-foreground hover:bg-red-50 hover:text-red-600 transition-all shrink-0"
-            aria-label="Logout"
-          >
-            <LogOut className="h-5 w-5" />
-          </button>
+          {/* Profile Dropdown Menu */}
+          {isProfileDropdownOpen && (
+            <div id="profile-dropdown" className="absolute right-0 top-full mt-2 w-56 sm:w-60 rounded-lg border border-border bg-card shadow-lg z-50">
+              <div className="p-1">
+                <button
+                  onClick={() => {
+                    setIsProfileDropdownOpen(false)
+                    router.push("/settings/profile")
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 sm:py-3 rounded-md text-sm sm:text-base text-card-foreground hover:bg-muted transition-colors"
+                >
+                  <User className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+                  Profile Settings
+                </button>
+                <button
+                  onClick={() => {
+                    setIsProfileDropdownOpen(false)
+                    router.push("/settings/business")
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 sm:py-3 rounded-md text-sm sm:text-base text-card-foreground hover:bg-muted transition-colors"
+                >
+                  <Building className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+                  Business Settings
+                </button>
+                <button
+                  onClick={() => {
+                    toggleTheme()
+                    setIsProfileDropdownOpen(false)
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 sm:py-3 rounded-md text-sm sm:text-base text-card-foreground hover:bg-muted transition-colors"
+                >
+                  {isDarkMode ? <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" /> : <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />}
+                  {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+                </button>
+                <button
+                  onClick={() => {
+                    setIsProfileDropdownOpen(false)
+                    router.push("/help")
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 sm:py-3 rounded-md text-sm sm:text-base text-card-foreground hover:bg-muted transition-colors"
+                >
+                  <HelpCircle className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+                  Help & Support
+                </button>
+                <div className="my-1 border-t border-border" />
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 sm:py-3 rounded-md text-sm sm:text-base text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>

@@ -24,6 +24,7 @@ interface SalesHistoryTableProps {
   currentPage: number
   onPageChange: (page: number) => void
   totalPages: number
+  loading?: boolean
 }
 
 export function SalesHistoryTable({
@@ -34,7 +35,8 @@ export function SalesHistoryTable({
   onSearchChange,
   currentPage,
   onPageChange,
-  totalPages
+  totalPages,
+  loading = false
 }: SalesHistoryTableProps) {
   const getPaymentMethodColor = (method: string) => {
     switch (method) {
@@ -53,6 +55,55 @@ export function SalesHistoryTable({
       default: return "bg-gray-100 text-gray-700"
     }
   }
+
+  // Skeleton row component for desktop table
+  const TableSkeletonRow = () => (
+    <tr className="animate-pulse">
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-4 bg-muted/70 rounded" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-20 bg-muted/70 rounded" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-24 bg-muted/70 rounded" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-20 bg-muted/70 rounded" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-20 bg-muted/70 rounded" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-8 bg-muted/70 rounded" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-16 bg-muted/70 rounded" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-6 w-16 bg-muted/70 rounded-full" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-6 w-16 bg-muted/70 rounded-full" /></td>
+      <td className="px-4 sm:px-6 py-4"><div className="h-4 w-4 bg-muted/70 rounded" /></td>
+    </tr>
+  )
+
+  // Skeleton card component for mobile view
+  const MobileSkeletonCard = () => (
+    <div className="bg-white border rounded-xl p-4 animate-pulse">
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <div className="h-4 w-4 bg-muted/70 rounded" />
+          <div>
+            <div className="h-4 w-20 bg-muted/70 rounded mb-1" />
+            <div className="h-3 w-24 bg-muted/70 rounded" />
+          </div>
+        </div>
+        <div className="h-4 w-4 bg-muted/70 rounded" />
+      </div>
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        <div>
+          <div className="h-3 w-12 bg-muted/70 rounded mb-1" />
+          <div className="h-4 w-16 bg-muted/70 rounded" />
+        </div>
+        <div>
+          <div className="h-3 w-12 bg-muted/70 rounded mb-1" />
+          <div className="h-4 w-16 bg-muted/70 rounded" />
+        </div>
+      </div>
+      <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-12 bg-muted/70 rounded-full" />
+          <div className="h-6 w-12 bg-muted/70 rounded-full" />
+        </div>
+        <div className="h-4 w-16 bg-muted/70 rounded" />
+      </div>
+    </div>
+  )
 
   return (
     <div className="flex-1 min-h-0 flex flex-col">
@@ -98,7 +149,12 @@ export function SalesHistoryTable({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {salesData.map((sale, index) => (
+              {loading ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <TableSkeletonRow key={index} />
+                ))
+              ) : (
+                salesData.map((sale, index) => (
                 <motion.tr
                   key={sale.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -135,14 +191,20 @@ export function SalesHistoryTable({
                     </motion.button>
                   </td>
                 </motion.tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>
 
         {/* Mobile Card View */}
         <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
-          {salesData.map((sale, index) => (
+          {loading ? (
+            Array.from({ length: 10 }).map((_, index) => (
+              <MobileSkeletonCard key={index} />
+            ))
+          ) : (
+            salesData.map((sale, index) => (
             <motion.div
               key={sale.id}
               initial={{ opacity: 0, y: 10 }}
@@ -191,7 +253,8 @@ export function SalesHistoryTable({
                 <p className="text-sm font-bold text-slate-900">KSh {sale.total.toFixed(2)}</p>
               </div>
             </motion.div>
-          ))}
+          ))
+          )}
         </div>
       </div>
 

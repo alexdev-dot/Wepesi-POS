@@ -187,7 +187,9 @@ export default function SuppliersPage() {
                   <h3 className="text-base font-semibold text-slate-900">All Suppliers</h3>
                   <span className="text-sm text-slate-500">18 suppliers</span>
                 </div>
-                <div className="overflow-x-auto">
+                
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-200">
@@ -249,6 +251,50 @@ export default function SuppliersPage() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+                  {suppliers.map((supplier) => (
+                    <div key={supplier.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-600 font-semibold text-sm shrink-0">
+                          {supplier.name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-slate-900 truncate">{supplier.name}</span>
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${getStatusColor(supplier.status)}`}>
+                              {supplier.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {supplier.address}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                        <div className="flex items-center gap-4">
+                          <div>
+                            <p className="text-xs text-slate-500">Category</p>
+                            <p className="text-sm font-semibold text-slate-900">{supplier.category}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-500">Orders</p>
+                            <p className="text-sm font-semibold text-slate-900">{supplier.totalOrders}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {renderStars(supplier.rating)}
+                          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                            <MoreVertical className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -275,7 +321,7 @@ export default function SuppliersPage() {
                   <X className="h-5 w-5 text-slate-400" />
                 </button>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">Company Name</label>
                   <Input type="text" placeholder="Enter company name" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all" />

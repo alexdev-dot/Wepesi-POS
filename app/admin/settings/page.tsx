@@ -51,39 +51,39 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-lg bg-slate-100 text-slate-600">
-            <Settings className="h-6 w-6" />
+          <div className="p-3 sm:p-4 rounded-lg bg-slate-100 text-slate-600">
+            <Settings className="h-6 w-6 sm:h-7 sm:w-7" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Global Settings</h1>
-            <p className="text-slate-600">Configure global system settings and preferences</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Global Settings</h1>
+            <p className="text-sm sm:text-base text-slate-600">Configure global system settings and preferences</p>
           </div>
         </div>
-        <button onClick={handleSave} className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all font-medium">
-          <Save className="h-4 w-4" />
+        <button onClick={handleSave} className="flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all font-medium text-sm sm:text-base">
+          <Save className="h-4 w-4 sm:h-5 sm:w-5" />
           Save Changes
         </button>
       </div>
 
       {/* Settings Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Logo & Branding */}
         <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
-              <Image className="h-5 w-5 text-slate-400" />
+          <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <Image className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
               Logo & Branding
             </h2>
           </div>
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Logo Upload */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-3">
                 Company Logo
               </label>
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col sm:flex-row items-start gap-4">
                 <div className="relative">
                   {logoPreview ? (
                     <img
@@ -107,10 +107,10 @@ export default function SettingsPage() {
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-slate-600 mb-2">
+                  <p className="text-sm sm:text-base text-slate-600 mb-2">
                     Upload your company logo. Recommended size: 200x200px. Supported formats: PNG, JPG, SVG.
                   </p>
-                  <label className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer text-sm font-medium">
+                  <label className="inline-flex items-center gap-2 px-4 py-2 sm:py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer text-sm sm:text-base font-medium">
                     <Upload className="h-4 w-4" />
                     Upload Logo
                     <input
@@ -126,10 +126,10 @@ export default function SettingsPage() {
 
             {/* Favicon Upload */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-3">
                 Favicon
               </label>
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col sm:flex-row items-start gap-4">
                 <div className="relative">
                   {faviconPreview ? (
                     <img
@@ -153,10 +153,10 @@ export default function SettingsPage() {
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-slate-600 mb-2">
+                  <p className="text-sm sm:text-base text-slate-600 mb-2">
                     Upload your favicon. Recommended size: 32x32px or 16x16px. Supported formats: ICO, PNG.
                   </p>
-                  <label className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer text-sm font-medium">
+                  <label className="inline-flex items-center gap-2 px-4 py-2 sm:py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer text-sm sm:text-base font-medium">
                     <Upload className="h-4 w-4" />
                     Upload Favicon
                     <input
@@ -172,28 +172,28 @@ export default function SettingsPage() {
 
             {/* Company Name */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Company Name
               </label>
               <input
                 type="text"
                 value={settings.companyName}
                 onChange={(e) => setSettings(prev => ({ ...prev, companyName: e.target.value }))}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                className="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base"
                 placeholder="Enter company name"
               />
             </div>
 
             {/* Tagline */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Tagline
               </label>
               <input
                 type="text"
                 value={settings.tagline}
                 onChange={(e) => setSettings(prev => ({ ...prev, tagline: e.target.value }))}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                className="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base"
                 placeholder="Enter tagline"
               />
             </div>
@@ -202,16 +202,16 @@ export default function SettingsPage() {
 
         {/* Colors & Theme */}
         <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
-              <Palette className="h-5 w-5 text-slate-400" />
+          <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <Palette className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
               Colors & Theme
             </h2>
           </div>
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Header Background Color */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Header Background Color
               </label>
               <div className="flex items-center gap-3">
@@ -220,21 +220,21 @@ export default function SettingsPage() {
                     type="color"
                     value={headerBgColor}
                     onChange={(e) => setHeaderBgColor(e.target.value)}
-                    className="w-12 h-12 rounded-lg border border-slate-200 cursor-pointer"
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg border border-slate-200 cursor-pointer"
                   />
                 </div>
                 <input
                   type="text"
                   value={headerBgColor}
                   onChange={(e) => setHeaderBgColor(e.target.value)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm uppercase"
+                  className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
                 />
               </div>
             </div>
 
             {/* Header Text Color */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Header Text Color
               </label>
               <div className="flex items-center gap-3">
@@ -242,20 +242,20 @@ export default function SettingsPage() {
                   type="color"
                   value={headerTextColor}
                   onChange={(e) => setHeaderTextColor(e.target.value)}
-                  className="w-12 h-12 rounded-lg border border-slate-200 cursor-pointer"
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg border border-slate-200 cursor-pointer"
                 />
                 <input
                   type="text"
                   value={headerTextColor}
                   onChange={(e) => setHeaderTextColor(e.target.value)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm uppercase"
+                  className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
                 />
               </div>
             </div>
 
             {/* Primary Color */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Primary Color
               </label>
               <div className="flex items-center gap-3">
@@ -263,20 +263,20 @@ export default function SettingsPage() {
                   type="color"
                   value={primaryColor}
                   onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="w-12 h-12 rounded-lg border border-slate-200 cursor-pointer"
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg border border-slate-200 cursor-pointer"
                 />
                 <input
                   type="text"
                   value={primaryColor}
                   onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm uppercase"
+                  className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
                 />
               </div>
             </div>
 
             {/* Secondary Color */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Secondary Color
               </label>
               <div className="flex items-center gap-3">
@@ -284,20 +284,20 @@ export default function SettingsPage() {
                   type="color"
                   value={secondaryColor}
                   onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="w-12 h-12 rounded-lg border border-slate-200 cursor-pointer"
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg border border-slate-200 cursor-pointer"
                 />
                 <input
                   type="text"
                   value={secondaryColor}
                   onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="flex-1 px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm uppercase"
+                  className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
                 />
               </div>
             </div>
 
             {/* Preview */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Preview
               </label>
               <div
@@ -313,19 +313,19 @@ export default function SettingsPage() {
                     </div>
                   )}
                   <div>
-                    <p style={{ color: headerTextColor }} className="font-semibold">{settings.companyName}</p>
-                    <p style={{ color: headerTextColor }} className="text-xs opacity-70">{settings.tagline}</p>
+                    <p style={{ color: headerTextColor }} className="font-semibold text-sm sm:text-base">{settings.companyName}</p>
+                    <p style={{ color: headerTextColor }} className="text-xs sm:text-sm opacity-70">{settings.tagline}</p>
                   </div>
                 </div>
                 <div className="mt-3 flex gap-2">
                   <button
-                    className="px-3 py-1.5 text-white text-sm rounded"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 text-white text-sm sm:text-base rounded"
                     style={{ backgroundColor: primaryColor }}
                   >
                     Primary
                   </button>
                   <button
-                    className="px-3 py-1.5 text-white text-sm rounded"
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 text-white text-sm sm:text-base rounded"
                     style={{ backgroundColor: secondaryColor }}
                   >
                     Secondary
@@ -338,16 +338,16 @@ export default function SettingsPage() {
 
         {/* Contact Information */}
         <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
-              <Globe className="h-5 w-5 text-slate-400" />
+          <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
               Contact Information
             </h2>
           </div>
-          <div className="p-6 space-y-6">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Website */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Website URL
               </label>
               <div className="relative">
@@ -356,7 +356,7 @@ export default function SettingsPage() {
                   type="url"
                   value={settings.website}
                   onChange={(e) => setSettings(prev => ({ ...prev, website: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
                   placeholder="https://example.com"
                 />
               </div>
@@ -364,7 +364,7 @@ export default function SettingsPage() {
 
             {/* Support Email */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Support Email
               </label>
               <div className="relative">
@@ -373,7 +373,7 @@ export default function SettingsPage() {
                   type="email"
                   value={settings.supportEmail}
                   onChange={(e) => setSettings(prev => ({ ...prev, supportEmail: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
                   placeholder="support@example.com"
                 />
               </div>
@@ -381,7 +381,7 @@ export default function SettingsPage() {
 
             {/* Support Phone */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Support Phone
               </label>
               <div className="relative">
@@ -390,7 +390,7 @@ export default function SettingsPage() {
                   type="tel"
                   value={settings.supportPhone}
                   onChange={(e) => setSettings(prev => ({ ...prev, supportPhone: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
@@ -398,7 +398,7 @@ export default function SettingsPage() {
 
             {/* Address */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm sm:text-base font-medium text-slate-700 mb-2">
                 Business Address
               </label>
               <div className="relative">
@@ -407,7 +407,7 @@ export default function SettingsPage() {
                   value={settings.address}
                   onChange={(e) => setSettings(prev => ({ ...prev, address: e.target.value }))}
                   rows={3}
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm resize-none"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base resize-none"
                   placeholder="Enter full business address"
                 />
               </div>
@@ -417,13 +417,13 @@ export default function SettingsPage() {
 
         {/* System Preferences */}
         <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="px-6 py-4 border-b border-slate-200">
-            <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
-              <Settings className="h-5 w-5 text-slate-400" />
+          <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
+              <Settings className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
               System Preferences
             </h2>
           </div>
-          <div className="p-6 space-y-4">
+          <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
             {/* Toggle Options */}
             {[
               { label: "Enable email notifications", key: "emailNotifications" },
@@ -431,13 +431,13 @@ export default function SettingsPage() {
               { label: "Auto-generate invoices", key: "autoInvoices" },
               { label: "Enable maintenance mode", key: "maintenanceMode" }
             ].map((option) => (
-              <div key={option.key} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div key={option.key} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 gap-3">
                 <div>
-                  <h3 className="text-sm font-medium text-slate-800">{option.label}</h3>
-                  <p className="text-xs text-slate-500">Configure this setting for your system</p>
+                  <h3 className="text-sm sm:text-base font-medium text-slate-800">{option.label}</h3>
+                  <p className="text-xs sm:text-sm text-slate-500">Configure this setting for your system</p>
                 </div>
-                <button className="relative w-12 h-6 rounded-full bg-primary transition-colors">
-                  <div className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform translate-x-6" />
+                <button className="relative w-12 h-6 sm:w-14 sm:h-7 rounded-full bg-primary transition-colors shrink-0">
+                  <div className="absolute top-1 left-1 w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full transition-transform translate-x-6 sm:translate-x-7" />
                 </button>
               </div>
             ))}

@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { X, Printer, Download, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import { getReceiptSettings, ReceiptSettings } from "@/lib/receipt-settings"
+import html2canvas from "html2canvas"
 
 interface CartItem {
   id: number
@@ -42,15 +44,66 @@ export function ReceiptPopup({
   phoneNumber
 }: ReceiptPopupProps) {
   const [isPrinting, setIsPrinting] = useState(false)
+  const [receiptSettings, setReceiptSettings] = useState<ReceiptSettings | null>(null)
+
+  useEffect(() => {
+    setReceiptSettings(getReceiptSettings())
+  }, [])
 
   if (!isOpen) return null
 
   const handlePrint = () => {
     setIsPrinting(true)
-    setTimeout(() => {
+    const printContent = document.getElementById('receipt-content')
+    if (printContent) {
+      const originalContents = document.body.innerHTML
+      const printContents = printContent.innerHTML
+      
+      document.body.innerHTML = `
+        <div style="max-width: 400px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
+          ${printContents}
+        </div>
+      `
+      
       window.print()
+      
+      document.body.innerHTML = originalContents
+      window.location.reload()
+    }
+    setTimeout(() => {
       setIsPrinting(false)
     }, 100)
+  }
+
+  const handleDownload = async () => {
+    const receiptContent = document.getElementById('receipt-content')
+    if (receiptContent) {
+      try {
+        const canvas = await html2canvas(receiptContent, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff'
+        })
+        
+        const link = document.createElement('a')
+        link.download = `receipt_${Date.now()}.png`
+        link.href = canvas.toDataURL('image/png')
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      } catch (error) {
+        console.error('Error generating receipt image:', error)
+        // Fallback to text download if html2canvas fails
+        const dataStr = receiptContent.innerText
+        const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(dataStr)
+        const link = document.createElement('a')
+        link.href = dataUri
+        link.download = `receipt_${Date.now()}.txt`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    }
   }
 
   const formatDate = () => {
@@ -71,6 +124,16 @@ export function ReceiptPopup({
       'mpesa': 'M-Pesa'
     }
     return labels[method] || method
+  }
+
+  const getFontSizeClass = () => {
+    if (!receiptSettings) return 'text-sm'
+    switch (receiptSettings.fontSize) {
+      case 'small': return 'text-xs'
+      case 'medium': return 'text-sm'
+      case 'large': return 'text-base'
+      default: return 'text-sm'
+    }
   }
 
   return (
@@ -98,8 +161,16 @@ export function ReceiptPopup({
         <div className="p-6" id="receipt-content">
           {/* Store Info */}
           <div className="text-center mb-6">
-            <h3 className="text-xl font-bold text-slate-900 mb-1">POS System</h3>
-            <p className="text-sm text-slate-600">Your One-Stop Shop</p>
+            {receiptSettings?.showLogo && receiptSettings.logo && (
+              <img src={receiptSettings.logo} alt="Logo" className="h-16 w-auto mx-auto mb-2" />
+            )}
+            <h3 className="text-xl font-bold text-slate-900 mb-1">{receiptSettings?.businessName || 'POS System'}</h3>
+            {receiptSettings?.showContactInfo && (
+              <>
+                <p className="text-sm text-slate-600">{receiptSettings.address}</p>
+                <p className="text-xs text-slate-500">{receiptSettings.phone}</p>
+              </>
+            )}
             <p className="text-xs text-slate-500 mt-1">{formatDate()}</p>
           </div>
 
@@ -177,8 +248,13 @@ export function ReceiptPopup({
 
           {/* Footer */}
           <div className="text-center mt-6 pt-4 border-t border-slate-200">
-            <p className="text-xs text-slate-500">Thank you for your purchase!</p>
-            <p className="text-xs text-slate-400 mt-1">Powered by POS System v2.0</p>
+            <p className="text-xs text-slate-500">{receiptSettings?.footerText || 'Thank you for your purchase!'}</p>
+            {receiptSettings?.showContactInfo && (
+              <div className="text-xs text-slate-400 mt-1">
+                {receiptSettings.email && <p>{receiptSettings.email}</p>}
+                {receiptSettings.website && <p>{receiptSettings.website}</p>}
+              </div>
+            )}
           </div>
         </div>
 
@@ -190,6 +266,14 @@ export function ReceiptPopup({
             className="flex-1 h-11 border-slate-200 text-slate-700 hover:bg-slate-50"
           >
             Close
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleDownload}
+            className="flex-1 h-11 border-slate-200 text-slate-700 hover:bg-slate-50"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Download
           </Button>
           <Button
             onClick={handlePrint}

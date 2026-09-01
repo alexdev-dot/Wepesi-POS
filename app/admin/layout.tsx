@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect, createContext, useContext } from "react"
+import { useState, useEffect, createContext, useContext, Suspense } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { AdminHeader } from "@/components/admin/admin-header"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { isSuperAdminLoggedIn } from "@/lib/auth"
 import { cn } from "@/lib/utils"
+import AdminLoading from "@/components/admin/loading"
 
 interface FullscreenContextType {
   isAppFullscreen: boolean
@@ -30,21 +31,23 @@ export default function AdminLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
   const [isAppFullscreen, setIsAppFullscreen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
 
   useEffect(() => {
-    setIsMounted(true)
     // Check if user is authenticated as super admin
     const authenticated = isSuperAdminLoggedIn()
     setIsAuthenticated(authenticated)
     
     // Load app fullscreen state from localStorage
-    const savedFullscreen = localStorage.getItem('appFullscreenMode')
-    if (savedFullscreen === 'true') {
-      setIsAppFullscreen(true)
+    try {
+      const savedFullscreen = localStorage.getItem('appFullscreenMode')
+      if (savedFullscreen === 'true') {
+        setIsAppFullscreen(true)
+      }
+    } catch (e) {
+      // Ignore localStorage errors (e.g., in private browsing)
     }
     
     if (!authenticated) {
@@ -56,12 +59,11 @@ export default function AdminLayout({
   const toggleAppFullscreen = () => {
     const newState = !isAppFullscreen
     setIsAppFullscreen(newState)
-    localStorage.setItem('appFullscreenMode', newState.toString())
-  }
-
-  // Don't render until mounted to avoid hydration mismatch
-  if (!isMounted) {
-    return null
+    try {
+      localStorage.setItem('appFullscreenMode', newState.toString())
+    } catch (e) {
+      // Ignore localStorage errors
+    }
   }
 
   // Don't render if not authenticated (will redirect)
@@ -94,8 +96,10 @@ export default function AdminLayout({
         <div className="flex flex-1 flex-col overflow-hidden">
           {!isAppFullscreen && <AdminHeader onMenuClick={handleMenuClick} />}
           
-          <main className={cn("flex-1 overflow-y-auto bg-slate-50", isAppFullscreen ? "p-0" : "p-6")}>
-            {children}
+          <main className={cn("flex-1 overflow-y-auto bg-slate-50", isAppFullscreen ? "p-0" : "p-4 md:p-6")}>
+            <Suspense fallback={<AdminLoading />}>
+              {children}
+            </Suspense>
           </main>
         </div>
       </div>

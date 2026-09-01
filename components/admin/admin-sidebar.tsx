@@ -14,8 +14,9 @@ import {
   ChevronRight,
   ChevronDown,
   X,
-  ShoppingBag
-} from "lucide-react"
+  ShoppingBag,
+  Star
+} from "@/components/admin/icons"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { clearSuperAdminSession } from "@/lib/auth"
@@ -27,6 +28,7 @@ const navItems = [
   { icon: Receipt, label: "Billing & Invoices", href: "/admin/billing" },
   { icon: Users, label: "Super Admin Users", href: "/admin/users" },
   { icon: ShieldCheck, label: "Roles & Permissions", href: "/admin/permissions" },
+  { icon: Star, label: "Features", href: "/admin/features" },
   { icon: Ticket, label: "Support Tickets", href: "/admin/support" },
   { icon: Activity, label: "System Health & Logs", href: "/admin/system-logs" },
   { icon: Settings, label: "Global Settings", href: "/admin/settings" },
@@ -45,7 +47,7 @@ export function AdminSidebar({ collapsed = false, currentPath = "", mobileOpen =
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
           onClick={onMobileClose}
         />
       )}
@@ -53,12 +55,13 @@ export function AdminSidebar({ collapsed = false, currentPath = "", mobileOpen =
       {/* Sidebar */}
       <aside className={cn(
         "fixed lg:relative z-50 flex h-screen flex-col bg-white text-slate-800 transition-all duration-300 font-sans shadow-xl border-r border-slate-200",
-        collapsed ? "lg:w-20 w-64" : "lg:w-64 w-64",
+        collapsed ? "lg:w-20 md:w-64 w-72" : "lg:w-64 md:w-64 w-72",
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
       {/* Logo */}
       <div className={cn(
-        "flex flex-col items-center border-b border-slate-200 bg-navy justify-center p-4"
+        "flex items-center border-b border-slate-200 bg-navy justify-center p-4",
+        collapsed ? "lg:flex-col lg:justify-center flex-row lg:gap-0 gap-3" : "flex-col"
       )}>
         <div className="relative mb-2">
           <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
@@ -72,7 +75,10 @@ export function AdminSidebar({ collapsed = false, currentPath = "", mobileOpen =
         {/* Mobile Close Button */}
         <button
           onClick={onMobileClose}
-          className="lg:hidden mt-2 p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+          className={cn(
+            "p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all",
+            collapsed ? "lg:mt-2 mt-0 lg:ml-0 ml-auto" : "lg:mt-2 mt-0"
+          )}
         >
           <X className="h-6 w-6" strokeWidth={2} />
         </button>

@@ -187,7 +187,9 @@ export default function EmployeesPage() {
                   <h3 className="text-base font-semibold text-slate-900">All Employees</h3>
                   <span className="text-sm text-slate-500">24 employees</span>
                 </div>
-                <div className="overflow-x-auto">
+                
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-200">
@@ -268,6 +270,70 @@ export default function EmployeesPage() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
+                  {employees.map((employee) => (
+                    <div key={employee.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-600 font-semibold text-sm shrink-0">
+                          {employee.name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-slate-900 truncate">{employee.name}</span>
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${getStatusColor(employee.status)}`}>
+                              {employee.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1 truncate">{employee.email}</p>
+                          <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                            <Phone className="h-3 w-3" />
+                            {employee.phone}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                        <div className="flex items-center gap-4">
+                          <div>
+                            <p className="text-xs text-slate-500">Role</p>
+                            <p className="text-sm font-semibold text-slate-900">{employee.role}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-500">PIN</p>
+                            {employee.pin ? (
+                              <div className="flex items-center gap-1">
+                                <Lock className="h-3 w-3 text-green-600" />
+                                <span className="text-sm font-semibold text-slate-900">••••</span>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => handleSetPin(employee)}
+                                className="text-xs font-semibold text-violet-600 hover:text-violet-700"
+                              >
+                                Set PIN
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          {employee.pin && (
+                            <button
+                              onClick={() => handleSetPin(employee)}
+                              className="p-2 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-all"
+                            >
+                              <KeyRound className="h-4 w-4" />
+                            </button>
+                          )}
+                          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                            <MoreVertical className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -278,8 +344,8 @@ export default function EmployeesPage() {
       {isAddEmployeeOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setIsAddEmployeeOpen(false)} />
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
               <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 shadow-sm">
@@ -294,7 +360,7 @@ export default function EmployeesPage() {
                   <X className="h-5 w-5 text-slate-400" />
                 </button>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div className="grid gap-4 grid-cols-2">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1.5">First Name</label>
@@ -357,8 +423,8 @@ export default function EmployeesPage() {
       {isPinModalOpen && selectedEmployee && (
         <>
           <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setIsPinModalOpen(false)} />
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
               <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 shadow-sm">
@@ -373,7 +439,7 @@ export default function EmployeesPage() {
                   <X className="h-5 w-5 text-slate-400" />
                 </button>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">4-Digit PIN</label>
                   <div className="relative">

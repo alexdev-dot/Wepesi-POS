@@ -1,8 +1,7 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import { Building2, Users, CreditCard, Search, Plus, MoreVertical, Eye, Edit, Trash2, ShieldAlert, CheckCircle, Clock, XCircle, Filter, Download, Maximize2, Minimize2 } from "lucide-react"
-import { useFullscreen } from "../layout"
+import { Building2, Users, Search, MoreVertical, Eye, Edit, Trash2, ShieldAlert, CheckCircle, Clock, XCircle, Filter, Download } from "@/components/admin/icons"
 
 // Static data moved outside component to prevent recreation on each render
 const stats = [
@@ -128,7 +127,6 @@ const stats = [
   ]
 
 export default function TenantsPage() {
-  const { isAppFullscreen, toggleAppFullscreen } = useFullscreen()
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [selectedTenant, setSelectedTenant] = useState<number | null>(null)
@@ -207,33 +205,19 @@ export default function TenantsPage() {
             <p className="text-slate-600">Manage all tenant accounts and business information</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggleAppFullscreen}
-            className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all text-sm font-medium text-slate-700"
-            title={isAppFullscreen ? "Exit Full Screen" : "Enter Full Screen"}
-          >
-            {isAppFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-            {isAppFullscreen ? "Exit Full Screen" : "Full Screen"}
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all font-medium">
-            <Plus className="h-4 w-4" />
-            Add New Tenant
-          </button>
-        </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500 mb-1">{stat.title}</p>
-                <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
+                <p className="text-xs sm:text-sm font-medium text-slate-500 mb-1">{stat.title}</p>
+                <p className="text-lg sm:text-2xl font-bold text-slate-800">{stat.value}</p>
                 <p className={`text-sm font-medium mt-2 ${
                   stat.change.startsWith('+') ? 'text-green-600' : 'text-red-600'
                 }`}>
@@ -293,52 +277,52 @@ export default function TenantsPage() {
           </div>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        {/* Desktop Table */}
+        <div className="hidden lg:block overflow-x-auto">
+          <table className="w-full min-w-225">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Business</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Plan</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Users</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Revenue</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Created</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Last Active</th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Business</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Plan</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Users</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Revenue</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Created</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Last Active</th>
+                <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
               {filteredTenants.map((tenant) => (
                 <tr key={tenant.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div>
                       <p className="text-sm font-medium text-slate-800">{tenant.name}</p>
                       <p className="text-xs text-slate-500">{tenant.email}</p>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     {getPlanBadge(tenant.plan)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     {getStatusBadge(tenant.status)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-slate-400" />
                       <span className="text-sm text-slate-700">{tenant.users}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm font-medium text-slate-800">{tenant.revenue}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm text-slate-600">{tenant.createdAt}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <span className="text-sm text-slate-600">{tenant.lastActive}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center justify-end gap-1">
                       <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View">
                         <Eye className="h-4 w-4" />
@@ -360,25 +344,87 @@ export default function TenantsPage() {
           </table>
         </div>
 
+        {/* Mobile Card View */}
+        <div className="lg:hidden px-4 sm:px-6 py-4 space-y-3">
+          {filteredTenants.map((tenant) => (
+            <div key={tenant.id} className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold text-sm shrink-0">
+                  {tenant.name.charAt(0)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-slate-900 truncate">{tenant.name}</span>
+                    {getStatusBadge(tenant.status)}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1 truncate">{tenant.email}</p>
+                </div>
+                <span className="text-sm font-bold text-slate-900">{tenant.revenue}</span>
+              </div>
+              
+              <div className="space-y-2 pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-between text-xs sm:text-sm text-slate-600">
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <p className="text-xs text-slate-500">Plan</p>
+                      {getPlanBadge(tenant.plan)}
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Users</p>
+                      <p className="text-sm font-semibold text-slate-900">{tenant.users}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <p className="text-xs text-slate-500">Created</p>
+                      <p className="text-sm font-semibold text-slate-900">{tenant.createdAt}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Active</p>
+                      <p className="text-sm font-semibold text-slate-900">{tenant.lastActive}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View">
+                      <Eye className="h-4 w-4" />
+                    </button>
+                    <button className="p-2 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all" title="Edit">
+                      <Edit className="h-4 w-4" />
+                    </button>
+                    <button className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                    <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all" title="More">
+                      <MoreVertical className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Pagination */}
-        <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-          <p className="text-sm text-slate-600">
+        <div className="px-4 sm:px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm sm:text-base text-slate-600">
             Showing <span className="font-medium text-slate-800">1</span> to <span className="font-medium text-slate-800">{filteredTenants.length}</span> of <span className="font-medium text-slate-800">{tenants.length}</span> tenants
           </p>
           <div className="flex items-center gap-2">
-            <button className="px-3 py-1.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
               Previous
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-all">
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-all">
               1
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
               2
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
               3
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
+            <button className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">
               Next
             </button>
           </div>

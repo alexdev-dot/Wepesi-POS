@@ -3,10 +3,11 @@
 import { ShoppingCart, Trash2, Plus, Minus, CreditCard, X, Banknote, Smartphone, ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { useState, memo } from "react"
 import { motion } from "framer-motion"
+import { OptimizedImage } from "@/components/ui/optimized-image"
 
-interface CartItem {
+export interface CartItem {
   id: number
   name: string
   price: number
@@ -37,7 +38,7 @@ interface CartSidebarProps {
   onPaymentClick?: () => void
 }
 
-export function CartSidebar({
+export const CartSidebar = memo(function CartSidebar({
   cartItems,
   subtotal,
   discount,
@@ -238,15 +239,13 @@ export function CartSidebar({
                     whileHover={{ scale: 1.05 }}
                     className="h-12 w-12 shrink-0 rounded-md bg-white border border-slate-200 overflow-hidden flex items-center justify-center"
                   >
-                    {item.image ? (
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="text-slate-400 text-xs">No img</div>
-                    )}
+                    <OptimizedImage
+                      src={item.image}
+                      alt={item.name}
+                      width={48}
+                      height={48}
+                      className="h-full w-full object-cover"
+                    />
                   </motion.div>
 
                   {/* Product Details */}
@@ -349,4 +348,4 @@ export function CartSidebar({
       </motion.div>
     </motion.div>
   )
-}
+})

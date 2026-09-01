@@ -86,8 +86,8 @@ export default function CustomersPage() {
                   <Users className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Customers</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Manage your customer base</p>
+                  <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">Customers</h1>
+                  <p className="text-sm sm:text-base text-slate-500 mt-0.5">Manage your customer base</p>
                 </div>
               </div>
 
@@ -99,12 +99,12 @@ export default function CustomersPage() {
                   <Input
                     type="text"
                     placeholder="Search customers..."
-                    className="h-10 pl-9 sm:pl-10 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all"
+                    className="h-10 sm:h-11 pl-9 sm:pl-10 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all"
                   />
                 </div>
 
                 {/* Status Filter */}
-                <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all shadow-sm">
+                <select className="px-3 py-2 sm:py-2.5 border border-slate-200 rounded-lg bg-white text-sm sm:text-base text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all shadow-sm">
                   <option>All Status</option>
                   <option>Active</option>
                   <option>Inactive</option>
@@ -113,16 +113,16 @@ export default function CustomersPage() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 ml-auto">
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm sm:text-base text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
                     <Filter className="h-4 w-4" />
                     <span className="hidden sm:inline">More Filters</span>
                   </button>
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm sm:text-base text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
                     <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </button>
                   <Button 
-                    className="h-10 bg-pink-600 hover:bg-pink-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all"
+                    className="h-10 sm:h-11 bg-pink-600 hover:bg-pink-700 text-sm sm:text-base font-semibold shadow-sm hover:shadow-md transition-all"
                     onClick={() => setIsAddCustomerOpen(true)}
                   >
                     <UserPlus className="h-4 w-4 mr-2" />
@@ -155,7 +155,7 @@ export default function CustomersPage() {
                       )}
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900">{stat.title}</h4>
+                      <h4 className="text-sm sm:text-base font-semibold text-slate-900">{stat.title}</h4>
                       <p className="mt-2 text-xl sm:text-2xl font-bold text-slate-900">{stat.value}</p>
                     </div>
                   </div>
@@ -165,8 +165,8 @@ export default function CustomersPage() {
               {/* Customers Table */}
               <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                 <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-                  <h3 className="text-base font-semibold text-slate-900">All Customers</h3>
-                  <span className="text-sm text-slate-500">1,248 customers</span>
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900">All Customers</h3>
+                  <span className="text-sm sm:text-base text-slate-500">1,248 customers</span>
                 </div>
                 
                 {/* Desktop Table */}
@@ -174,13 +174,13 @@ export default function CustomersPage() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-200">
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Customer</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Contact</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Total Spent</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Orders</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Joined</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Actions</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Customer</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Contact</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Total Spent</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Orders</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Status</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Joined</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-slate-500 uppercase">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
@@ -193,12 +193,12 @@ export default function CustomersPage() {
                               </div>
                               <div>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-sm font-medium text-slate-900">{customer.name}</span>
+                                  <span className="text-sm sm:text-base font-medium text-slate-900">{customer.name}</span>
                                   {customer.isVip && (
                                     <Crown className="h-4 w-4 text-yellow-500 fill-yellow-500" />
                                   )}
                                 </div>
-                                <div className="text-xs text-slate-500 flex items-center gap-1">
+                                <div className="text-xs sm:text-sm text-slate-500 flex items-center gap-1">
                                   <MapPin className="h-3 w-3" />
                                   {customer.address}
                                 </div>
@@ -207,24 +207,24 @@ export default function CustomersPage() {
                           </td>
                           <td className="px-4 sm:px-6 py-4">
                             <div className="space-y-1">
-                              <div className="flex items-center gap-1 text-xs text-slate-600">
+                              <div className="flex items-center gap-1 text-xs sm:text-sm text-slate-600">
                                 <Mail className="h-3 w-3" />
                                 <span>{customer.email}</span>
                               </div>
-                              <div className="flex items-center gap-1 text-xs text-slate-600">
+                              <div className="flex items-center gap-1 text-xs sm:text-sm text-slate-600">
                                 <Phone className="h-3 w-3" />
                                 <span>{customer.phone}</span>
                               </div>
                             </div>
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-slate-900">{customer.totalSpent}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-900 font-semibold">{customer.totalOrders}</td>
+                          <td className="px-4 sm:px-6 py-4 text-base font-semibold text-slate-900">{customer.totalSpent}</td>
+                          <td className="px-4 sm:px-6 py-4 text-base text-slate-900 font-semibold">{customer.totalOrders}</td>
                           <td className="px-4 sm:px-6 py-4">
                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(customer.status)}`}>
                               {customer.status}
                             </span>
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{customer.joinDate}</td>
+                          <td className="px-4 sm:px-6 py-4 text-base text-slate-700">{customer.joinDate}</td>
                           <td className="px-4 sm:px-6 py-4">
                             <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
                               <MoreVertical className="h-4 w-4" />
@@ -246,41 +246,41 @@ export default function CustomersPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-slate-900 truncate">{customer.name}</span>
+                            <span className="text-sm sm:text-base font-semibold text-slate-900 truncate">{customer.name}</span>
                             {customer.isVip && (
                               <Crown className="h-4 w-4 text-yellow-500 fill-yellow-500 shrink-0" />
                             )}
                           </div>
-                          <div className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                          <div className="text-xs sm:text-sm text-slate-500 flex items-center gap-1 mt-1">
                             <MapPin className="h-3 w-3" />
                             <span className="truncate">{customer.address}</span>
                           </div>
                         </div>
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${getStatusColor(customer.status)}`}>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs sm:text-sm font-medium border shrink-0 ${getStatusColor(customer.status)}`}>
                           {customer.status}
                         </span>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-3 mb-3">
                         <div>
-                          <p className="text-xs text-slate-500">Email</p>
-                          <p className="text-xs text-slate-700 truncate">{customer.email}</p>
+                          <p className="text-xs sm:text-sm text-slate-500">Email</p>
+                          <p className="text-xs sm:text-sm text-slate-700 truncate">{customer.email}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-slate-500">Phone</p>
-                          <p className="text-xs text-slate-700 truncate">{customer.phone}</p>
+.                        <div>
+                          <p className="text-xs sm:text-sm text-slate-500">Phone</p>
+                          <p className="text-xs sm:text-sm text-slate-700 truncate">{customer.phone}</p>
                         </div>
                       </div>
                       
                       <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                         <div className="flex items-center gap-4">
                           <div>
-                            <p className="text-xs text-slate-500">Total Spent</p>
-                            <p className="text-sm font-bold text-slate-900">{customer.totalSpent}</p>
+                            <p className="text-xs sm:text-sm text-slate-500">Total Spent</p>
+                            <p className="text-sm sm:text-base font-bold text-slate-900">{customer.totalSpent}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-slate-500">Orders</p>
-                            <p className="text-sm font-semibold text-slate-900">{customer.totalOrders}</p>
+                            <p className="text-xs sm:text-sm text-slate-500">Orders</p>
+                            <p className="text-sm sm:text-base font-semibold text-slate-900">{customer.totalOrders}</p>
                           </div>
                         </div>
                         <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all" aria-label="More options">
@@ -308,8 +308,8 @@ export default function CustomersPage() {
                     <UserPlus className="h-5 w-5" strokeWidth={2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-slate-900">Add Customer</h3>
-                    <p className="text-xs text-slate-500">Add a new customer</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-900">Add Customer</h3>
+                    <p className="text-xs sm:text-sm text-slate-500">Add a new customer</p>
                   </div>
                 </div>
                 <button onClick={() => setIsAddCustomerOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
@@ -319,46 +319,46 @@ export default function CustomersPage() {
               <div className="p-6 space-y-4">
                 <div className="grid gap-4 grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">First Name</label>
-                    <Input type="text" placeholder="Enter first name" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
+                    <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">First Name</label>
+                    <Input type="text" placeholder="Enter first name" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Last Name</label>
-                    <Input type="text" placeholder="Enter last name" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
+                    <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Last Name</label>
+                    <Input type="text" placeholder="Enter last name" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
-                  <Input type="email" placeholder="Enter email address" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
+                  <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Email</label>
+                  <Input type="email" placeholder="Enter email address" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Phone</label>
-                  <Input type="tel" placeholder="Enter phone number" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
+                  <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Phone</label>
+                  <Input type="tel" placeholder="Enter phone number" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Address</label>
-                  <Input type="text" placeholder="Enter address" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
+                  <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Address</label>
+                  <Input type="text" placeholder="Enter address" className="h-10 sm:h-11 px-3 text-sm sm:text-base border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all" />
                 </div>
                 <div className="grid gap-4 grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Status</label>
-                    <select className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all">
+                    <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">Status</label>
+                    <select className="w-full px-3 py-2.5 text-sm sm:text-base border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all">
                       <option>Active</option>
                       <option>Inactive</option>
                       <option>Pending</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">VIP Status</label>
-                    <select className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all">
+                    <label className="block text-sm sm:text-base font-medium text-slate-700 mb-1.5">VIP Status</label>
+                    <select className="w-full px-3 py-2.5 text-sm sm:text-base border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all">
                       <option>Regular</option>
                       <option>VIP</option>
                     </select>
                   </div>
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={() => setIsAddCustomerOpen(false)} className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
-                  <Button className="flex-1 h-10 bg-pink-600 hover:bg-pink-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all">Add Customer</Button>
+                  <Button variant="outline" onClick={() => setIsAddCustomerOpen(false)} className="flex-1 h-10 sm:h-11 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
+                  <Button className="flex-1 h-10 sm:h-11 bg-pink-600 hover:bg-pink-700 text-sm sm:text-base font-semibold shadow-sm hover:shadow-md transition-all">Add Customer</Button>
                 </div>
               </div>
             </div>
