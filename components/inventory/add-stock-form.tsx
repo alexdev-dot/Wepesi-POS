@@ -54,17 +54,17 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-background/80 z-50 flex items-center justify-center p-4">
+      <div className="bg-card rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Add Stock</h2>
-            <p className="text-sm text-slate-500">Record new stock entry</p>
+            <h2 className="text-xl font-bold text-foreground">Add Stock</h2>
+            <p className="text-sm text-muted-foreground">Record new stock entry</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors"
+            className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -74,13 +74,13 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Product Selection */}
           <div>
-            <Label htmlFor="productName" className="text-sm font-semibold text-slate-700 mb-1.5 block">Product *</Label>
+            <Label htmlFor="productName" className="text-sm font-semibold text-foreground mb-1.5 block">Product *</Label>
             <select
               id="productName"
               name="productName"
               value={formData.productName}
               onChange={handleInputChange}
-              className="h-10 w-full px-3 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="h-10 w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               required
             >
               <option value="">Select Product</option>
@@ -96,7 +96,7 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
 
           {/* Quantity */}
           <div>
-            <Label htmlFor="quantity" className="text-sm font-semibold text-slate-700 mb-1.5 block">Quantity *</Label>
+            <Label htmlFor="quantity" className="text-sm font-semibold text-foreground mb-1.5 block">Quantity *</Label>
             <Input
               id="quantity"
               name="quantity"
@@ -112,7 +112,7 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
 
           {/* Unit Cost */}
           <div>
-            <Label htmlFor="unitCost" className="text-sm font-semibold text-slate-700 mb-1.5 block">Unit Cost (KSh) *</Label>
+            <Label htmlFor="unitCost" className="text-sm font-semibold text-foreground mb-1.5 block">Unit Cost (KSh) *</Label>
             <Input
               id="unitCost"
               name="unitCost"
@@ -128,7 +128,7 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
 
           {/* Supplier */}
           <div>
-            <Label htmlFor="supplier" className="text-sm font-semibold text-slate-700 mb-1.5 block">Supplier</Label>
+            <Label htmlFor="supplier" className="text-sm font-semibold text-foreground mb-1.5 block">Supplier</Label>
             <Input
               id="supplier"
               name="supplier"
@@ -141,7 +141,7 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
 
           {/* Notes */}
           <div>
-            <Label htmlFor="notes" className="text-sm font-semibold text-slate-700 mb-1.5 block">Notes</Label>
+            <Label htmlFor="notes" className="text-sm font-semibold text-foreground mb-1.5 block">Notes</Label>
             <textarea
               id="notes"
               name="notes"
@@ -149,17 +149,17 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
               onChange={handleInputChange}
               placeholder="Additional notes..."
               rows={3}
-              className="w-full px-3 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
+              className="w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4 border-t border-slate-200 sticky bottom-0 bg-white">
+          <div className="flex gap-3 pt-4 border-t border-border sticky bottom-0 bg-card">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50"
+              className="flex-1 h-10 border-border text-foreground hover:bg-muted"
             >
               Cancel
             </Button>

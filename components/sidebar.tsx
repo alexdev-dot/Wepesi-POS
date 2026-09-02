@@ -112,14 +112,14 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-background/80 z-40 lg:hidden backdrop-blur-sm"
           onClick={onMobileClose}
         />
       )}
 
       {/* Sidebar */}
       <aside className={cn(
-        "z-50 flex h-screen flex-col bg-slate-100 text-slate-800 transition-all duration-300 ease-in-out font-sans shadow-xl border-r border-slate-200",
+        "z-50 flex h-screen flex-col bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out font-sans shadow-xl border-r border-sidebar-border",
         hideByDefault ? (mobileOpen ? "lg:relative" : "fixed") : "lg:relative",
         collapsed ? "lg:w-20 w-72 sm:w-80" : "lg:w-52 w-72 sm:w-80",
         !mobileOpen && "hidden lg:flex",
@@ -129,7 +129,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
       )}>
         {/* Logo */}
         <div className={cn(
-          "flex items-center border-b border-slate-200 bg-white/50 backdrop-blur-sm",
+          "flex items-center border-b border-sidebar-border bg-sidebar-accent/50 backdrop-blur-sm",
           collapsed ? "lg:justify-center justify-between px-4 sm:px-6 py-5" : "gap-3 px-6 py-5"
         )}>
           <div className="relative flex items-center justify-center">
@@ -138,15 +138,15 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-bold tracking-wide text-slate-900">POS System</span>
-              <span className="text-xs sm:text-sm text-slate-500 font-medium">v2.0</span>
+              <span className="text-base sm:text-lg font-bold tracking-wide text-sidebar-foreground">POS System</span>
+              <span className="text-xs sm:text-sm text-muted-foreground font-medium">v2.0</span>
             </div>
           )}
           {/* Mobile Close Button */}
           <button
             onClick={onMobileClose}
             className={cn(
-              "p-2 sm:p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg transition-all",
+              "p-2 sm:p-2.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all",
               collapsed ? "lg:hidden" : "lg:hidden ml-auto"
             )}
           >
@@ -155,7 +155,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+        <nav className="flex-1 overflow-y-auto px-3 py-4 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
           <ul className="space-y-1">
             {navItems.map((item) => {
               const hasChildren = item.children && item.children.length > 0
@@ -178,21 +178,21 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                         className={cn(
                           "flex items-center rounded-lg px-3 py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-all duration-200 w-full group",
                           (isActive || isChildActive)
-                            ? "bg-green-100 text-green-700 shadow-sm"
-                            : "text-slate-600 hover:bg-slate-200 hover:text-slate-800",
+                            ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground",
                           collapsed ? "justify-center" : "gap-3"
                         )}
                         title={collapsed ? item.label : undefined}
                       >
                         <item.icon className={cn(
                           "h-5 w-5 sm:h-6 sm:w-6 shrink-0",
-                          (isActive || isChildActive) ? "text-green-600" : "text-slate-400 group-hover:text-slate-600 transition-colors"
+                          (isActive || isChildActive) ? "text-sidebar-primary-foreground" : "text-muted-foreground group-hover:text-foreground transition-colors"
                         )} strokeWidth={2} />
                         {!collapsed && (
                           <>
                             <span className="flex-1 text-left">{item.label}</span>
                             <ChevronDown className={cn(
-                              "h-4 w-4 sm:h-5 sm:w-5 shrink-0 transition-transform text-slate-400 group-hover:text-slate-600",
+                              "h-4 w-4 sm:h-5 sm:w-5 shrink-0 transition-transform text-muted-foreground group-hover:text-foreground",
                               isDropdownOpen ? "rotate-180" : ""
                             )} strokeWidth={2} />
                           </>
@@ -210,14 +210,14 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                                   className={cn(
                                     "flex items-center rounded-md px-3 py-2 sm:py-2.5 text-sm sm:text-base font-medium transition-all duration-200 group",
                                     childIsActive
-                                      ? "bg-green-50 text-green-600"
-                                      : "text-slate-500 hover:bg-slate-200 hover:text-slate-700",
+                                      ? "bg-sidebar-accent text-sidebar-primary"
+                                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
                                     "gap-3"
                                   )}
                                 >
                                   <child.icon className={cn(
                                     "h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0",
-                                    childIsActive ? "text-green-500" : "text-slate-400 group-hover:text-slate-500 transition-colors"
+                                    childIsActive ? "text-sidebar-primary" : "text-muted-foreground group-hover:text-foreground transition-colors"
                                   )} strokeWidth={2} />
                                   <span>{child.label}</span>
                                 </a>
@@ -228,12 +228,12 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                       )}
                       {/* Collapsed Dropdown Popup */}
                       {collapsed && collapsedDropdown?.label === item.label && (
-                        <div 
-                          className="sidebar-dropdown fixed left-20 top-0 z-50 w-64 bg-white rounded-xl shadow-2xl border border-slate-200 py-2"
+                        <div
+                          className="sidebar-dropdown fixed left-20 top-0 z-50 w-64 bg-card rounded-xl shadow-2xl border border-border py-2"
                           style={{ top: collapsedDropdown.y }}
                         >
-                          <div className="px-4 py-2 border-b border-slate-100 bg-slate-50">
-                            <span className="text-sm font-semibold text-slate-900">{item.label}</span>
+                          <div className="px-4 py-2 border-b border-border bg-muted">
+                            <span className="text-sm font-semibold text-foreground">{item.label}</span>
                           </div>
                           <ul className="py-1">
                             {item.children?.map((child) => {
@@ -249,13 +249,13 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                                     className={cn(
                                       "flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors",
                                       childIsActive
-                                        ? "bg-green-50 text-green-600"
-                                        : "text-slate-700 hover:bg-slate-100"
+                                        ? "bg-sidebar-accent text-sidebar-primary"
+                                        : "text-foreground hover:bg-muted"
                                     )}
                                   >
                                     <child.icon className={cn(
                                       "h-4 w-4 shrink-0",
-                                      childIsActive ? "text-green-500" : "text-slate-400"
+                                      childIsActive ? "text-sidebar-primary" : "text-muted-foreground"
                                     )} strokeWidth={2} />
                                     <span>{child.label}</span>
                                   </a>
@@ -273,15 +273,15 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                       className={cn(
                         "flex items-center rounded-lg px-3 py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-all duration-200 w-full group",
                         isActive
-                          ? "bg-green-100 text-green-700 shadow-sm"
-                          : "text-slate-600 hover:bg-slate-200 hover:text-slate-800",
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground",
                         collapsed ? "justify-center" : "gap-3"
                       )}
                       title={collapsed ? item.label : undefined}
                     >
                       <item.icon className={cn(
                         "h-5 w-5 sm:h-6 sm:w-6 shrink-0",
-                        isActive ? "text-green-600" : "text-slate-400 group-hover:text-slate-600 transition-colors"
+                        isActive ? "text-sidebar-primary-foreground" : "text-muted-foreground group-hover:text-foreground transition-colors"
                       )} strokeWidth={2} />
                       {!collapsed && <span className="flex-1 text-left">{item.label}</span>}
                     </a>

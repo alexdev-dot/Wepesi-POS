@@ -14,7 +14,6 @@ interface ReceiptPreviewPopupProps {
     title: string
     text: string
     email: string
-    website: string
   }
 }
 
@@ -489,26 +488,27 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-2 sm:p-4">
+      <div className="bg-card rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] sm:max-h-[85vh] overflow-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-900">Receipt Preview</h2>
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b border-border">
+          <h2 className="text-base sm:text-lg font-semibold text-foreground">Receipt Preview</h2>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setIsFlipped(!isFlipped)}
-              className="h-8 px-3 border-slate-200 text-slate-700 hover:bg-slate-50"
+              className="h-8 px-2 sm:px-3 border-border text-foreground hover:bg-muted text-xs sm:text-sm"
             >
-              <RotateCw className="h-4 w-4 mr-2" />
-              {isFlipped ? "Front" : "Back"}
+              <RotateCw className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">{isFlipped ? "Front" : "Back"}</span>
+              <span className="sm:hidden">{isFlipped ? "F" : "B"}</span>
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="h-8 w-8 p-0 hover:bg-slate-100"
+              className="h-8 w-8 p-0 hover:bg-muted"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -516,7 +516,7 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-3 sm:p-6">
           <div className="flex justify-center perspective-1000">
             <div 
               ref={receiptRef}
@@ -525,88 +525,86 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
             >
               {/* Front Side */}
               <div 
-                className={`${selectedTemplate === "thermal-58mm" ? "w-56" : "w-80"} bg-white border border-slate-200 rounded-lg p-4 shadow-sm backface-hidden`}
+                className={`${selectedTemplate === "thermal-58mm" ? "w-48 sm:w-56" : "w-64 sm:w-80"} bg-card border border-border rounded-lg p-3 sm:p-4 shadow-sm backface-hidden`}
                 style={{ backfaceVisibility: "hidden" }}
               >
-                <div className={`text-center mb-4 ${getFontSizeClass()}`}>
+                <div className={`text-center mb-3 sm:mb-4 ${getFontSizeClass()}`}>
                   {receiptSettings?.showLogo && receiptSettings.logo && (
-                    <img src={receiptSettings.logo} alt="Logo" className="h-12 w-auto mx-auto mb-2" />
+                    <img src={receiptSettings.logo} alt="Logo" className="h-10 sm:h-12 w-auto mx-auto mb-2" />
                   )}
-                  <div className="font-bold text-lg mb-1">{receiptSettings?.businessName || 'MY BUSINESS'}</div>
+                  <div className="font-bold text-base sm:text-lg mb-1 text-foreground">{receiptSettings?.businessName || 'MY BUSINESS'}</div>
                   {receiptSettings?.showContactInfo && (
                     <>
-                      <div className="text-slate-500">{receiptSettings.address}</div>
-                      <div className="text-slate-500">{receiptSettings.phone}</div>
-                      {receiptSettings.email && <div className="text-slate-500">{receiptSettings.email}</div>}
-                      {receiptSettings.website && <div className="text-slate-500">{receiptSettings.website}</div>}
+                      <div className="text-muted-foreground">{receiptSettings.address}</div>
+                      <div className="text-muted-foreground">{receiptSettings.phone}</div>
+                      {receiptSettings.email && <div className="text-muted-foreground">{receiptSettings.email}</div>}
                     </>
                   )}
                 </div>
-                <div className={`border-t border-b border-slate-300 py-2 mb-4 ${getFontSizeClass()}`}>
-                  <div className="flex justify-between">
+                <div className={`border-t border-b border-border py-1.5 sm:py-2 mb-3 sm:mb-4 ${getFontSizeClass()}`}>
+                  <div className="flex justify-between text-xs">
                     <span>Receipt #: 12345</span>
                     <span>Date: {formatDate()}</span>
                   </div>
-                  <div className="flex justify-between mt-1">
+                  <div className="flex justify-between mt-1 text-xs">
                     <span>Cashier: Alex</span>
                     <span>Time: {formatTime()}</span>
                   </div>
                 </div>
-                <div className={`space-y-2 mb-4 ${getFontSizeClass()}`}>
-                  <div className="flex justify-between">
+                <div className={`space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 ${getFontSizeClass()}`}>
+                  <div className="flex justify-between text-xs">
                     <span>Coca Cola 500ml x2</span>
                     <span>KSh 240</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-xs">
                     <span>Bread Loaf x1</span>
                     <span>KSh 80</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-xs">
                     <span>Milk 1L x1</span>
                     <span>KSh 120</span>
                   </div>
-                  <div className="flex justify-between text-slate-500">
+                  <div className="flex justify-between text-muted-foreground text-xs">
                     <span>Subtotal</span>
                     <span>KSh 440</span>
                   </div>
-                  <div className="flex justify-between text-slate-500">
+                  <div className="flex justify-between text-muted-foreground text-xs">
                     <span>Tax (16%)</span>
                     <span>KSh 70.40</span>
                   </div>
-                  <div className="flex justify-between font-bold text-base border-t border-slate-300 pt-2">
+                  <div className="flex justify-between font-bold text-sm sm:text-base border-t border-border pt-2 text-foreground">
                     <span>TOTAL</span>
                     <span>KSh 510.40</span>
                   </div>
                 </div>
-                <div className={`border-t border-slate-300 pt-2 text-center text-slate-500 ${getFontSizeClass()}`}>
-                  <div className="mb-1">Paid: Cash</div>
-                  <div>{receiptSettings?.footerText || 'Thank you for your business!'}</div>
+                <div className={`border-t border-border pt-1.5 sm:pt-2 text-center text-muted-foreground ${getFontSizeClass()}`}>
+                  <div className="mb-1 text-xs">Paid: Cash</div>
+                  <div className="text-xs">{receiptSettings?.footerText || 'Thank you for your business!'}</div>
                 </div>
               </div>
 
               {/* Back Side */}
               <div
-                className={`${selectedTemplate === "thermal-58mm" ? "w-56" : "w-80"} bg-white border border-slate-200 rounded-lg p-4 shadow-sm absolute top-0 left-0 backface-hidden`}
+                className={`${selectedTemplate === "thermal-58mm" ? "w-48 sm:w-56" : "w-64 sm:w-80"} bg-card border border-border rounded-lg p-3 sm:p-4 shadow-sm absolute top-0 left-0 backface-hidden`}
                 style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
               >
-                <div className="text-center py-8">
+                <div className="text-center py-6 sm:py-8">
                   {receiptSettings?.backImage ? (
-                    <img src={receiptSettings.backImage} alt="Back of Receipt" className="w-full h-auto rounded-lg mb-4" />
+                    <img src={receiptSettings.backImage} alt="Back of Receipt" className="w-full h-auto rounded-lg mb-3 sm:mb-4" />
                   ) : (
-                    <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 mb-4">
-                      <div className="text-slate-400 text-xs mb-2">Back of Receipt</div>
-                      <div className="text-slate-300 text-4xl mb-2">📄</div>
-                      <div className="text-slate-400 text-xs">Custom back image or text</div>
+                    <div className="border-2 border-dashed border-border rounded-lg p-4 sm:p-6 mb-3 sm:mb-4">
+                      <div className="text-muted-foreground text-xs mb-2">Back of Receipt</div>
+                      <div className="text-muted-foreground/40 text-3xl sm:text-4xl mb-2">📄</div>
+                      <div className="text-muted-foreground text-xs">Custom back image or text</div>
                     </div>
                   )}
-                  <div className="text-xs text-slate-500 space-y-1">
-                    <div className="font-semibold text-slate-700">{backReceiptData?.title || receiptSettings?.backReceiptTitle || "Return Policy"}</div>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <div className="font-semibold text-foreground">{backReceiptData?.title || receiptSettings?.backReceiptTitle || "Return Policy"}</div>
                     <div>{backReceiptData?.text || receiptSettings?.backReceiptText || "Returns accepted within 7 days with original receipt"}</div>
                   </div>
-                  <div className="mt-4 text-xs text-slate-500">
-                    <div className="font-semibold text-slate-700 mb-1">Contact Us</div>
+                  <div className="mt-4 text-xs text-muted-foreground">
+                    <div className="font-semibold text-foreground mb-1">Contact Us</div>
                     <div>Email: {backReceiptData?.email || receiptSettings?.backContactEmail || "support@mybusiness.com"}</div>
-                    <div>Website: {backReceiptData?.website || receiptSettings?.backContactWebsite || "www.mybusiness.com"}</div>
                   </div>
                 </div>
               </div>
@@ -615,27 +613,29 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-4 border-t border-slate-200">
+        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 p-3 sm:p-4 border-t border-border">
           <Button
             variant="outline"
             onClick={handlePrint}
-            className="h-10 border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="h-9 sm:h-10 border-border text-foreground hover:bg-muted text-xs sm:text-sm"
           >
-            <Printer className="h-4 w-4 mr-2" />
-            Print
+            <Printer className="h-4 w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Print</span>
+            <span className="sm:hidden">Print</span>
           </Button>
           <Button
             variant="outline"
             onClick={handleDownload}
-            className="h-10 border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="h-9 sm:h-10 border-border text-foreground hover:bg-muted text-xs sm:text-sm"
           >
-            <Download className="h-4 w-4 mr-2" />
-            Download
+            <Download className="h-4 w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Download</span>
+            <span className="sm:hidden">Save</span>
           </Button>
           <Button
             variant="outline"
             onClick={onClose}
-            className="h-10 border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="h-9 sm:h-10 border-border text-foreground hover:bg-muted text-xs sm:text-sm"
           >
             Close
           </Button>

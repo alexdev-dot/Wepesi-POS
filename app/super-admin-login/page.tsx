@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, ShoppingBag } from "lucide-react"
 import { validateSuperAdmin, setSuperAdminSession } from "@/lib/auth"
@@ -96,7 +96,7 @@ export default function SuperAdminLoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter super admin email"
-                    className="w-full h-12 rounded-xl border border-slate-300 bg-white pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                    className="w-full h-12 rounded-xl bg-white pl-10 pr-4 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     suppressHydrationWarning
                   />
                 </div>
@@ -112,7 +112,7 @@ export default function SuperAdminLoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter super admin password"
-                    className="w-full h-12 rounded-xl border border-slate-300 bg-white pl-10 pr-12 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                    className="w-full h-12 rounded-xl bg-white pl-10 pr-12 text-sm placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
                     suppressHydrationWarning
                   />
                   <button

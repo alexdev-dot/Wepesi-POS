@@ -47,14 +47,14 @@ export function AdminSidebar({ collapsed = false, currentPath = "", mobileOpen =
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-background/80 z-40 md:hidden"
           onClick={onMobileClose}
         />
       )}
       
       {/* Sidebar */}
       <aside className={cn(
-        "fixed lg:relative z-50 flex h-screen flex-col bg-white text-slate-800 transition-all duration-300 font-sans shadow-xl border-r border-slate-200",
+        "fixed lg:relative z-50 flex h-screen flex-col bg-card text-slate-800 transition-all duration-300 font-sans shadow-xl border-r border-slate-200",
         collapsed ? "lg:w-20 md:w-64 w-72" : "lg:w-64 md:w-64 w-72",
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>

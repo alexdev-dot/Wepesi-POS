@@ -6,11 +6,13 @@ import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Receipt, TrendingDown, DollarSign, Building2, Plus, Download, Filter, Calendar, MoreVertical, ArrowDownRight, ShoppingBag, Truck, Users, Zap, Home, Utensils, Clock, X } from "lucide-react"
+import { useMobile } from "@/lib/hooks/use-mobile"
 
 export default function ExpensesPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false)
+  const isMobile = useMobile()
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed)
@@ -71,15 +73,15 @@ export default function ExpensesPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Paid": return "bg-green-100 text-green-700 border-green-200"
-      case "Pending": return "bg-orange-100 text-orange-700 border-orange-200"
-      case "Overdue": return "bg-red-100 text-red-700 border-red-200"
-      default: return "bg-slate-100 text-slate-700 border-slate-200"
+      case "Paid": return "bg-green-100 text-green-700 border-green-200   "
+      case "Pending": return "bg-orange-100 text-orange-700 border-orange-200   "
+      case "Overdue": return "bg-red-100 text-red-700 border-red-200   "
+      default: return "bg-slate-100 text-slate-700 border-slate-200   border-slate-700"
     }
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/expenses" 
@@ -97,21 +99,21 @@ export default function ExpensesPage() {
                   <Receipt className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Expenses</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Track and manage business expenses</p>
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Expenses</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">Track and manage business expenses</p>
                 </div>
               </div>
 
               {/* Filters Section */}
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Date Range */}
-                <div className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white shadow-sm">
-                  <Calendar className="h-4 w-4 text-slate-500" />
-                  <span className="text-sm text-slate-700">May 2025</span>
+                <div className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card shadow-sm">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-foreground">May 2025</span>
                 </div>
 
                 {/* Category Filter */}
-                <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm">
+                <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm">
                   <option>All Categories</option>
                   <option>Inventory</option>
                   <option>Operations</option>
@@ -121,7 +123,7 @@ export default function ExpensesPage() {
                 </select>
 
                 {/* Status Filter */}
-                <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm">
+                <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all shadow-sm">
                   <option>All Status</option>
                   <option>Paid</option>
                   <option>Pending</option>
@@ -130,11 +132,11 @@ export default function ExpensesPage() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 ml-auto">
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Filter className="h-4 w-4" />
                     <span className="hidden sm:inline">More Filters</span>
                   </button>
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </button>
@@ -156,7 +158,7 @@ export default function ExpensesPage() {
               {/* Stats Cards */}
               <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
                 {expenseStats.map((stat) => (
-                  <div key={stat.title} className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div key={stat.title} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between mb-3 sm:mb-4">
                       <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${
                         stat.isPositive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
@@ -173,16 +175,16 @@ export default function ExpensesPage() {
                       )}
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900">{stat.title}</h4>
-                      <p className="mt-2 text-xl sm:text-2xl font-bold text-slate-900">{stat.value}</p>
+                      <h4 className="text-sm font-semibold text-foreground">{stat.title}</h4>
+                      <p className="mt-2 text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Expense Categories */}
-              <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
-                <h3 className="text-base font-semibold text-slate-900 mb-4">Expense by Category</h3>
+              <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
+                <h3 className="text-base font-semibold text-foreground mb-4">Expense by Category</h3>
                 <div className="space-y-4">
                   {expenseCategories.map((category) => (
                     <div key={category.name} className="flex items-center gap-4">
@@ -191,63 +193,63 @@ export default function ExpensesPage() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-slate-900">{category.name}</span>
-                          <span className="text-sm font-semibold text-slate-900">KSh {category.amount.toLocaleString()}</span>
+                          <span className="text-sm font-medium text-foreground">{category.name}</span>
+                          <span className="text-sm font-semibold text-foreground">KSh {category.amount.toLocaleString()}</span>
                         </div>
-                        <div className="w-full bg-slate-100 rounded-full h-2">
+                        <div className="w-full bg-muted rounded-full h-2">
                           <div 
                             className="bg-orange-600 h-2 rounded-full transition-all"
                             style={{ width: `${category.percentage}%` }}
                           />
                         </div>
                       </div>
-                      <span className="text-sm text-slate-500 w-12 text-right">{category.percentage}%</span>
+                      <span className="text-sm text-muted-foreground w-12 text-right">{category.percentage}%</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Expenses Table */}
-              <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-                  <h3 className="text-base font-semibold text-slate-900">Recent Expenses</h3>
-                  <span className="text-sm text-slate-500">8 expenses this month</span>
+              <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+                <div className="px-4 sm:px-6 py-4 border-b border-border bg-muted flex items-center justify-between">
+                  <h3 className="text-base font-semibold text-foreground">Recent Expenses</h3>
+                  <span className="text-sm text-muted-foreground">8 expenses this month</span>
                 </div>
                 
                 {/* Desktop Table */}
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-slate-200">
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Category</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Description</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Amount</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Date</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Vendor</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Actions</th>
+                      <tr className="border-b border-border">
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Category</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Description</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Amount</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Date</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Vendor</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Status</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-border">
                       {expenses.map((expense) => (
-                        <tr key={expense.id} className="hover:bg-slate-50 transition-colors">
+                        <tr key={expense.id} className="hover:bg-muted transition-colors">
                           <td className="px-4 sm:px-6 py-4">
                             <div className="flex items-center gap-2">
                               {getCategoryIcon(expense.category)}
-                              <span className="text-sm font-medium text-slate-900">{expense.category}</span>
+                              <span className="text-sm font-medium text-foreground">{expense.category}</span>
                             </div>
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-900">{expense.description}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-slate-900">KSh {expense.amount.toLocaleString()}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{expense.date}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{expense.vendor}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-foreground">{expense.description}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-foreground">KSh {expense.amount.toLocaleString()}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground">{expense.date}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground">{expense.vendor}</td>
                           <td className="px-4 sm:px-6 py-4">
                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${getStatusColor(expense.status)}`}>
                               {expense.status}
                             </span>
                           </td>
                           <td className="px-4 sm:px-6 py-4">
-                            <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                            <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
                               <MoreVertical className="h-4 w-4" />
                             </button>
                           </td>
@@ -260,29 +262,29 @@ export default function ExpensesPage() {
                 {/* Mobile Card View */}
                 <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
                   {expenses.map((expense) => (
-                    <div key={expense.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div key={expense.id} className="bg-card border border-border rounded-xl p-4 shadow-sm">
                       <div className="flex items-start gap-3 mb-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600 shrink-0">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600 shrink-0  ">
                           {getCategoryIcon(expense.category)}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-slate-900">{expense.category}</span>
+                            <span className="text-sm font-semibold text-foreground">{expense.category}</span>
                             <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${getStatusColor(expense.status)}`}>
                               {expense.status}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-500 mt-1 truncate">{expense.description}</p>
+                          <p className="text-xs text-muted-foreground mt-1 truncate">{expense.description}</p>
                         </div>
-                        <span className="text-sm font-bold text-slate-900">KSh {expense.amount.toLocaleString()}</span>
+                        <span className="text-sm font-bold text-foreground">KSh {expense.amount.toLocaleString()}</span>
                       </div>
                       
-                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                      <div className="flex items-center justify-between pt-3 border-t border-border text-xs text-muted-foreground">
                         <div className="flex items-center gap-4">
                           <span>{expense.date}</span>
                           <span className="truncate">{expense.vendor}</span>
                         </div>
-                        <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                        <button className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
                           <MoreVertical className="h-4 w-4" />
                         </button>
                       </div>
@@ -300,25 +302,25 @@ export default function ExpensesPage() {
         <>
           <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setIsAddExpenseOpen(false)} />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-              <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+            <div className="bg-card rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+              <div className="px-6 py-4 border-b border-border flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-600 shadow-sm">
                     <Receipt className="h-5 w-5" strokeWidth={2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-slate-900">Add Expense</h3>
-                    <p className="text-xs text-slate-500">Record a new expense</p>
+                    <h3 className="text-base font-semibold text-foreground">Add Expense</h3>
+                    <p className="text-xs text-muted-foreground">Record a new expense</p>
                   </div>
                 </div>
-                <button onClick={() => setIsAddExpenseOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                  <X className="h-5 w-5 text-slate-400" />
+                <button onClick={() => setIsAddExpenseOpen(false)} className="p-2 hover:bg-muted rounded-lg transition-colors">
+                  <X className="h-5 w-5 text-muted-foreground" />
                 </button>
               </div>
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Category</label>
-                  <select className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Category</label>
+                  <select className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all">
                     <option>Select category</option>
                     <option>Inventory</option>
                     <option>Operations</option>
@@ -328,23 +330,23 @@ export default function ExpensesPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Description</label>
-                  <Input type="text" placeholder="Enter description" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Description</label>
+                  <Input type="text" placeholder="Enter description" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Amount</label>
-                  <Input type="number" placeholder="Enter amount" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Amount</label>
+                  <Input type="number" placeholder="Enter amount" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Vendor</label>
-                  <Input type="text" placeholder="Enter vendor name" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Vendor</label>
+                  <Input type="text" placeholder="Enter vendor name" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Date</label>
-                  <Input type="date" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Date</label>
+                  <Input type="date" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/20 transition-all" />
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={() => setIsAddExpenseOpen(false)} className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
+                  <Button variant="outline" onClick={() => setIsAddExpenseOpen(false)} className="flex-1 h-10 border-border text-foreground hover:bg-muted">Cancel</Button>
                   <Button className="flex-1 h-10 bg-orange-600 hover:bg-orange-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all">Add Expense</Button>
                 </div>
               </div>

@@ -91,50 +91,17 @@
   --sidebar-ring: #30B54A;
 }
 
-.dark {
-  color-scheme: dark;
-  /* Deep charcoal backgrounds for dark mode */
-  --background: #1e293b;
-  --foreground: #f8fafc;
-  --card: #334155;
-  --card-foreground: #f8fafc;
-  --popover: #334155;
-  --popover-foreground: #f8fafc;
-  --primary: #30B54A;
-  --primary-foreground: #ffffff;
-  --secondary: #475569;
-  --secondary-foreground: #f8fafc;
-  --muted: #475569;
-  --muted-foreground: #94a3b8;
-  --accent: #64748b;
-  --accent-foreground: #f8fafc;
-  --destructive: #ef4444;
-  --border: #475569;
-  --input: #475569;
-  --ring: #30B54A;
-  --success: #22c55e;
-  --success-foreground: #ffffff;
-  --navy: #0f172a;
-  --navy-foreground: #ffffff;
-  --sidebar: #334155;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #30B54A;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #475569;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #475569;
-  --sidebar-ring: #30B54A;
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
   html {
     scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   /* Fullscreen mode optimizations */
@@ -209,53 +176,6 @@ select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid #30B54A;
   outline-offset: 2px;
-}
-
-/* Dark Mode Styles */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #1e293b;
-    --color-foreground: #f8fafc;
-    
-    --color-card: #334155;
-    --color-card-foreground: #f8fafc;
-    
-    --color-popover: #334155;
-    --color-popover-foreground: #f8fafc;
-    
-    --color-primary: #30B54A;
-    --color-primary-foreground: #1e293b;
-    
-    --color-secondary: #475569;
-    --color-secondary-foreground: #f8fafc;
-    
-    --color-muted: #475569;
-    --color-muted-foreground: #94a3b8;
-    
-    --color-accent: #475569;
-    --color-accent-foreground: #f8fafc;
-    
-    --color-destructive: #ef4444;
-    --color-destructive-foreground: #f8fafc;
-    
-    --color-border: #475569;
-    --color-input: #475569;
-    --color-ring: #30B54A;
-  }
-  
-  *:focus-visible {
-    outline: 2px solid #30B54A;
-    outline-offset: 2px;
-  }
-  
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid #30B54A;
-    outline-offset: 2px;
-  }
 }
 
 /* Fullscreen optimizations */

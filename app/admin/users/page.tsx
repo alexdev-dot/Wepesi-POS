@@ -15,7 +15,7 @@ export default function UsersPage() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-8 sm:p-12 text-center shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card p-8 sm:p-12 text-center shadow-sm">
         <Users className="h-16 w-16 sm:h-20 sm:w-20 text-slate-300 mx-auto mb-4" />
         <h2 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-2">User Management</h2>
         <p className="text-sm sm:text-base text-slate-600">This page is under development</p>

@@ -113,7 +113,6 @@ export default function BarcodeGeneratorPage() {
   useEffect(() => {
     if (barcodeType === "qr" && barcodeData) {
       QRCode.toDataURL(barcodeData, {
-        width: 200,
         margin: 2,
         color: {
           dark: '#0f172a',
@@ -229,17 +228,17 @@ export default function BarcodeGeneratorPage() {
   const renderBarcodePreview = () => {
     if (barcodeType === "qr") {
       return (
-        <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg border border-slate-200">
+        <div className="flex flex-col items-center justify-center p-8 bg-card rounded-lg border border-border">
           {qrCodeDataUrl ? (
             <img 
               src={qrCodeDataUrl} 
               alt="QR Code" 
-              className="border-2 border-slate-900 rounded-lg"
+              className="border-2 border-foreground rounded-lg"
               style={{ width: 200, height: 200 }}
             />
           ) : (
-            <div className="w-48 h-48 bg-slate-100 rounded-lg flex items-center justify-center">
-              <span className="text-sm text-slate-500">Generating QR Code...</span>
+            <div className="w-48 h-48 bg-muted rounded-lg flex items-center justify-center">
+              <span className="text-sm text-muted-foreground">Generating QR Code...</span>
             </div>
           )}
         </div>
@@ -247,16 +246,16 @@ export default function BarcodeGeneratorPage() {
     }
 
     return (
-      <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg border border-slate-200">
+      <div className="flex flex-col items-center justify-center p-8 bg-card rounded-lg border border-border">
         {barcodeDataUrl ? (
           <img 
             src={barcodeDataUrl} 
             alt="Barcode" 
-            className="border-2 border-slate-900 rounded-lg"
+            className="border-2 border-foreground rounded-lg"
           />
         ) : (
-          <div className="w-48 h-48 bg-slate-100 rounded-lg flex items-center justify-center">
-            <span className="text-sm text-slate-500">Generating Barcode...</span>
+          <div className="w-48 h-48 bg-muted rounded-lg flex items-center justify-center">
+            <span className="text-sm text-muted-foreground">Generating Barcode...</span>
           </div>
         )}
       </div>
@@ -264,7 +263,7 @@ export default function BarcodeGeneratorPage() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/settings/barcodes" 
@@ -278,12 +277,12 @@ export default function BarcodeGeneratorPage() {
           <div className="px-4 sm:px-6 py-4 sm:py-5">
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 shadow-sm">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 shadow-sm  ">
                   <Barcode className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Barcode Generator</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Generate barcodes and QR codes for your products</p>
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Barcode Generator</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">Generate barcodes and QR codes for your products</p>
                 </div>
               </div>
             </div>
@@ -296,24 +295,24 @@ export default function BarcodeGeneratorPage() {
                 {/* Left Column - Configuration */}
                 <div className="space-y-6">
                   {/* Barcode Input */}
-                  <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
-                    <h3 className="text-base font-semibold text-slate-900 mb-4">Barcode Data</h3>
+                  <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
+                    <h3 className="text-base font-semibold text-foreground mb-4">Barcode Data</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                        <label className="block text-sm font-medium text-foreground mb-1.5">
                           Enter Data <span className="text-red-500">*</span>
                         </label>
                         <Input
                           type="text"
                           value={barcodeData}
                           onChange={(e) => setBarcodeData(e.target.value)}
-                          className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                          className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
                           placeholder="Enter barcode data..."
                         />
                       </div>
                       <Button
                         variant="outline"
-                        className="w-full h-10 border-slate-200 text-slate-700 hover:bg-slate-50"
+                        className="w-full h-10 border-border text-foreground hover:bg-muted"
                         onClick={() => {
                           let randomData = ""
                           switch (barcodeType) {
@@ -350,8 +349,8 @@ export default function BarcodeGeneratorPage() {
                   </div>
 
                   {/* Barcode Type Selection */}
-                  <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
-                    <h3 className="text-base font-semibold text-slate-900 mb-4">Barcode Type</h3>
+                  <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
+                    <h3 className="text-base font-semibold text-foreground mb-4">Barcode Type</h3>
                     <div className="space-y-3">
                       {barcodeTypes.map((type) => (
                         <button
@@ -360,21 +359,21 @@ export default function BarcodeGeneratorPage() {
                           className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all ${
                             barcodeType === type.id
                               ? "border-indigo-500 bg-indigo-50"
-                              : "border-slate-200 bg-white hover:border-slate-300"
+                              : "border-border bg-card hover:border-border"
                           }`}
                         >
                           <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                            barcodeType === type.id ? "bg-indigo-100 text-indigo-600" : "bg-slate-100 text-slate-600"
+                            barcodeType === type.id ? "bg-indigo-100 text-indigo-600" : "bg-muted text-muted-foreground"
                           }`}>
                             {type.id === "qr" ? <QrCode className="h-5 w-5" /> : <Scan className="h-5 w-5" />}
                           </div>
                           <div className="text-left">
                             <div className={`text-sm font-semibold ${
-                              barcodeType === type.id ? "text-indigo-900" : "text-slate-900"
+                              barcodeType === type.id ? "text-indigo-900" : "text-foreground"
                             }`}>
                               {type.name}
                             </div>
-                            <div className="text-xs text-slate-500">{type.description}</div>
+                            <div className="text-xs text-muted-foreground">{type.description}</div>
                           </div>
                         </button>
                       ))}
@@ -386,21 +385,21 @@ export default function BarcodeGeneratorPage() {
                 {/* Right Column - Preview */}
                 <div className="space-y-6">
                   {/* Barcode Preview */}
-                  <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                  <div className="rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-base font-semibold text-slate-900">Preview</h3>
+                      <h3 className="text-base font-semibold text-foreground">Preview</h3>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50" onClick={handlePrint}>
+                        <Button variant="outline" size="sm" className="h-9 border-border text-foreground hover:bg-muted" onClick={handlePrint}>
                           <Printer className="h-4 w-4 mr-2" />
                           Print
                         </Button>
-                        <Button variant="outline" size="sm" className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50" onClick={handleDownload}>
+                        <Button variant="outline" size="sm" className="h-9 border-border text-foreground hover:bg-muted" onClick={handleDownload}>
                           <Download className="h-4 w-4 mr-2" />
                           Download
                         </Button>
                       </div>
                     </div>
-                    <div className="bg-slate-50 rounded-lg p-6 flex items-center justify-center min-h-64">
+                    <div className="bg-muted rounded-lg p-6 flex items-center justify-center min-h-64">
                       {renderBarcodePreview()}
                     </div>
                   </div>

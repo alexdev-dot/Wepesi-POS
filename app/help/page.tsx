@@ -166,14 +166,14 @@ export default function HelpPage() {
       />
       <div className="flex flex-1 flex-col overflow-hidden font-sans min-w-0">
         <Header onMenuClick={handleMenuClick} />
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-slate-50">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-background">
           {/* Header */}
-          <div className="bg-white border-b border-slate-200">
+          <div className="bg-card border-b border-border">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-2 sm:mb-3">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2 sm:mb-3">
                 Help & Support Center
               </h1>
-              <p className="text-sm sm:text-base text-slate-600">
+              <p className="text-sm sm:text-base text-muted-foreground">
                 Find answers to your questions or get in touch with our support team
               </p>
             </div>
@@ -183,35 +183,35 @@ export default function HelpPage() {
         {/* Search Bar */}
         <div className="mb-8 sm:mb-12">
           <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search for help articles, FAQs, or topics..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl border border-slate-200 bg-white text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm"
+              className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-xl border border-border bg-card text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm"
             />
           </div>
         </div>
 
         {/* Quick Links */}
         <div className="mb-8 sm:mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">Quick Links</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6">Quick Links</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickLinks.map((link, index) => (
               <Link
                 key={index}
                 href={link.href}
-                className="group flex items-start gap-4 p-4 sm:p-6 bg-white rounded-xl border border-slate-200 hover:border-primary hover:shadow-md transition-all"
+                className="group flex items-start gap-4 p-4 sm:p-6 bg-card rounded-xl border border-border hover:border-primary hover:shadow-md transition-all"
               >
                 <div className={`flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0`}>
                   <link.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-sm sm:text-base font-semibold text-slate-900 mb-1">{link.title}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">{link.description}</p>
+                  <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1">{link.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{link.description}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 group-hover:text-primary transition-colors shrink-0 mt-1" />
+                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0 mt-1" />
               </Link>
             ))}
           </div>
@@ -219,46 +219,46 @@ export default function HelpPage() {
 
         {/* FAQ Section */}
         <div className="mb-8 sm:mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">Frequently Asked Questions</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {faqCategories.map((category) => {
               const Icon = category.icon
               const isExpanded = expandedCategory === category.id
               return (
-                <div key={category.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <div key={category.id} className="bg-card rounded-xl border border-border overflow-hidden">
                   <button
                     onClick={() => toggleCategory(category.id)}
-                    className="w-full flex items-center justify-between p-4 sm:p-5 hover:bg-slate-50 transition-colors"
+                    className="w-full flex items-center justify-between p-4 sm:p-5 hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
                         <Icon className="h-5 w-5" />
                       </div>
-                      <span className="text-sm sm:text-base font-semibold text-slate-900">{category.title}</span>
+                      <span className="text-sm sm:text-base font-semibold text-foreground">{category.title}</span>
                     </div>
                     {isExpanded ? (
-                      <ChevronUp className="h-5 w-5 text-slate-400" />
+                      <ChevronUp className="h-5 w-5 text-muted-foreground" />
                     ) : (
-                      <ChevronDown className="h-5 w-5 text-slate-400" />
+                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
                     )}
                   </button>
                   {isExpanded && (
-                    <div className="border-t border-slate-200 p-4 sm:p-5 space-y-3">
+                    <div className="border-t border-border p-4 sm:p-5 space-y-3">
                       {category.faqs.map((faq, faqIndex) => (
-                        <div key={faqIndex} className="border-b border-slate-100 last:border-0 pb-3">
+                        <div key={faqIndex} className="border-b border-border last:border-0 pb-3">
                           <button
                             onClick={() => toggleFaq(faqIndex)}
                             className="w-full text-left flex items-center justify-between gap-2"
                           >
-                            <span className="text-sm sm:text-base font-medium text-slate-900">{faq.question}</span>
+                            <span className="text-sm sm:text-base font-medium text-foreground">{faq.question}</span>
                             {expandedFaq === faqIndex ? (
-                              <ChevronUp className="h-4 w-4 text-slate-400 shrink-0" />
+                              <ChevronUp className="h-4 w-4 text-muted-foreground shrink-0" />
                             ) : (
-                              <ChevronDown className="h-4 w-4 text-slate-400 shrink-0" />
+                              <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
                             )}
                           </button>
                           {expandedFaq === faqIndex && (
-                            <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">{faq.answer}</p>
+                            <p className="mt-2 text-sm sm:text-base text-muted-foreground leading-relaxed">{faq.answer}</p>
                           )}
                         </div>
                       ))}
@@ -272,16 +272,16 @@ export default function HelpPage() {
 
         {/* Support Channels */}
         <div className="mb-8 sm:mb-12">
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">Contact Support</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6">Contact Support</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {supportChannels.map((channel, index) => (
-              <div key={index} className="bg-white rounded-xl border border-slate-200 p-5 sm:p-6">
+              <div key={index} className="bg-card rounded-xl border border-border p-5 sm:p-6">
                 <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${channel.color} mb-4`}>
                   <channel.icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">{channel.title}</h3>
-                <p className="text-sm text-slate-600 mb-3">{channel.description}</p>
-                <p className="text-sm sm:text-base font-medium text-slate-900">{channel.contact}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">{channel.title}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{channel.description}</p>
+                <p className="text-sm sm:text-base font-medium text-foreground">{channel.contact}</p>
               </div>
             ))}
           </div>
@@ -293,7 +293,7 @@ export default function HelpPage() {
           <p className="text-sm sm:text-base mb-4 sm:mb-6 opacity-90">
             Our support team is available 24/7 to assist you with any issues
           </p>
-          <button className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-white text-primary rounded-lg font-semibold hover:bg-slate-100 transition-colors text-sm sm:text-base">
+          <button className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-card text-foreground rounded-lg font-semibold hover:bg-muted transition-colors text-sm sm:text-base">
             <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
             Start a Live Chat
           </button>

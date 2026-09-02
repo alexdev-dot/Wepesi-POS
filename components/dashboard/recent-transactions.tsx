@@ -13,7 +13,7 @@ const transactions = [
 
 export function RecentTransactionsSkeleton() {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
       <div className="flex items-center gap-3 mb-4">
         <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
         <div className="flex-1">
@@ -24,7 +24,7 @@ export function RecentTransactionsSkeleton() {
       </div>
       <div className="flex-1 space-y-3">
         {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className="flex items-center gap-3 py-3 border-b border-slate-100">
+          <div key={index} className="flex items-center gap-3 py-3 border-b border-border">
             <div className="h-3 bg-muted/70 rounded w-16 animate-pulse" />
             <div className="h-3 bg-muted/70 rounded w-24 animate-pulse" />
             <div className="h-3 bg-muted/70 rounded w-8 animate-pulse" />
@@ -45,7 +45,7 @@ export function RecentTransactions() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
       whileHover={{ y: -2 }}
-      className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col font-sans"
+      className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col font-sans"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
@@ -61,7 +61,7 @@ export function RecentTransactions() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.6 }}
-            className="text-base font-semibold text-slate-900"
+            className="text-base font-semibold text-foreground"
           >
             Recent Transactions
           </motion.h3>
@@ -69,7 +69,7 @@ export function RecentTransactions() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.65 }}
-            className="text-xs text-slate-500"
+            className="text-xs text-muted-foreground"
           >
             Latest sales
           </motion.p>
@@ -96,13 +96,13 @@ export function RecentTransactions() {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-200">
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Receipt No.</th>
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Customer</th>
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Items</th>
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Time</th>
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+              <tr className="border-b border-border">
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Receipt No.</th>
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Customer</th>
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Items</th>
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total</th>
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Time</th>
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -112,14 +112,14 @@ export function RecentTransactions() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.8 + index * 0.05 }}
-                  whileHover={{ x: 4, backgroundColor: "#f8fafc" }}
-                  className="border-b border-slate-100 transition-colors cursor-pointer"
+                  whileHover={{ x: 4, backgroundColor: "var(--muted)" }}
+                  className="border-b border-border transition-colors cursor-pointer"
                 >
-                  <td className="py-3 text-xs font-medium text-slate-900">{transaction.id}</td>
-                  <td className="py-3 text-xs text-slate-700">{transaction.customer}</td>
-                  <td className="py-3 text-xs text-slate-700">{transaction.items}</td>
-                  <td className="py-3 text-xs font-semibold text-slate-900">{transaction.total}</td>
-                  <td className="py-3 text-xs text-slate-500">{transaction.time}</td>
+                  <td className="py-3 text-xs font-medium text-foreground">{transaction.id}</td>
+                  <td className="py-3 text-xs text-muted-foreground">{transaction.customer}</td>
+                  <td className="py-3 text-xs text-muted-foreground">{transaction.items}</td>
+                  <td className="py-3 text-xs font-semibold text-foreground">{transaction.total}</td>
+                  <td className="py-3 text-xs text-muted-foreground">{transaction.time}</td>
                   <td className="py-3">
                     <motion.span
                       whileHover={{ scale: 1.05 }}
@@ -143,15 +143,15 @@ export function RecentTransactions() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.8 + index * 0.05 }}
               whileHover={{ y: -2 }}
-              className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 bg-slate-50 cursor-pointer"
+              className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted cursor-pointer"
             >
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-slate-900">{transaction.id}</p>
-                <p className="text-xs text-slate-500 truncate">{transaction.customer}</p>
+                <p className="text-xs font-semibold text-foreground">{transaction.id}</p>
+                <p className="text-xs text-muted-foreground truncate">{transaction.customer}</p>
               </div>
               <div className="text-right">
-                <p className="text-xs font-semibold text-slate-900">{transaction.total}</p>
-                <p className="text-xs text-slate-500">{transaction.time}</p>
+                <p className="text-xs font-semibold text-foreground">{transaction.total}</p>
+                <p className="text-xs text-muted-foreground">{transaction.time}</p>
               </div>
             </motion.div>
           ))}

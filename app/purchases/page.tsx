@@ -7,11 +7,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PurchaseForm } from "@/components/purchases/purchase-form"
 import { ShoppingCart, Package, DollarSign, TrendingUp, Plus, Upload, Download, Filter, Search, Calendar, MoreVertical, Eye } from "lucide-react"
+import { useMobile } from "@/lib/hooks/use-mobile"
 
 export default function PurchasesPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isPurchaseFormOpen, setIsPurchaseFormOpen] = useState(false)
+  const isMobile = useMobile()
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed)
@@ -59,7 +61,7 @@ export default function PurchasesPage() {
   ]
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/purchases" 
@@ -77,29 +79,29 @@ export default function PurchasesPage() {
                   <ShoppingCart className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Purchases</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Manage supplier purchases and orders</p>
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Purchases</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">Manage supplier purchases and orders</p>
                 </div>
               </div>
 
               {/* Filters Section */}
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Date Range */}
-                <div className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white shadow-sm">
-                  <Calendar className="h-4 w-4 text-slate-500" />
-                  <span className="text-sm text-slate-700">01 May 2025 - 31 May 2025</span>
+                <div className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card shadow-sm">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-foreground">01 May 2025 - 31 May 2025</span>
                 </div>
 
                 {/* Filter Dropdowns */}
                 <div className="flex flex-wrap gap-2">
-                  <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all shadow-sm">
+                  <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all shadow-sm">
                     <option>All Suppliers</option>
                     <option>Brookside Dairy</option>
                     <option>Coca Cola Ltd</option>
                     <option>BakeHouse</option>
                   </select>
 
-                  <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all shadow-sm">
+                  <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all shadow-sm">
                     <option>All Status</option>
                     <option>Completed</option>
                     <option>In Transit</option>
@@ -107,7 +109,7 @@ export default function PurchasesPage() {
                     <option>Cancelled</option>
                   </select>
 
-                  <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all shadow-sm">
+                  <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all shadow-sm">
                     <option>All Payment Status</option>
                     <option>Paid</option>
                     <option>Partial</option>
@@ -118,11 +120,11 @@ export default function PurchasesPage() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 ml-auto">
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Filter className="h-4 w-4" />
                     <span className="hidden sm:inline">More Filters</span>
                   </button>
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </button>
@@ -144,7 +146,7 @@ export default function PurchasesPage() {
               {/* Stats Cards */}
               <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
                 {purchaseStats.map((stat) => (
-                  <div key={stat.title} className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div key={stat.title} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between mb-3 sm:mb-4">
                       <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${stat.bgColor} ${stat.color} shadow-sm`}>
                         <stat.icon className="h-5 w-5" strokeWidth={2} />
@@ -154,59 +156,59 @@ export default function PurchasesPage() {
                       </div>
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900">{stat.title}</h4>
-                      <p className="text-xs text-slate-500 mt-0.5">{stat.description}</p>
-                      <p className="mt-2 text-xl sm:text-2xl font-bold text-slate-900">{stat.value}</p>
+                      <h4 className="text-sm font-semibold text-foreground">{stat.title}</h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">{stat.description}</p>
+                      <p className="mt-2 text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Search Bar */}
-              <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+              <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
                 <div className="relative w-full">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder="Search by PO number, supplier..."
-                    className="h-10 pl-9 sm:pl-10 text-sm border bg-slate-50 focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
+                    className="h-10 pl-9 sm:pl-10 text-sm border bg-muted focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
                   />
                 </div>
               </div>
 
               {/* Purchases Table */}
-              <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+              <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                 {/* Desktop Table */}
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-slate-50 border-b border-slate-200">
+                    <thead className="bg-muted border-b border-border">
                       <tr>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                          <input type="checkbox" className="rounded border-slate-300" />
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          <input type="checkbox" className="rounded border-border" />
                         </th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">PO Number</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Supplier</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Items</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Amount</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Payment</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">PO Number</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Supplier</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Items</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Amount</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Payment</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-border">
                       {purchases.map((purchase) => (
-                        <tr key={purchase.id} className="hover:bg-slate-50 transition-colors">
+                        <tr key={purchase.id} className="hover:bg-muted transition-colors">
                           <td className="px-4 sm:px-6 py-4">
-                            <input type="checkbox" className="rounded border-slate-300" />
+                            <input type="checkbox" className="rounded border-border" />
                           </td>
                           <td className="px-4 sm:px-6 py-4">
                             <span className="text-sm font-medium text-green-600 hover:text-green-700">{purchase.id}</span>
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.date}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.supplier}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{purchase.items}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-slate-900">KSh {(purchase.total || 0).toLocaleString()}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground">{purchase.date}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground">{purchase.supplier}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground">{purchase.items}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm font-semibold text-foreground">KSh {(purchase.total || 0).toLocaleString()}</td>
                           <td className="px-4 sm:px-6 py-4">
                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
                               purchase.status === "Completed" ? "bg-green-100 text-green-700 border-green-200" :
@@ -229,10 +231,10 @@ export default function PurchasesPage() {
                           </td>
                           <td className="px-4 sm:px-6 py-4">
                             <div className="flex items-center gap-1">
-                              <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                              <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
                                 <Eye className="h-4 w-4" />
                               </button>
-                              <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                              <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
                                 <MoreVertical className="h-4 w-4" />
                               </button>
                             </div>
@@ -246,7 +248,7 @@ export default function PurchasesPage() {
                 {/* Mobile Card View */}
                 <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
                   {purchases.map((purchase) => (
-                    <div key={purchase.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div key={purchase.id} className="bg-card border border-border rounded-xl p-4 shadow-sm">
                       <div className="flex items-start gap-3 mb-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 font-semibold text-sm shrink-0">
                           {purchase.id.slice(-2)}
@@ -263,20 +265,20 @@ export default function PurchasesPage() {
                               {purchase.status}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-500 mt-1">{purchase.supplier}</p>
+                          <p className="text-xs text-muted-foreground mt-1">{purchase.supplier}</p>
                         </div>
-                        <span className="text-sm font-bold text-slate-900">KSh {(purchase.total || 0).toLocaleString()}</span>
+                        <span className="text-sm font-bold text-foreground">KSh {(purchase.total || 0).toLocaleString()}</span>
                       </div>
                       
-                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                      <div className="flex items-center justify-between pt-3 border-t border-border text-xs text-muted-foreground">
                         <div className="flex items-center gap-4">
                           <div>
-                            <p className="text-xs text-slate-500">Date</p>
-                            <p className="text-sm font-semibold text-slate-900">{purchase.date}</p>
+                            <p className="text-xs text-muted-foreground">Date</p>
+                            <p className="text-sm font-semibold text-foreground">{purchase.date}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-slate-500">Items</p>
-                            <p className="text-sm font-semibold text-slate-900">{purchase.items}</p>
+                            <p className="text-xs text-muted-foreground">Items</p>
+                            <p className="text-sm font-semibold text-foreground">{purchase.items}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -288,7 +290,7 @@ export default function PurchasesPage() {
                           }`}>
                             {purchase.paymentStatus}
                           </span>
-                          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                          <button className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         </div>

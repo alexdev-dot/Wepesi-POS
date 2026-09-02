@@ -173,7 +173,7 @@ export function InvoiceForm({ mode = "create", initialData, onSave, onCancel }: 
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+    <div className="bg-card rounded-xl border border-slate-200 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200">
         <div className="flex-1 min-w-0">
@@ -220,7 +220,7 @@ export function InvoiceForm({ mode = "create", initialData, onSave, onCancel }: 
             <select
               value={formData.tenantId}
               onChange={(e) => handleTenantChange(e.target.value)}
-              className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-white ${
+              className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-card ${
                 errors.tenantId ? "border-red-300 focus:ring-red-500/20" : "border-slate-200"
               }`}
             >

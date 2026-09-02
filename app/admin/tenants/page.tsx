@@ -212,7 +212,7 @@ export default function TenantsPage() {
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-card p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -238,7 +238,7 @@ export default function TenantsPage() {
       </div>
 
       {/* Main Content */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
         {/* Filters and Search */}
         <div className="p-6 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -260,7 +260,7 @@ export default function TenantsPage() {
               <select
                 value={statusFilter}
                 onChange={handleStatusFilterChange}
-                className="px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm bg-white"
+                className="px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm bg-card"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
@@ -347,7 +347,7 @@ export default function TenantsPage() {
         {/* Mobile Card View */}
         <div className="lg:hidden px-4 sm:px-6 py-4 space-y-3">
           {filteredTenants.map((tenant) => (
-            <div key={tenant.id} className="bg-white border rounded-xl p-4 shadow-sm">
+            <div key={tenant.id} className="bg-card border rounded-xl p-4 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold text-sm shrink-0">
                   {tenant.name.charAt(0)}

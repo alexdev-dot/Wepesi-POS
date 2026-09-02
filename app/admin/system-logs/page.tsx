@@ -243,7 +243,7 @@ export default function SystemLogsPage() {
         {systemStats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-card p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -289,7 +289,7 @@ export default function SystemLogsPage() {
       </div>
 
       {/* Services Status */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
         <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
           <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
             <Server className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
@@ -328,7 +328,7 @@ export default function SystemLogsPage() {
       </div>
 
       {/* Activity Logs */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
         {/* Filters and Search */}
         <div className="p-4 sm:p-6 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -350,7 +350,7 @@ export default function SystemLogsPage() {
               <select
                 value={levelFilter}
                 onChange={handleLevelFilterChange}
-                className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-white"
+                className="px-4 py-2.5 sm:py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-card text-foreground"
               >
                 <option value="all">All Levels</option>
                 <option value="info">Info</option>
@@ -364,7 +364,7 @@ export default function SystemLogsPage() {
             <select
               value={serviceFilter}
               onChange={handleServiceFilterChange}
-              className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-white"
+              className="px-4 py-2.5 sm:py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-card text-foreground"
             >
               <option value="all">All Services</option>
               <option value="API Server">API Server</option>
@@ -436,7 +436,7 @@ export default function SystemLogsPage() {
         {/* Mobile Card View */}
         <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
           {filteredLogs.map((log) => (
-            <div key={log.id} className="bg-white border rounded-xl p-4 shadow-sm">
+            <div key={log.id} className="bg-card border rounded-xl p-4 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 font-semibold text-sm shrink-0">
                   {log.service.charAt(0)}

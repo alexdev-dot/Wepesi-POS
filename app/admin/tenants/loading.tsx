@@ -19,7 +19,7 @@ export default function TenantsLoading() {
       {/* Stats grid skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div key={i} className="rounded-xl border border-slate-200 bg-card p-6 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="h-4 bg-slate-200 rounded animate-pulse w-24 mb-2" />
@@ -33,7 +33,7 @@ export default function TenantsLoading() {
       </div>
       
       {/* Table skeleton */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
         {/* Filters skeleton */}
         <div className="p-6 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4">

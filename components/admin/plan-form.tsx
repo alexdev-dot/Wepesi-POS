@@ -105,7 +105,7 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+    <div className="bg-card rounded-xl border border-slate-200 shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200">
         <div className="flex-1 min-w-0">
@@ -173,7 +173,7 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
             <select
               value={formData.period}
               onChange={(e) => setFormData(prev => ({ ...prev, period: e.target.value as "month" | "year" }))}
-              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-white"
+              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-card"
             >
               <option value="month">Monthly</option>
               <option value="year">Yearly</option>
@@ -282,7 +282,7 @@ export function PlanForm({ mode = "create", initialData, onSave, onCancel }: Pla
             }`}
           >
             <div
-              className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${
+              className={`absolute top-1 left-1 w-4 h-4 bg-card rounded-full transition-transform ${
                 formData.popular ? "translate-x-6" : "translate-x-0"
               }`}
             />

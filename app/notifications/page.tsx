@@ -123,7 +123,7 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter(n => !n.read).length
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/notifications" 
@@ -137,7 +137,7 @@ export default function NotificationsPage() {
           <div className="px-4 sm:px-6 py-4 sm:py-5">
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600 shadow-sm relative">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600 shadow-sm relative  ">
                   <Bell className="h-5 w-5" strokeWidth={2} />
                   {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
@@ -146,8 +146,8 @@ export default function NotificationsPage() {
                   )}
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Notifications</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Stay updated with system alerts and updates</p>
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Notifications</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">Stay updated with system alerts and updates</p>
                 </div>
               </div>
 
@@ -155,7 +155,7 @@ export default function NotificationsPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Filter Dropdowns */}
                 <div className="flex flex-wrap gap-2">
-                  <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all shadow-sm">
+                  <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all shadow-sm">
                     <option>All Types</option>
                     <option>Success</option>
                     <option>Warning</option>
@@ -163,7 +163,7 @@ export default function NotificationsPage() {
                     <option>Info</option>
                   </select>
 
-                  <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all shadow-sm">
+                  <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition-all shadow-sm">
                     <option>All Status</option>
                     <option>Unread</option>
                     <option>Read</option>
@@ -172,15 +172,15 @@ export default function NotificationsPage() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 ml-auto">
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Filter className="h-4 w-4" />
                     <span className="hidden sm:inline">More Filters</span>
                   </button>
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Check className="h-4 w-4" />
                     <span className="hidden sm:inline">Mark All Read</span>
                   </button>
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Trash2 className="h-4 w-4" />
                     <span className="hidden sm:inline">Clear All</span>
                   </button>
@@ -193,13 +193,13 @@ export default function NotificationsPage() {
           <div className="flex-1 overflow-auto px-4 sm:px-6 pb-6">
             <div className="max-w-7xl mx-auto space-y-4">
               {/* Search Bar */}
-              <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+              <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
                 <div className="relative w-full">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder="Search notifications..."
-                    className="h-10 pl-9 sm:pl-10 text-sm border bg-slate-50 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+                    className="h-10 pl-9 sm:pl-10 text-sm border bg-muted focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                   />
                 </div>
               </div>
@@ -211,7 +211,7 @@ export default function NotificationsPage() {
                   return (
                     <div
                       key={notification.id}
-                      className={`rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 ${
+                      className={`rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 ${
                         !notification.read ? "border-l-4 border-l-amber-500" : ""
                       }`}
                     >
@@ -224,25 +224,25 @@ export default function NotificationsPage() {
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-1">
-                            <h3 className={`text-sm font-semibold ${!notification.read ? "text-slate-900" : "text-slate-700"}`}>
+                            <h3 className={`text-sm font-semibold ${!notification.read ? "text-foreground" : "text-muted-foreground"}`}>
                               {notification.title}
                             </h3>
-                            <span className="text-xs text-slate-500 shrink-0">{notification.time}</span>
+                            <span className="text-xs text-muted-foreground shrink-0">{notification.time}</span>
                           </div>
-                          <p className="text-sm text-slate-600">{notification.message}</p>
+                          <p className="text-sm text-muted-foreground">{notification.message}</p>
                         </div>
 
                         {/* Actions */}
                         <div className="flex items-center gap-1 shrink-0">
                           {!notification.read && (
-                            <button className="p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all" title="Mark as read">
+                            <button className="p-1.5 text-muted-foreground hover:text-green-600 hover:bg-green-50 rounded-lg transition-all" title="Mark as read">
                               <Check className="h-4 w-4" />
                             </button>
                           )}
-                          <button className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete">
+                          <button className="p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete">
                             <Trash2 className="h-4 w-4" />
                           </button>
-                          <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all" title="More">
+                          <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all" title="More">
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         </div>

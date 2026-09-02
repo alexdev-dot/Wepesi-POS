@@ -80,17 +80,17 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-background/80 z-50 flex items-center justify-center p-4">
+      <div className="bg-card rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Add New Product</h2>
-            <p className="text-sm text-slate-500">Fill in the product details below</p>
+            <h2 className="text-xl font-bold text-foreground">Add New Product</h2>
+            <p className="text-sm text-muted-foreground">Fill in the product details below</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors"
+            className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -100,9 +100,9 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Product Image Upload */}
           <div>
-            <Label className="text-sm font-semibold text-slate-700 mb-2 block">Product Image</Label>
+            <Label className="text-sm font-semibold text-foreground mb-2 block">Product Image</Label>
             <div 
-              className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-blue-400 transition-colors cursor-pointer"
               onClick={() => document.getElementById('product-image')?.click()}
             >
               {imagePreview ? (
@@ -126,9 +126,9 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
                 </div>
               ) : (
                 <div>
-                  <Upload className="h-10 w-10 text-slate-400 mx-auto mb-2" />
-                  <p className="text-sm text-slate-600">Click to upload or drag and drop</p>
-                  <p className="text-xs text-slate-400 mt-1">PNG, JPG up to 5MB</p>
+                  <Upload className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
+                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
                 </div>
               )}
               <input
@@ -144,7 +144,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name" className="text-sm font-semibold text-slate-700 mb-1.5 block">Product Name *</Label>
+              <Label htmlFor="name" className="text-sm font-semibold text-foreground mb-1.5 block">Product Name *</Label>
               <Input
                 id="name"
                 name="name"
@@ -156,7 +156,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
               />
             </div>
             <div>
-              <Label htmlFor="description" className="text-sm font-semibold text-slate-700 mb-1.5 block">Description</Label>
+              <Label htmlFor="description" className="text-sm font-semibold text-foreground mb-1.5 block">Description</Label>
               <Input
                 id="description"
                 name="description"
@@ -170,7 +170,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="sku" className="text-sm font-semibold text-slate-700 mb-1.5 block">SKU *</Label>
+              <Label htmlFor="sku" className="text-sm font-semibold text-foreground mb-1.5 block">SKU *</Label>
               <Input
                 id="sku"
                 name="sku"
@@ -182,7 +182,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
               />
             </div>
             <div>
-              <Label htmlFor="barcode" className="text-sm font-semibold text-slate-700 mb-1.5 block">Barcode</Label>
+              <Label htmlFor="barcode" className="text-sm font-semibold text-foreground mb-1.5 block">Barcode</Label>
               <Input
                 id="barcode"
                 name="barcode"
@@ -197,13 +197,13 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
           {/* Category and Brand */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="category" className="text-sm font-semibold text-slate-700 mb-1.5 block">Category *</Label>
+              <Label htmlFor="category" className="text-sm font-semibold text-foreground mb-1.5 block">Category *</Label>
               <select
                 id="category"
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                className="h-10 w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 required
               >
                 <option value="">Select Category</option>
@@ -216,13 +216,13 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
               </select>
             </div>
             <div>
-              <Label htmlFor="brand" className="text-sm font-semibold text-slate-700 mb-1.5 block">Brand *</Label>
+              <Label htmlFor="brand" className="text-sm font-semibold text-foreground mb-1.5 block">Brand *</Label>
               <select
                 id="brand"
                 name="brand"
                 value={formData.brand}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                className="h-10 w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 required
               >
                 <option value="">Select Brand</option>
@@ -240,7 +240,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
           {/* Pricing */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="costPrice" className="text-sm font-semibold text-slate-700 mb-1.5 block">Cost Price (KSh) *</Label>
+              <Label htmlFor="costPrice" className="text-sm font-semibold text-foreground mb-1.5 block">Cost Price (KSh) *</Label>
               <Input
                 id="costPrice"
                 name="costPrice"
@@ -254,7 +254,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
               />
             </div>
             <div>
-              <Label htmlFor="sellingPrice" className="text-sm font-semibold text-slate-700 mb-1.5 block">Selling Price (KSh) *</Label>
+              <Label htmlFor="sellingPrice" className="text-sm font-semibold text-foreground mb-1.5 block">Selling Price (KSh) *</Label>
               <Input
                 id="sellingPrice"
                 name="sellingPrice"
@@ -272,7 +272,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
           {/* Stock */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="stockQty" className="text-sm font-semibold text-slate-700 mb-1.5 block">Stock Quantity *</Label>
+              <Label htmlFor="stockQty" className="text-sm font-semibold text-foreground mb-1.5 block">Stock Quantity *</Label>
               <Input
                 id="stockQty"
                 name="stockQty"
@@ -285,13 +285,13 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
               />
             </div>
             <div>
-              <Label htmlFor="status" className="text-sm font-semibold text-slate-700 mb-1.5 block">Status</Label>
+              <Label htmlFor="status" className="text-sm font-semibold text-foreground mb-1.5 block">Status</Label>
               <select
                 id="status"
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                className="h-10 w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               >
                 <option value="In Stock">In Stock</option>
                 <option value="Low Stock">Low Stock</option>
@@ -301,12 +301,12 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4 border-t border-slate-200 sticky bottom-0 bg-white">
+          <div className="flex gap-3 pt-4 border-t border-border sticky bottom-0 bg-card">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50"
+              className="flex-1 h-10 border-border text-foreground hover:bg-muted"
             >
               Cancel
             </Button>

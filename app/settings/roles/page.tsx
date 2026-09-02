@@ -122,7 +122,7 @@ export default function RolesPermissionsPage() {
   )
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/settings/roles" 
@@ -136,8 +136,8 @@ export default function RolesPermissionsPage() {
             {/* Page Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Roles & Permissions</h1>
-                <p className="text-sm text-slate-500 mt-1">Manage user roles and their access permissions</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Roles & Permissions</h1>
+                <p className="text-sm text-muted-foreground mt-1">Manage user roles and their access permissions</p>
               </div>
               <div className="flex gap-2 w-full sm:w-auto">
                 {activeTab === "roles" && (
@@ -161,14 +161,14 @@ export default function RolesPermissionsPage() {
             </div>
 
             {/* Tabs */}
-            <div className="border-b border-slate-200">
+            <div className="border-b border-border">
               <nav className="flex gap-6">
                 <button
                   onClick={() => setActiveTab("roles")}
                   className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
                     activeTab === "roles"
                       ? "border-blue-600 text-blue-600"
-                      : "border-transparent text-slate-500 hover:text-slate-700"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   Roles
@@ -178,7 +178,7 @@ export default function RolesPermissionsPage() {
                   className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
                     activeTab === "permissions"
                       ? "border-blue-600 text-blue-600"
-                      : "border-transparent text-slate-500 hover:text-slate-700"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   Permissions
@@ -191,100 +191,100 @@ export default function RolesPermissionsPage() {
               <>
                 {/* Stats Cards */}
                 <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm group-hover:shadow transition-all">
                         <Shield className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Total Roles</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{roles.length}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">Active roles</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Roles</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{roles.length}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">Active roles</p>
                     </div>
                   </div>
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-green-100 text-green-600 shadow-sm group-hover:shadow transition-all">
                         <Users className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Total Users</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{roles.reduce((acc, role) => acc + role.userCount, 0)}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">Assigned users</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Users</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{roles.reduce((acc, role) => acc + role.userCount, 0)}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">Assigned users</p>
                     </div>
                   </div>
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-purple-100 text-purple-600 shadow-sm group-hover:shadow transition-all">
                         <Check className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Permissions</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{permissions.length}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">Available permissions</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Permissions</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{permissions.length}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">Available permissions</p>
                     </div>
                   </div>
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
-                      <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600 shadow-sm group-hover:shadow transition-all">
+                      <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-orange-100 shadow-sm group-hover:shadow transition-all">
                         <Shield className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Admin Roles</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{roles.filter(r => r.name === "Administrator").length}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">Full access</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Admin Roles</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{roles.filter(r => r.name === "Administrator").length}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">Full access</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Search Section */}
-                <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
                   <div className="relative w-full">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       type="text"
                       placeholder="Search roles..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="h-10 pl-9 sm:pl-10 text-sm border bg-slate-50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="h-10 pl-9 sm:pl-10 text-sm border bg-muted focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Roles Table */}
-                <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-slate-50 border-b border-slate-200">
+                      <thead className="bg-muted border-b border-border">
                         <tr>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Role Name</th>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Description</th>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Permissions</th>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Users</th>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Created</th>
-                          <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Role Name</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Description</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Permissions</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Users</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Created</th>
+                          <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-200">
+                      <tbody className="divide-y divide-border">
                         {filteredRoles.map((role) => (
-                          <tr key={role.id} className="hover:bg-slate-50 transition-colors">
+                          <tr key={role.id} className="hover:bg-muted transition-colors">
                             <td className="px-4 sm:px-6 py-4">
                               <div className="flex items-center gap-3">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
                                   <Shield className="h-5 w-5" strokeWidth={2} />
                                 </div>
                                 <div>
-                                  <p className="text-sm font-semibold text-slate-900">{role.name}</p>
-                                  <p className="text-xs text-slate-500">Role ID: {role.id}</p>
+                                  <p className="text-sm font-semibold text-foreground">{role.name}</p>
+                                  <p className="text-xs text-muted-foreground">Role ID: {role.id}</p>
                                 </div>
                               </div>
                             </td>
                             <td className="px-4 sm:px-6 py-4">
-                              <p className="text-sm text-slate-700 max-w-xs truncate">{role.description}</p>
+                              <p className="text-sm text-muted-foreground max-w-xs truncate">{role.description}</p>
                             </td>
                             <td className="px-4 sm:px-6 py-4">
                               <div className="flex flex-wrap gap-1">
@@ -294,7 +294,7 @@ export default function RolesPermissionsPage() {
                                   </span>
                                 ))}
                                 {role.permissions.length > 2 && (
-                                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium">
+                                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-muted text-muted-foreground text-xs font-medium">
                                     +{role.permissions.length - 2} more
                                   </span>
                                 )}
@@ -302,19 +302,19 @@ export default function RolesPermissionsPage() {
                             </td>
                             <td className="px-4 sm:px-6 py-4">
                               <div className="flex items-center gap-2">
-                                <Users className="h-4 w-4 text-slate-400" />
-                                <span className="text-sm font-medium text-slate-700">{role.userCount}</span>
+                                <Users className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-sm font-medium text-foreground">{role.userCount}</span>
                               </div>
                             </td>
                             <td className="px-4 sm:px-6 py-4">
-                              <p className="text-sm text-slate-600">{role.createdAt}</p>
+                              <p className="text-sm text-muted-foreground">{role.createdAt}</p>
                             </td>
                             <td className="px-4 sm:px-6 py-4">
                               <div className="flex items-center justify-end gap-2">
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 text-slate-600 hover:text-blue-600 hover:bg-blue-50"
+                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-blue-600 hover:bg-blue-50"
                                   onClick={() => handleEditRole(role)}
                                 >
                                   <Edit className="h-4 w-4" />
@@ -322,7 +322,7 @@ export default function RolesPermissionsPage() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 text-slate-600 hover:text-red-600 hover:bg-red-50"
+                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-red-600 hover:bg-red-50"
                                   onClick={() => handleDeleteRole(role)}
                                 >
                                   <Trash2 className="h-4 w-4" />
@@ -343,94 +343,94 @@ export default function RolesPermissionsPage() {
               <>
                 {/* Stats Cards */}
                 <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm group-hover:shadow transition-all">
                         <Check className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Total Permissions</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{permissions.length}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">System permissions</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Permissions</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{permissions.length}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">System permissions</p>
                     </div>
                   </div>
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-green-100 text-green-600 shadow-sm group-hover:shadow transition-all">
                         <Shield className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Categories</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{[...new Set(permissions.map(p => p.category))].length}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">Permission categories</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Categories</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{[...new Set(permissions.map(p => p.category))].length}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">Permission categories</p>
                     </div>
                   </div>
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-purple-100 text-purple-600 shadow-sm group-hover:shadow transition-all">
                         <Users className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Roles Using</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{roles.length}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">Active roles</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Roles Using</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{roles.length}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">Active roles</p>
                     </div>
                   </div>
-                  <div className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between">
-                      <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600 shadow-sm group-hover:shadow transition-all">
+                      <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-orange-100 shadow-sm group-hover:shadow transition-all">
                         <Check className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                       </div>
                     </div>
                     <div className="mt-3 sm:mt-4">
-                      <p className="text-xs sm:text-sm font-medium text-slate-600">Modules</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{[...new Set(permissions.map(p => p.module))].length}</p>
-                      <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">System modules</p>
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground">Modules</p>
+                      <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{[...new Set(permissions.map(p => p.module))].length}</p>
+                      <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">System modules</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Search Section */}
-                <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
                   <div className="relative w-full">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       type="text"
                       placeholder="Search permissions..."
                       value={permissionSearchQuery}
                       onChange={(e) => setPermissionSearchQuery(e.target.value)}
-                      className="h-10 pl-9 sm:pl-10 text-sm border bg-slate-50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                      className="h-10 pl-9 sm:pl-10 text-sm border bg-muted focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Permissions Table */}
-                <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-slate-50 border-b border-slate-200">
+                      <thead className="bg-muted border-b border-border">
                         <tr>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Permission Name</th>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Category</th>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Module</th>
-                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Description</th>
-                          <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Permission Name</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Category</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Module</th>
+                          <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Description</th>
+                          <th className="px-4 sm:px-6 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-200">
+                      <tbody className="divide-y divide-border">
                         {filteredPermissions.map((permission) => (
-                          <tr key={permission.id} className="hover:bg-slate-50 transition-colors">
+                          <tr key={permission.id} className="hover:bg-muted transition-colors">
                             <td className="px-4 sm:px-6 py-4">
                               <div className="flex items-center gap-3">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
                                   <Check className="h-5 w-5" strokeWidth={2} />
                                 </div>
                                 <div>
-                                  <p className="text-sm font-semibold text-slate-900">{permission.name}</p>
-                                  <p className="text-xs text-slate-500">ID: {permission.id}</p>
+                                  <p className="text-sm font-semibold text-foreground">{permission.name}</p>
+                                  <p className="text-xs text-muted-foreground">ID: {permission.id}</p>
                                 </div>
                               </div>
                             </td>
@@ -440,24 +440,24 @@ export default function RolesPermissionsPage() {
                               </span>
                             </td>
                             <td className="px-4 sm:px-6 py-4">
-                              <p className="text-sm text-slate-700">{permission.module}</p>
+                              <p className="text-sm text-muted-foreground">{permission.module}</p>
                             </td>
                             <td className="px-4 sm:px-6 py-4">
-                              <p className="text-sm text-slate-600 max-w-xs truncate">{permission.description}</p>
+                              <p className="text-sm text-muted-foreground max-w-xs truncate">{permission.description}</p>
                             </td>
                             <td className="px-4 sm:px-6 py-4">
                               <div className="flex items-center justify-end gap-2">
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 text-slate-600 hover:text-blue-600 hover:bg-blue-50"
+                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-blue-600 hover:bg-blue-50"
                                 >
                                   <Edit className="h-4 w-4" />
                                 </Button>
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 w-8 p-0 text-slate-600 hover:text-red-600 hover:bg-red-50"
+                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-red-600 hover:bg-red-50"
                                 >
                                   <Trash2 className="h-4 w-4" />
                                 </Button>

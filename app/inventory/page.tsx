@@ -8,19 +8,13 @@ import { Input } from "@/components/ui/input"
 import { InventoryTable, InventoryItem } from "@/components/inventory/inventory-table"
 import { AddStockForm } from "@/components/inventory/add-stock-form"
 import { Package, AlertTriangle, TrendingUp, DollarSign, Plus, Upload, Download, Filter, Search, FileText } from "lucide-react"
+import { useMobile } from "@/lib/hooks/use-mobile"
 
 export default function InventoryPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isAddStockOpen, setIsAddStockOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  const isMobile = useMobile()
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([
     { id: 1, image: "/products/Coca cola 500ml.jpg", name: "Coca Cola 500ml", sku: "CC500", category: "Beverages", currentStock: 120, reorderLevel: 50, unitCost: 60, totalValue: 7200, lastRestock: "2024-01-15" },
     { id: 2, image: "/products/bread loaf.avif", name: "Bread Loaf", sku: "BRD400", category: "Bakery", currentStock: 85, reorderLevel: 30, unitCost: 45, totalValue: 3825, lastRestock: "2024-01-14" },
@@ -75,7 +69,7 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/inventory" 
@@ -89,12 +83,12 @@ export default function InventoryPage() {
             {/* Page Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Inventory</h1>
-                <p className="text-sm text-slate-500 mt-1">Manage your stock levels and movements</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Inventory</h1>
+                <p className="text-sm text-muted-foreground mt-1">Manage your stock levels and movements</p>
               </div>
               <div className="flex gap-2 w-full sm:w-auto">
                 <Button 
-                  className="h-10 sm:h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold shadow-sm hover:shadow transition-all flex-1 sm:flex-none"
+                  className="h-10 sm:h-11 bg-muted hover:bg-muted/80 text-foreground text-sm font-semibold shadow-sm hover:shadow transition-all flex-1 sm:flex-none"
                   variant="outline"
                 >
                   <FileText className="h-4 w-4 mr-2" />
@@ -113,31 +107,31 @@ export default function InventoryPage() {
             {/* Stats Cards */}
             <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
               {inventoryStats.map((stat) => (
-                <div key={stat.title} className="group relative rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                <div key={stat.title} className="group relative rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                   <div className="flex items-start justify-between">
                     <div className={`flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl ${stat.bgColor} ${stat.color} shadow-sm group-hover:shadow transition-all`}>
                       <stat.icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                     </div>
                   </div>
                   <div className="mt-3 sm:mt-4">
-                    <p className="text-xs sm:text-sm font-medium text-slate-600">{stat.title}</p>
-                    <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 tracking-tight">{stat.value}</p>
-                    <p className="mt-0.5 text-[10px] sm:text-xs text-slate-500">{stat.description}</p>
+                    <p className="text-xs sm:text-sm font-medium text-muted-foreground">{stat.title}</p>
+                    <p className="mt-1 text-lg sm:text-xl font-bold text-foreground tracking-tight">{stat.value}</p>
+                    <p className="mt-0.5 text-[10px] sm:text-xs text-muted-foreground">{stat.description}</p>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Search and Filter Section */}
-            <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+            <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
               <div className="flex flex-col gap-4">
                 {/* Search Bar */}
                 <div className="relative w-full">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder="Search inventory..."
-                    className="h-10 pl-9 sm:pl-10 text-sm border bg-slate-50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="h-10 pl-9 sm:pl-10 text-sm border bg-muted focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
 
@@ -145,7 +139,7 @@ export default function InventoryPage() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   {/* Filters */}
                   <div className="flex flex-wrap gap-2">
-                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
+                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
                       <option>All Categories</option>
                       <option>Beverages</option>
                       <option>Bakery</option>
@@ -155,14 +149,14 @@ export default function InventoryPage() {
                       <option>Personal Care</option>
                     </select>
 
-                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
+                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
                       <option>All Status</option>
                       <option>In Stock</option>
                       <option>Low Stock</option>
                       <option>Out of Stock</option>
                     </select>
 
-                    <Button variant="outline" size="sm" className="h-10 text-sm border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                    <Button variant="outline" size="sm" className="h-10 text-sm border-border text-foreground hover:bg-muted transition-all">
                       <Filter className="h-4 w-4 mr-2" />
                       More Filters
                     </Button>
@@ -170,11 +164,11 @@ export default function InventoryPage() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 sm:ml-auto">
-                    <Button variant="outline" size="sm" className="h-10 text-sm border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                    <Button variant="outline" size="sm" className="h-10 text-sm border-border text-foreground hover:bg-muted transition-all">
                       <Upload className="h-4 w-4 mr-2" />
                       Import
                     </Button>
-                    <Button variant="outline" size="sm" className="h-10 text-sm border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+                    <Button variant="outline" size="sm" className="h-10 text-sm border-border text-foreground hover:bg-muted transition-all">
                       <Download className="h-4 w-4 mr-2" />
                       Export
                     </Button>

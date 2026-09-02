@@ -55,10 +55,10 @@ export function FeatureView({ feature, onClose }: FeatureViewProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl">
+    <div className="fixed inset-0 bg-background/80 z-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-card rounded-2xl shadow-2xl">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-card border-b border-slate-200 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary/10 rounded-lg">
               <Target className="h-5 w-5 text-primary" />
@@ -190,7 +190,7 @@ export function FeatureView({ feature, onClose }: FeatureViewProps) {
                 {feature.details.dependencies.map((dep, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-3 py-1 bg-white border border-slate-200 rounded-lg text-sm text-slate-700"
+                    className="inline-flex items-center px-3 py-1 bg-card border border-slate-200 rounded-lg text-sm text-slate-700"
                   >
                     {dep}
                   </span>
@@ -221,7 +221,7 @@ export function FeatureView({ feature, onClose }: FeatureViewProps) {
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-white border-t border-slate-200 px-6 py-4 flex items-center justify-end gap-3">
+        <div className="sticky bottom-0 bg-card border-t border-slate-200 px-6 py-4 flex items-center justify-end gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700"

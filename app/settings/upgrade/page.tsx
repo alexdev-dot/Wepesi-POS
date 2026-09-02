@@ -110,7 +110,7 @@ export default function UpgradeSubscriptionPage() {
   ]
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/settings/upgrade" 
@@ -124,12 +124,12 @@ export default function UpgradeSubscriptionPage() {
           <div className="px-4 sm:px-6 py-4 sm:py-5">
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600 shadow-sm">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600 shadow-sm  ">
                   <Sparkles className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Upgrade Subscription</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Choose the perfect plan for your business</p>
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Upgrade Subscription</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">Choose the perfect plan for your business</p>
                 </div>
               </div>
 
@@ -140,7 +140,7 @@ export default function UpgradeSubscriptionPage() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     billingCycle === "monthly"
                       ? "bg-amber-600 text-white shadow-sm"
-                      : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm"
+                      : "bg-card text-foreground border border-border hover:bg-muted shadow-sm"
                   }`}
                 >
                   Monthly
@@ -150,11 +150,11 @@ export default function UpgradeSubscriptionPage() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     billingCycle === "yearly"
                       ? "bg-amber-600 text-white shadow-sm"
-                      : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm"
+                      : "bg-card text-foreground border border-border hover:bg-muted shadow-sm"
                   }`}
                 >
                   Yearly
-                  <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Save 17%</span>
+                  <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full  ">Save 17%</span>
                 </button>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function UpgradeSubscriptionPage() {
                 {plans.map((plan) => (
                   <div
                     key={plan.id}
-                    className={`relative rounded-xl border-2 ${plan.borderColor} bg-white p-6 shadow-sm hover:shadow-lg transition-all duration-200 ${
+                    className={`relative rounded-xl border-2 ${plan.borderColor} bg-card p-6 shadow-sm hover:shadow-lg transition-all duration-200 ${
                       plan.popular ? "scale-105 z-10" : ""
                     }`}
                   >
@@ -180,27 +180,27 @@ export default function UpgradeSubscriptionPage() {
                       </div>
                     )}
                     <div className="flex items-center gap-3 mb-4">
-                      <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${plan.bgColor} ${plan.color} shadow-sm`}>
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${plan.bgColor} ${plan.color} shadow-sm bg-opacity-30`}>
                         <plan.icon className="h-6 w-6" strokeWidth={2} />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-slate-900">{plan.name}</h3>
-                        <p className="text-xs text-slate-500">{plan.description}</p>
+                        <h3 className="text-lg font-semibold text-foreground">{plan.name}</h3>
+                        <p className="text-xs text-muted-foreground">{plan.description}</p>
                       </div>
                     </div>
                     <div className="mb-6">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-3xl sm:text-4xl font-bold text-slate-900">
+                        <span className="text-3xl sm:text-4xl font-bold text-foreground">
                           KSh {billingCycle === "monthly" ? plan.price.monthly.toLocaleString() : plan.price.yearly.toLocaleString()}
                         </span>
-                        <span className="text-sm text-slate-500">
+                        <span className="text-sm text-muted-foreground">
                           /{billingCycle === "monthly" ? "month" : "year"}
                         </span>
                       </div>
                     </div>
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm text-slate-700">
+                    <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
                       <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0 mt-0.5" strokeWidth={2} />
                       <span>{feature}</span>
                     </li>
@@ -210,7 +210,7 @@ export default function UpgradeSubscriptionPage() {
                   className={`w-full h-11 font-semibold shadow-sm hover:shadow-md transition-all ${
                     plan.id === selectedPlan
                       ? "bg-amber-600 hover:bg-amber-700 text-white"
-                      : "bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                      : "bg-card border-2 border-border text-foreground hover:bg-muted hover:border-border"
                   }`}
                   onClick={() => setSelectedPlan(plan.id)}
                 >
@@ -221,27 +221,27 @@ export default function UpgradeSubscriptionPage() {
           </div>
 
           {/* Features Comparison */}
-          <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
-              <h3 className="text-base font-semibold text-slate-900">Feature Comparison</h3>
+          <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+            <div className="px-6 py-4 border-b border-border bg-muted">
+              <h3 className="text-base font-semibold text-foreground">Feature Comparison</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-slate-200">
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">Feature</th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-slate-900">Basic</th>
+                  <tr className="border-b border-border">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Feature</th>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">Basic</th>
                     <th className="px-6 py-4 text-center text-sm font-semibold text-amber-600">Pro</th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-slate-900">Enterprise</th>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">Enterprise</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-border">
                   {features.map((feature, index) => (
-                    <tr key={index} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 text-sm text-slate-700 font-medium">{feature.name}</td>
-                      <td className="px-6 py-4 text-sm text-slate-600 text-center">{feature.basic}</td>
-                      <td className="px-6 py-4 text-sm text-slate-900 font-semibold text-center">{feature.pro}</td>
-                      <td className="px-6 py-4 text-sm text-slate-600 text-center">{feature.enterprise}</td>
+                    <tr key={index} className="hover:bg-muted transition-colors">
+                      <td className="px-6 py-4 text-sm text-muted-foreground font-medium">{feature.name}</td>
+                      <td className="px-6 py-4 text-sm text-muted-foreground text-center">{feature.basic}</td>
+                      <td className="px-6 py-4 text-sm text-foreground font-semibold text-center">{feature.pro}</td>
+                      <td className="px-6 py-4 text-sm text-muted-foreground text-center">{feature.enterprise}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -250,20 +250,20 @@ export default function UpgradeSubscriptionPage() {
           </div>
 
           {/* FAQ Section */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="text-base font-semibold text-slate-900 mb-4">Frequently Asked Questions</h3>
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <h3 className="text-base font-semibold text-foreground mb-4">Frequently Asked Questions</h3>
             <div className="space-y-4">
-              <div className="border-b border-slate-100 pb-4">
-                <h4 className="text-sm font-semibold text-slate-900 mb-2">Can I change my plan later?</h4>
-                <p className="text-sm text-slate-600">Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated accordingly.</p>
+              <div className="border-b border-border pb-4">
+                <h4 className="text-sm font-semibold text-foreground mb-2">Can I change my plan later?</h4>
+                <p className="text-sm text-muted-foreground">Yes, you can upgrade or downgrade your plan at any time. Changes will be prorated accordingly.</p>
               </div>
-              <div className="border-b border-slate-100 pb-4">
-                <h4 className="text-sm font-semibold text-slate-900 mb-2">What payment methods do you accept?</h4>
-                <p className="text-sm text-slate-600">We accept M-Pesa, credit cards, bank transfers, and mobile money payments.</p>
+              <div className="border-b border-border pb-4">
+                <h4 className="text-sm font-semibold text-foreground mb-2">What payment methods do you accept?</h4>
+                <p className="text-sm text-muted-foreground">We accept M-Pesa, credit cards, bank transfers, and mobile money payments.</p>
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 mb-2">Is there a free trial?</h4>
-                <p className="text-sm text-slate-600">Yes, we offer a 14-day free trial on all plans. No credit card required.</p>
+                <h4 className="text-sm font-semibold text-foreground mb-2">Is there a free trial?</h4>
+                <p className="text-sm text-muted-foreground">Yes, we offer a 14-day free trial on all plans. No credit card required.</p>
               </div>
             </div>
           </div>

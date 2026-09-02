@@ -61,16 +61,16 @@ export default function ReceiptTemplatesPage() {
               className={`cursor-pointer rounded-xl border-2 p-4 transition-all ${
                 selectedTemplate === template.id
                   ? "border-blue-500 bg-blue-50"
-                  : "border-slate-200 bg-white hover:border-slate-300"
+                  : "border-border bg-card hover:border-border"
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-slate-900">{template.name}</span>
+                <span className="text-sm font-semibold text-foreground">{template.name}</span>
                 {template.popular && (
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Popular</span>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full  ">Popular</span>
                 )}
               </div>
-              <div className={`h-32 bg-white border border-slate-200 rounded-lg p-2 text-xs ${template.width === "58mm" ? "w-24" : "w-32"}`}>
+              <div className={`h-32 bg-card border border-border rounded-lg p-2 text-xs ${template.width === "58mm" ? "w-24" : "w-32"}`}>
                 <div className="font-bold text-center mb-1">RECEIPT</div>
                 <div className="space-y-0.5">
                   <div className="flex justify-between">
@@ -81,7 +81,7 @@ export default function ReceiptTemplatesPage() {
                     <span>Item 2</span>
                     <span>KSh 80</span>
                   </div>
-                  <div className="border-t border-slate-300 mt-1 pt-1 flex justify-between font-bold">
+                  <div className="border-t border-border mt-1 pt-1 flex justify-between font-bold">
                     <span>Total</span>
                     <span>KSh 200</span>
                   </div>
@@ -95,7 +95,7 @@ export default function ReceiptTemplatesPage() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/settings/receipts" 
@@ -108,18 +108,18 @@ export default function ReceiptTemplatesPage() {
           {/* Page Header */}
           <div className="px-4 sm:px-6 py-4 sm:py-5">
             <div className="max-w-7xl mx-auto">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-4">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm shrink-0  ">
                   <FileText className="h-5 w-5" strokeWidth={2} />
                 </div>
-                <div className="flex-1">
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Receipt Templates</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Customize and manage receipt formats</p>
+                <div className="flex-1 w-full">
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Receipt Templates</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">Customize and manage receipt formats</p>
                 </div>
                 <select
                   value={selectedTemplate}
                   onChange={(e) => setSelectedTemplate(e.target.value)}
-                  className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full sm:w-auto px-3 py-2 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
                   {thermalTemplates.map((template) => (
                     <option key={template.id} value={template.id}>
@@ -138,10 +138,10 @@ export default function ReceiptTemplatesPage() {
                       setActiveTab(type.id)
                       setSelectedTemplate("")
                     }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       activeTab === type.id
                         ? "bg-blue-600 text-white shadow-sm"
-                        : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm"
+                        : "bg-card text-foreground border border-border hover:bg-muted shadow-sm"
                     }`}
                   >
                     <type.icon className="h-4 w-4" />
@@ -154,7 +154,7 @@ export default function ReceiptTemplatesPage() {
 
           {/* Main Content */}
           <div className="flex-1 overflow-auto px-4 sm:px-6 pb-6">
-            <div className="max-w-7xl mx-auto space-y-6">
+            <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
               {/* Template Customization */}
               {selectedTemplate && (
                 <CustomizeTemplateCard onPreviewClick={(data) => {

@@ -14,7 +14,7 @@ const topProducts = [
 
 export function TopProductsSkeleton() {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
       <div className="flex items-center gap-3 mb-4">
         <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
         <div className="flex-1">
@@ -25,7 +25,7 @@ export function TopProductsSkeleton() {
       </div>
       <div className="flex-1 space-y-3">
         {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className="flex items-center gap-3 py-3 border-b border-slate-100">
+          <div key={index} className="flex items-center gap-3 py-3 border-b border-border">
             <div className="h-10 w-10 rounded-lg bg-muted/70 animate-pulse shrink-0" />
             <div className="flex-1">
               <div className="h-3 bg-muted/70 rounded w-3/4 mb-1 animate-pulse" />
@@ -46,7 +46,7 @@ export function TopProducts() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
       whileHover={{ y: -2 }}
-      className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col font-sans"
+      className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col font-sans"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
@@ -62,7 +62,7 @@ export function TopProducts() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.7 }}
-            className="text-base font-semibold text-slate-900"
+            className="text-base font-semibold text-foreground"
           >
             Top Selling Products
           </motion.h3>
@@ -70,7 +70,7 @@ export function TopProducts() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.75 }}
-            className="text-xs text-slate-500"
+            className="text-xs text-muted-foreground"
           >
             Best performers
           </motion.p>
@@ -97,10 +97,10 @@ export function TopProducts() {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-200">
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Product</th>
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Sold</th>
-                <th className="pb-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Revenue</th>
+              <tr className="border-b border-border">
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</th>
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Sold</th>
+                <th className="pb-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Revenue</th>
               </tr>
             </thead>
             <tbody>
@@ -110,14 +110,14 @@ export function TopProducts() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.9 + index * 0.05 }}
-                  whileHover={{ x: 4, backgroundColor: "#f8fafc" }}
-                  className="border-b border-slate-100 transition-colors cursor-pointer"
+                  whileHover={{ x: 4, backgroundColor: "var(--muted)" }}
+                  className="border-b border-border transition-colors cursor-pointer"
                 >
-                  <td className="py-3 text-xs font-medium text-slate-900">
+                  <td className="py-3 text-xs font-medium text-foreground">
                     <div className="flex items-start gap-3">
                       <motion.div
                         whileHover={{ scale: 1.1 }}
-                        className="h-10 w-10 shrink-0 rounded-lg bg-slate-100 overflow-hidden"
+                        className="h-10 w-10 shrink-0 rounded-lg bg-muted overflow-hidden"
                       >
                         {product.image ? (
                           <Image
@@ -128,14 +128,14 @@ export function TopProducts() {
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-slate-400 text-xs">No img</div>
+                          <div className="h-full w-full flex items-center justify-center text-muted-foreground text-xs">No img</div>
                         )}
                       </motion.div>
                       <span className="whitespace-normal">{product.name}</span>
                     </div>
                   </td>
-                  <td className="py-3 text-xs text-slate-700">{product.sold}</td>
-                  <td className="py-3 text-xs font-semibold text-slate-900">{product.revenue}</td>
+                  <td className="py-3 text-xs text-muted-foreground">{product.sold}</td>
+                  <td className="py-3 text-xs font-semibold text-foreground">{product.revenue}</td>
                 </motion.tr>
               ))}
             </tbody>
@@ -151,9 +151,9 @@ export function TopProducts() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.9 + index * 0.05 }}
               whileHover={{ y: -2 }}
-              className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 bg-slate-50 cursor-pointer"
+              className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted cursor-pointer"
             >
-              <div className="h-12 w-12 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+              <div className="h-12 w-12 rounded-lg bg-muted overflow-hidden shrink-0">
                 {product.image ? (
                   <Image
                     src={product.image}
@@ -163,14 +163,14 @@ export function TopProducts() {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center text-slate-400 text-xs">No img</div>
+                  <div className="h-full w-full flex items-center justify-center text-muted-foreground text-xs">No img</div>
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-slate-900 truncate">{product.name}</p>
-                <p className="text-xs text-slate-500">{product.sold} sold</p>
+                <p className="text-xs font-semibold text-foreground truncate">{product.name}</p>
+                <p className="text-xs text-muted-foreground">{product.sold} sold</p>
               </div>
-              <p className="text-xs font-semibold text-slate-900">{product.revenue}</p>
+              <p className="text-xs font-semibold text-foreground">{product.revenue}</p>
             </motion.div>
           ))}
         </div>

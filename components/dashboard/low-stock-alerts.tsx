@@ -13,7 +13,7 @@ const lowStockItems = [
 
 export function LowStockAlertsSkeleton() {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
       <div className="flex items-center gap-3 mb-4">
         <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
         <div className="flex-1">
@@ -48,7 +48,7 @@ export function LowStockAlerts() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.65, ease: "easeOut" }}
       whileHover={{ y: -2 }}
-      className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col font-sans"
+      className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 h-full flex flex-col font-sans"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
@@ -64,7 +64,7 @@ export function LowStockAlerts() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.75 }}
-            className="text-base font-semibold text-slate-900"
+            className="text-base font-semibold text-foreground"
           >
             Low Stock Alerts
           </motion.h3>
@@ -72,7 +72,7 @@ export function LowStockAlerts() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.8 }}
-            className="text-xs text-slate-500"
+            className="text-xs text-muted-foreground"
           >
             Items needing restock
           </motion.p>
@@ -106,7 +106,7 @@ export function LowStockAlerts() {
           >
             <motion.div
               whileHover={{ scale: 1.1 }}
-              className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-lg bg-slate-100 overflow-hidden"
+              className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-lg bg-muted overflow-hidden"
             >
               {item.image ? (
                 <Image
@@ -117,15 +117,15 @@ export function LowStockAlerts() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full flex items-center justify-center text-slate-400 text-xs">No img</div>
+                <div className="h-full w-full flex items-center justify-center text-muted-foreground/40 text-xs">No img</div>
               )}
             </motion.div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-slate-900 truncate">{item.name}</p>
-              <p className="text-xs text-slate-500 truncate">SKU: {item.sku}</p>
+              <p className="text-xs font-semibold text-foreground truncate">{item.name}</p>
+              <p className="text-xs text-muted-foreground truncate">SKU: {item.sku}</p>
             </div>
             <div className="text-right shrink-0">
-              <p className="text-xs font-semibold text-slate-900">{item.stock}</p>
+              <p className="text-xs font-semibold text-foreground">{item.stock}</p>
               <motion.p
                 whileHover={{ scale: 1.05 }}
                 className="text-xs text-red-600 font-medium"

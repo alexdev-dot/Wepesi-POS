@@ -60,58 +60,60 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+    <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-5 border-b border-slate-100 bg-linear-to-r from-slate-50 to-white">
-        <div className="flex items-center justify-between">
+      <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-border bg-muted/30">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shrink-0  ">
               <Settings className="h-5 w-5" strokeWidth={2} />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-slate-900">Customize Template</h3>
-              <p className="text-sm text-slate-500 mt-0.5">Personalize your receipt design</p>
+              <h3 className="text-base font-semibold text-foreground">Customize Template</h3>
+              <p className="text-sm text-muted-foreground mt-0.5">Personalize your receipt design</p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <Button
               variant="outline"
               size="sm"
-              className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all"
+              className="h-9 flex-1 sm:flex-none border-border text-foreground hover:bg-muted hover:border-border transition-all"
               onClick={() => settings && onPreviewClick({
                 title: settings.backReceiptTitle,
                 text: settings.backReceiptText,
                 email: settings.backContactEmail,
-                website: settings.backContactWebsite
+                website: ''
               })}
             >
               <Eye className="h-4 w-4 mr-2" />
-              Preview
+              <span className="hidden sm:inline">Preview</span>
+              <span className="sm:hidden">View</span>
             </Button>
-            <Button variant="outline" size="sm" className="h-9 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all">
+            <Button variant="outline" size="sm" className="h-9 flex-1 sm:flex-none border-border text-foreground hover:bg-muted hover:border-border transition-all">
               <Copy className="h-4 w-4 mr-2" />
-              Duplicate
+              <span className="hidden sm:inline">Duplicate</span>
+              <span className="sm:hidden">Copy</span>
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="p-6 space-y-8">
+      <div className="p-4 sm:p-6 space-y-6 sm:space-y-8">
         {/* Branding Section */}
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
             <Palette className="h-4 w-4 text-blue-600" strokeWidth={2} />
-            <h4 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">Branding</h4>
+            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">Branding</h4>
           </div>
-          <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {/* Logo Upload */}
             <div className="col-span-full sm:col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Logo</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Logo</label>
               <div 
-                className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer group ${
+                className={`border-2 border-dashed rounded-xl p-4 sm:p-6 text-center transition-all cursor-pointer group ${
                   isDraggingLogo 
                     ? 'border-blue-500 bg-blue-50' 
-                    : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
+                    : 'border-border hover:border-border hover:bg-muted/50'
                 }`}
                 onClick={() => document.getElementById('logo-upload')?.click()}
                 onDragOver={(e) => {
@@ -122,12 +124,12 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
                 onDrop={(e) => handleDrop(e, 'logo')}
               >
                 {settings?.logo ? (
-                  <img src={settings.logo} alt="Logo" className="h-16 w-auto mx-auto mb-2" />
+                  <img src={settings.logo} alt="Logo" className="h-12 sm:h-16 w-auto mx-auto mb-2" />
                 ) : (
-                  <Upload className="h-10 w-10 text-slate-400 mx-auto mb-3 group-hover:text-blue-500 transition-colors" />
+                  <Upload className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground mx-auto mb-2 sm:mb-3 group-hover:text-blue-500 transition-colors" />
                 )}
-                <p className="text-sm font-medium text-slate-600">{settings?.logo ? 'Change logo' : 'Click or drag to upload logo'}</p>
-                <p className="text-xs text-slate-400 mt-1">PNG, JPG up to 2MB</p>
+                <p className="text-xs sm:text-sm font-medium text-foreground">{settings?.logo ? 'Change logo' : 'Click or drag to upload logo'}</p>
+                <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 2MB</p>
                 <input
                   id="logo-upload"
                   type="file"
@@ -145,73 +147,62 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
 
             {/* Business Name */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Business Name</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Business Name</label>
               <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
                   value={settings?.businessName || ''}
                   onChange={(e) => settings && setSettings({ ...settings, businessName: e.target.value })}
-                  className="h-11 pl-10 pr-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                  className="h-10 sm:h-11 pl-10 pr-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
                 />
               </div>
             </div>
 
             {/* Footer Text */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Footer Text</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Footer Text</label>
               <div className="relative">
-                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
                   value={settings?.footerText || ''}
                   onChange={(e) => settings && setSettings({ ...settings, footerText: e.target.value })}
-                  className="h-11 pl-10 pr-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                  className="h-10 sm:h-11 pl-10 pr-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
                 />
               </div>
             </div>
 
             {/* Address */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Address</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Address</label>
               <Input
                 type="text"
                 value={settings?.address || ''}
                 onChange={(e) => settings && setSettings({ ...settings, address: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                className="h-10 sm:h-11 px-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
               />
             </div>
 
             {/* Phone */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Phone</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
               <Input
                 type="text"
                 value={settings?.phone || ''}
                 onChange={(e) => settings && setSettings({ ...settings, phone: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                className="h-10 sm:h-11 px-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Email</label>
               <Input
                 type="text"
                 value={settings?.email || ''}
                 onChange={(e) => settings && setSettings({ ...settings, email: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
-              />
-            </div>
-
-            {/* Website */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Website</label>
-              <Input
-                type="text"
-                value={settings?.website || ''}
-                onChange={(e) => settings && setSettings({ ...settings, website: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                className="h-10 sm:h-11 px-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
               />
             </div>
           </div>
@@ -219,16 +210,16 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
 
         {/* Layout Section */}
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
             <Layout className="h-4 w-4 text-blue-600" strokeWidth={2} />
-            <h4 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">Layout & Display</h4>
+            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">Layout & Display</h4>
           </div>
-          <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {/* Show Contact Info Toggle */}
-            <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-all">
+            <div className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-border bg-muted/50 hover:bg-muted transition-all">
               <div>
-                <label className="block text-sm font-medium text-slate-700">Contact Info</label>
-                <p className="text-xs text-slate-500 mt-0.5">Show business contact details</p>
+                <label className="block text-sm font-medium text-foreground">Contact Info</label>
+                <p className="text-xs text-muted-foreground mt-0.5">Show business contact details</p>
               </div>
               <button
                 onClick={() => settings && setSettings({ ...settings, showContactInfo: !settings.showContactInfo })}
@@ -245,10 +236,10 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
             </div>
 
             {/* Show Barcode Toggle */}
-            <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-all">
+            <div className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-border bg-muted/50 hover:bg-muted transition-all">
               <div>
-                <label className="block text-sm font-medium text-slate-700">Barcode</label>
-                <p className="text-xs text-slate-500 mt-0.5">Include transaction barcode</p>
+                <label className="block text-sm font-medium text-foreground">Barcode</label>
+                <p className="text-xs text-muted-foreground mt-0.5">Include transaction barcode</p>
               </div>
               <button
                 onClick={() => settings && setSettings({ ...settings, showBarcode: !settings.showBarcode })}
@@ -266,11 +257,11 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
 
             {/* Font Size */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Font Size</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Font Size</label>
               <select 
                 value={settings?.fontSize || 'medium'}
                 onChange={(e) => settings && setSettings({ ...settings, fontSize: e.target.value as 'small' | 'medium' | 'large' })}
-                className="w-full h-11 px-4 text-sm rounded-xl bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all cursor-pointer hover:border-slate-300"
+                className="w-full h-10 sm:h-11 px-4 text-sm rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all cursor-pointer hover:border-border"
               >
                 <option value="small">Small</option>
                 <option value="medium">Medium</option>
@@ -280,11 +271,11 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
 
             {/* Template Type */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Receipt Template</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Receipt Template</label>
               <select 
                 value={settings?.templateType || 'classic'}
                 onChange={(e) => settings && setSettings({ ...settings, templateType: e.target.value as 'classic' | 'compact' | 'modern' })}
-                className="w-full h-11 px-4 text-sm rounded-xl bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all cursor-pointer hover:border-slate-300"
+                className="w-full h-10 sm:h-11 px-4 text-sm rounded-xl bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all cursor-pointer hover:border-border"
               >
                 <option value="classic">🧾 Classic Thermal</option>
                 <option value="compact">🧾 Compact</option>
@@ -296,19 +287,19 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
 
         {/* Back of Receipt Section */}
         <div>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
             <ImageIcon className="h-4 w-4 text-blue-600" strokeWidth={2} />
-            <h4 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">Back of Receipt</h4>
+            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">Back of Receipt</h4>
           </div>
-          <div className="grid gap-5 sm:gap-6 grid-cols-1 sm:grid-cols-2">
+          <div className="grid gap-4 sm:gap-5 lg:gap-6 grid-cols-1 sm:grid-cols-2">
             {/* Back Image Upload */}
             <div className="col-span-full sm:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Back Image</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Back Image</label>
               <div 
-                className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer group ${
+                className={`border-2 border-dashed rounded-xl p-4 sm:p-6 text-center transition-all cursor-pointer group ${
                   isDraggingBackImage 
                     ? 'border-blue-500 bg-blue-50' 
-                    : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
+                    : 'border-border hover:border-border hover:bg-muted/50'
                 }`}
                 onClick={() => document.getElementById('back-image-upload')?.click()}
                 onDragOver={(e) => {
@@ -319,12 +310,12 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
                 onDrop={(e) => handleDrop(e, 'backImage')}
               >
                 {settings?.backImage ? (
-                  <img src={settings.backImage} alt="Back Image" className="h-24 w-auto mx-auto mb-2 rounded" />
+                  <img src={settings.backImage} alt="Back Image" className="h-20 sm:h-24 w-auto mx-auto mb-2 rounded" />
                 ) : (
-                  <ImageIcon className="h-10 w-10 text-slate-400 mx-auto mb-3 group-hover:text-blue-500 transition-colors" />
+                  <ImageIcon className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground mx-auto mb-2 sm:mb-3 group-hover:text-blue-500 transition-colors" />
                 )}
-                <p className="text-sm font-medium text-slate-600">{settings?.backImage ? 'Change back image' : 'Click or drag to upload back image'}</p>
-                <p className="text-xs text-slate-400 mt-1">PNG, JPG up to 5MB (appears on reverse side of receipt)</p>
+                <p className="text-xs sm:text-sm font-medium text-foreground">{settings?.backImage ? 'Change back image' : 'Click or drag to upload back image'}</p>
+                <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB (appears on reverse side of receipt)</p>
                 <input
                   id="back-image-upload"
                   type="file"
@@ -342,45 +333,34 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
 
             {/* Back Receipt Title */}
             <div className="col-span-full sm:col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Section Title</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Section Title</label>
               <Input
                 type="text"
                 value={settings?.backReceiptTitle || ''}
                 onChange={(e) => settings && setSettings({ ...settings, backReceiptTitle: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                className="h-10 sm:h-11 px-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
               />
             </div>
 
             {/* Back Receipt Text */}
             <div className="col-span-full sm:col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Policy Text</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Policy Text</label>
               <Input
                 type="text"
                 value={settings?.backReceiptText || ''}
                 onChange={(e) => settings && setSettings({ ...settings, backReceiptText: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                className="h-10 sm:h-11 px-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
               />
             </div>
 
             {/* Contact Email */}
             <div className="col-span-full sm:col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Contact Email</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Contact Email</label>
               <Input
                 type="text"
                 value={settings?.backContactEmail || ''}
                 onChange={(e) => settings && setSettings({ ...settings, backContactEmail: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
-              />
-            </div>
-
-            {/* Contact Website */}
-            <div className="col-span-full sm:col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Website</label>
-              <Input
-                type="text"
-                value={settings?.backContactWebsite || ''}
-                onChange={(e) => settings && setSettings({ ...settings, backContactWebsite: e.target.value })}
-                className="h-11 px-4 text-sm bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all"
+                className="h-10 sm:h-11 px-4 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-border transition-all"
               />
             </div>
           </div>
@@ -388,19 +368,19 @@ export function CustomizeTemplateCard({ onPreviewClick }: CustomizeTemplateCardP
       </div>
 
       {/* Action Buttons */}
-      <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+      <div className="px-4 sm:px-6 py-4 border-t border-border bg-muted/50">
         {showSuccessMessage && (
-          <div className="mb-4 flex items-center gap-2 text-green-600 bg-green-50 border border-green-200 rounded-lg px-4 py-3 animate-in fade-in slide-in-from-top-2">
+          <div className="mb-3 sm:mb-4 flex items-center gap-2 text-green-600 bg-green-50 border border-green-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 animate-in fade-in slide-in-from-top-2   ">
             <Check className="h-4 w-4" />
-            <span className="text-sm font-medium">Template saved successfully!</span>
+            <span className="text-xs sm:text-sm font-medium">Template saved successfully!</span>
           </div>
         )}
-        <div className="flex gap-3 justify-end">
-          <Button variant="outline" className="w-36 h-11 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 transition-all font-medium">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
+          <Button variant="outline" className="w-full sm:w-36 h-10 sm:h-11 border-border text-foreground hover:bg-muted hover:border-border transition-all font-medium">
             <X className="h-4 w-4 mr-2" />
             Cancel
           </Button>
-          <Button className="w-36 h-11 bg-blue-600 hover:bg-blue-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all" onClick={handleSaveChanges}>
+          <Button className="w-full sm:w-36 h-10 sm:h-11 bg-blue-600 hover:bg-blue-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all" onClick={handleSaveChanges}>
             <Check className="h-4 w-4 mr-2" />
             Save Changes
           </Button>

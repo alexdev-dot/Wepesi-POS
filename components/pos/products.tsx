@@ -82,9 +82,10 @@ interface ProductCardProps {
   price: number
   image: string | null
   onAdd?: () => void
+  index?: number
 }
 
-export const ProductCard = memo(function ProductCard({ id, name, stock, price, image, onAdd }: ProductCardProps) {
+export const ProductCard = memo(function ProductCard({ id, name, stock, price, image, onAdd, index = 0 }: ProductCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -98,7 +99,7 @@ export const ProductCard = memo(function ProductCard({ id, name, stock, price, i
       <motion.div
         initial={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
-        className="absolute inset-0 bg-black/20 flex items-center justify-center z-10 transition-opacity duration-200"
+        className="absolute inset-0 bg-background/20 flex items-center justify-center z-10 transition-opacity duration-200"
       >
         <motion.div
           initial={{ scale: 0.8 }}
@@ -116,7 +117,7 @@ export const ProductCard = memo(function ProductCard({ id, name, stock, price, i
             alt={name}
             width={160}
             height={160}
-            priority={id === 1}
+            priority={index < 6}
             className="h-full w-full object-cover transition-transform duration-150"
           />
         </motion.div>
@@ -350,6 +351,7 @@ export function ProductGrid({ products, viewMode, onViewModeChange, onAddToCart,
               <ProductCard
                 key={product.id}
                 {...product}
+                index={index}
                 onAdd={() => onAddToCart?.(product)}
               />
             ))}

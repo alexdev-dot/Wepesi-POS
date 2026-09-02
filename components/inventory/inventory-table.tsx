@@ -26,9 +26,9 @@ interface InventoryTableProps {
 
 export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTableProps) {
   const getStockStatus = (current: number, reorder: number) => {
-    if (current === 0) return { label: "Out of Stock", color: "bg-red-100 text-red-700" }
-    if (current <= reorder) return { label: "Low Stock", color: "bg-orange-100 text-orange-700" }
-    return { label: "In Stock", color: "bg-green-100 text-green-700" }
+    if (current === 0) return { label: "Out of Stock", color: "bg-red-100 text-red-700  " }
+    if (current <= reorder) return { label: "Low Stock", color: "bg-orange-100 text-orange-700  " }
+    return { label: "In Stock", color: "bg-green-100 text-green-700  " }
   }
 
   const getStockProgress = (current: number, reorder: number) => {
@@ -38,7 +38,7 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
       {inventoryItems.length === 0 ? (
         <EmptyState 
           icon="package"
@@ -52,28 +52,28 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
       {/* Desktop Table */}
       <div className="hidden md:block overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
         <table className="w-full min-w-225">
-          <thead className="bg-slate-50 border-b border-slate-200">
+          <thead className="bg-muted border-b border-border">
             <tr>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Product</th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">SKU</th>
-              <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Category</th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Current Stock</th>
-              <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Reorder Level</th>
-              <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Unit Cost</th>
-              <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Total Value</th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Status</th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider whitespace-nowrap">Actions</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Product</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">SKU</th>
+              <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Category</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Current Stock</th>
+              <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Reorder Level</th>
+              <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Unit Cost</th>
+              <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Total Value</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Status</th>
+              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y divide-border">
             {inventoryItems.map((item) => {
               const stockStatus = getStockStatus(item.currentStock, item.reorderLevel)
               const stockProgress = getStockProgress(item.currentStock, item.reorderLevel)
               return (
-                <tr key={item.id} className="hover:bg-slate-50 transition-colors group">
+                <tr key={item.id} className="hover:bg-muted transition-colors group">
                   <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-slate-100 overflow-hidden shrink-0 ring-2 ring-transparent group-hover:ring-slate-200 transition-all">
+                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-muted overflow-hidden shrink-0 ring-2 ring-transparent group-hover:ring-border transition-all">
                         {item.image ? (
                           <Image
                             src={item.image}
@@ -83,25 +83,25 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-slate-400 text-xs">No img</div>
+                          <div className="h-full w-full flex items-center justify-center text-muted-foreground text-xs">No img</div>
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-900 truncate">{item.name}</p>
-                        <p className="text-xs text-slate-500 truncate">Last restock: {item.lastRestock}</p>
+                        <p className="text-sm font-semibold text-foreground truncate">{item.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">Last restock: {item.lastRestock}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 sm:px-6 py-4 text-sm text-slate-700 font-mono font-medium">{item.sku}</td>
-                  <td className="hidden lg:table-cell px-4 sm:px-6 py-4 text-sm text-slate-700">{item.category}</td>
+                  <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground font-mono font-medium">{item.sku}</td>
+                  <td className="hidden lg:table-cell px-4 sm:px-6 py-4 text-sm text-muted-foreground">{item.category}</td>
                   <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="flex-1 min-w-30">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-slate-900">{item.currentStock}</span>
-                          <span className="text-xs text-slate-500">/{item.reorderLevel}</span>
+                          <span className="text-sm font-medium text-foreground">{item.currentStock}</span>
+                          <span className="text-xs text-muted-foreground">/{item.reorderLevel}</span>
                         </div>
-                        <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                           <div 
                             className={`h-full rounded-full transition-all ${
                               stockProgress <= 25 ? 'bg-red-500' : 
@@ -113,9 +113,9 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
                       </div>
                     </div>
                   </td>
-                  <td className="hidden md:table-cell px-4 sm:px-6 py-4 text-sm text-slate-700">{item.reorderLevel}</td>
-                  <td className="hidden sm:table-cell px-4 sm:px-6 py-4 text-sm text-slate-700 font-medium">KSh {item.unitCost.toFixed(2)}</td>
-                  <td className="hidden md:table-cell px-4 sm:px-6 py-4 text-sm text-slate-900 font-semibold">KSh {item.totalValue.toLocaleString()}</td>
+                  <td className="hidden md:table-cell px-4 sm:px-6 py-4 text-sm text-muted-foreground">{item.reorderLevel}</td>
+                  <td className="hidden sm:table-cell px-4 sm:px-6 py-4 text-sm text-muted-foreground font-medium">KSh {item.unitCost.toFixed(2)}</td>
+                  <td className="hidden md:table-cell px-4 sm:px-6 py-4 text-sm text-foreground font-semibold">KSh {item.totalValue.toLocaleString()}</td>
                   <td className="px-4 sm:px-6 py-4">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${stockStatus.color}`}>
                       {stockStatus.label}
@@ -124,20 +124,20 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
                   <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center gap-1">
                       <button 
-                        className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors" 
+                        className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" 
                         title="Edit"
                         onClick={() => onEdit?.(item)}
                       >
                         <Edit className="h-4 w-4" />
                       </button>
                       <button 
-                        className="p-1.5 rounded-lg hover:bg-red-50 text-slate-600 hover:text-red-600 transition-colors" 
+                        className="p-1.5 rounded-lg hover:bg-red-50 text-muted-foreground hover:text-red-600 transition-colors" 
                         title="Delete"
                         onClick={() => onDelete?.(item)}
                       >
                         <Trash className="h-4 w-4" />
                       </button>
-                      <button className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors" title="More">
+                      <button className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" title="More">
                         <MoreHorizontal className="h-4 w-4" />
                       </button>
                     </div>
@@ -155,9 +155,9 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
           const stockStatus = getStockStatus(item.currentStock, item.reorderLevel)
           const stockProgress = getStockProgress(item.currentStock, item.reorderLevel)
           return (
-            <div key={item.id} className="bg-white border rounded-xl p-4 shadow-sm">
+            <div key={item.id} className="bg-card border border-border rounded-xl p-4 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
-                <div className="h-14 w-14 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+                <div className="h-14 w-14 rounded-lg bg-muted overflow-hidden shrink-0">
                   {item.image ? (
                     <Image
                       src={item.image}
@@ -167,13 +167,13 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center text-slate-400 text-xs">No img</div>
+                    <div className="h-full w-full flex items-center justify-center text-muted-foreground text-xs">No img</div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-900 truncate">{item.name}</p>
-                  <p className="text-xs text-slate-500 font-mono mt-1">{item.sku}</p>
-                  <p className="text-xs text-slate-500 mt-1">Last restock: {item.lastRestock}</p>
+                  <p className="text-sm font-semibold text-foreground truncate">{item.name}</p>
+                  <p className="text-xs text-muted-foreground font-mono mt-1">{item.sku}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Last restock: {item.lastRestock}</p>
                 </div>
                 <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${stockStatus.color}`}>
                   {stockStatus.label}
@@ -182,21 +182,21 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
               
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <p className="text-xs text-slate-500">Category</p>
-                  <p className="text-sm font-medium text-slate-900">{item.category}</p>
+                  <p className="text-xs text-muted-foreground">Category</p>
+                  <p className="text-sm font-medium text-foreground">{item.category}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">Unit Cost</p>
-                  <p className="text-sm font-medium text-slate-900">KSh {item.unitCost.toFixed(2)}</p>
+                  <p className="text-xs text-muted-foreground">Unit Cost</p>
+                  <p className="text-sm font-medium text-foreground">KSh {item.unitCost.toFixed(2)}</p>
                 </div>
               </div>
               
               <div className="mb-3">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-slate-500">Current Stock</span>
-                  <span className="text-sm font-medium text-slate-900">{item.currentStock} / {item.reorderLevel}</span>
+                  <span className="text-xs text-muted-foreground">Current Stock</span>
+                  <span className="text-sm font-medium text-foreground">{item.currentStock} / {item.reorderLevel}</span>
                 </div>
-                <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                   <div 
                     className={`h-full rounded-full transition-all ${
                       stockProgress <= 25 ? 'bg-red-500' : 
@@ -207,21 +207,21 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
                 </div>
               </div>
               
-              <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-between pt-3 border-t border-border">
                 <div>
-                  <p className="text-xs text-slate-500">Total Value</p>
-                  <p className="text-sm font-bold text-slate-900">KSh {item.totalValue.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground">Total Value</p>
+                  <p className="text-sm font-bold text-foreground">KSh {item.totalValue.toLocaleString()}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <button 
-                    className="p-2 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors" 
+                    className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" 
                     aria-label="Edit item"
                     onClick={() => onEdit?.(item)}
                   >
                     <Edit className="h-4 w-4" />
                   </button>
                   <button 
-                    className="p-2 rounded-lg hover:bg-red-50 text-slate-600 hover:text-red-600 transition-colors" 
+                    className="p-2 rounded-lg hover:bg-red-50 text-muted-foreground hover:text-red-600 transition-colors" 
                     aria-label="Delete item"
                     onClick={() => onDelete?.(item)}
                   >
@@ -235,10 +235,10 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
       </div>
 
       {/* Pagination */}
-      <div className="px-4 sm:px-6 py-4 border-t border-slate-200 bg-white flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-xs sm:text-sm text-slate-600">Showing 1 to {inventoryItems.length} of 1,248 entries</p>
+      <div className="px-4 sm:px-6 py-4 border-t border-border bg-card flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-xs sm:text-sm text-muted-foreground">Showing 1 to {inventoryItems.length} of 1,248 entries</p>
         <div className="flex items-center gap-1 flex-wrap">
-          <Button variant="outline" size="sm" className="h-9 text-sm border-slate-200 text-slate-700 hover:bg-slate-50" disabled>
+          <Button variant="outline" size="sm" className="h-9 text-sm border-border text-foreground hover:bg-muted" disabled>
             Previous
           </Button>
           {[1, 2, 3, "...", 125].map((page, index) => (
@@ -246,12 +246,12 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete }: InventoryTa
               key={index}
               variant={page === 1 ? "default" : "outline"}
               size="sm"
-              className={`h-9 text-sm ${page === 1 ? "bg-blue-600 text-white hover:bg-blue-700" : "border-slate-200 text-slate-700 hover:bg-slate-50"}`}
+              className={`h-9 text-sm ${page === 1 ? "bg-blue-600 text-white hover:bg-blue-700" : "border-border text-foreground hover:bg-muted"}`}
             >
               {page}
             </Button>
           ))}
-          <Button variant="outline" size="sm" className="h-9 text-sm border-slate-200 text-slate-700 hover:bg-slate-50">
+          <Button variant="outline" size="sm" className="h-9 text-sm border-border text-foreground hover:bg-muted">
             Next
           </Button>
         </div>

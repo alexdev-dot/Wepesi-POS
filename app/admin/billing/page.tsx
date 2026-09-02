@@ -254,7 +254,7 @@ export default function BillingPage() {
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+className="rounded-xl border border-slate-200 bg-card p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -289,7 +289,7 @@ export default function BillingPage() {
       </div>
 
       {/* Invoices Table */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
         {/* Filters and Search */}
         <div className="p-4 sm:p-6 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -311,7 +311,7 @@ export default function BillingPage() {
               <select
                 value={statusFilter}
                 onChange={handleStatusFilterChange}
-                className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-white"
+                className="px-4 py-2.5 sm:py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-card text-foreground"
               >
                 <option value="all">All Status</option>
                 <option value="paid">Paid</option>
@@ -324,7 +324,7 @@ export default function BillingPage() {
             <select
               value={dateFilter}
               onChange={handleDateFilterChange}
-              className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-white"
+              className="px-4 py-2.5 sm:py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base bg-card text-foreground"
             >
               <option value="all">All Time</option>
               <option value="this_month">This Month</option>
@@ -412,7 +412,7 @@ export default function BillingPage() {
         {/* Mobile Card View */}
         <div className="lg:hidden px-4 sm:px-6 py-4 space-y-3">
           {filteredInvoices.map((invoice) => (
-            <div key={invoice.id} className="bg-white border rounded-xl p-4 shadow-sm">
+            <div key={invoice.id} className="bg-card border rounded-xl p-4 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold text-sm shrink-0">
                   {invoice.id.charAt(3)}
@@ -493,8 +493,8 @@ export default function BillingPage() {
 
       {/* Invoice Form Modal */}
       {isInvoiceModalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 sm:p-6">
-          <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl flex flex-col">
+        <div className="fixed inset-0 bg-background/80 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-card rounded-xl shadow-2xl flex flex-col">
             <Suspense fallback={<div className="flex items-center justify-center p-8">
               <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             </div>}>

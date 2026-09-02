@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { X, CreditCard, ChevronDown } from "lucide-react"
+import { X, CreditCard, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { motion } from "framer-motion"
@@ -17,7 +17,7 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
   const [amountReceived, setAmountReceived] = useState(total)
   const [paymentMethod, setPaymentMethod] = useState("cash")
   const [phoneNumber, setPhoneNumber] = useState("")
-  const [paymentDropdownOpen, setPaymentDropdownOpen] = useState(false)
+  const [cardNumber, setCardNumber] = useState("")
 
   const paymentMethods = [
     { value: 'cash', label: 'Cash', icon: '/icons/dollars.png' },
@@ -40,21 +40,21 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2 }}
-        className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-auto"
+        className="bg-card rounded-xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-auto"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-900">Complete Payment</h2>
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <h2 className="text-lg font-semibold text-foreground">Complete Payment</h2>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="h-8 w-8 p-0 hover:bg-slate-100"
+            className="h-8 w-8 p-0 hover:bg-muted"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -63,27 +63,27 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
         {/* Content */}
         <div className="p-6 space-y-4">
           {/* Total Amount */}
-          <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-            <div className="text-sm text-slate-600 mb-1">Total Amount</div>
-            <div className="text-2xl font-bold text-slate-900">KSh {total.toFixed(2)}</div>
+          <div className="bg-muted rounded-lg p-4 border border-border">
+            <div className="text-sm text-muted-foreground mb-1">Total Amount</div>
+            <div className="text-2xl font-bold text-foreground">KSh {total.toFixed(2)}</div>
           </div>
 
           {/* Amount Received */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Amount Received</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">Amount Received</label>
             <Input
               type="number"
               value={amountReceived || ''}
               onChange={(e) => setAmountReceived(parseFloat(e.target.value) || 0)}
-              className="h-11 w-full px-4 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
+              className="h-11 w-full px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
               min="0"
               step="0.01"
             />
           </div>
 
           {/* Change */}
-          <div className="flex items-center justify-between text-sm p-3 bg-slate-50 rounded-lg">
-            <span className="text-slate-600">Change</span>
+          <div className="flex items-center justify-between text-sm p-3 bg-muted rounded-lg">
+            <span className="text-muted-foreground">Change</span>
             <span className={`font-semibold ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               KSh {change.toFixed(2)}
             </span>
@@ -91,82 +91,84 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
 
           {/* Payment Method */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Payment Method</label>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setPaymentDropdownOpen(!paymentDropdownOpen)}
-                className="h-11 w-full px-4 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2">
-                  <img 
-                    src={selectedPayment.icon} 
-                    alt={selectedPayment.label} 
-                    className={`object-contain ${selectedPayment.value === 'mpesa' ? 'h-7 w-7' : 'h-5 w-5'}`} 
-                  />
-                  <span>{selectedPayment.label}</span>
-                </div>
-                <motion.div
-                  animate={{ rotate: paymentDropdownOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
+            <label className="block text-sm font-medium text-foreground mb-1.5">Payment Method</label>
+            <div className="grid grid-cols-3 gap-3">
+              {paymentMethods.map((method) => (
+                <motion.button
+                  key={method.value}
+                  type="button"
+                  onClick={() => setPaymentMethod(method.value)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`
+                    relative p-2 rounded-xl border-2 transition-all duration-200
+                    ${paymentMethod === method.value
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-border bg-card hover:border-green-300'
+                    }
+                  `}
                 >
-                  <ChevronDown className="h-4 w-4 text-slate-400" />
-                </motion.div>
-              </button>
-
-              {paymentDropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden"
-                >
-                  {paymentMethods.map((method) => (
-                    <button
-                      key={method.value}
-                      type="button"
-                      onClick={() => {
-                        setPaymentMethod(method.value)
-                        setPaymentDropdownOpen(false)
-                      }}
-                      className="w-full px-4 py-2.5 text-sm text-left hover:bg-slate-50 transition-colors flex items-center gap-2"
+                  <div className="flex flex-col items-center gap-1">
+                    <img
+                      src={method.icon}
+                      alt={method.label}
+                      className={`object-contain ${method.value === 'mpesa' ? 'h-16 w-16' : 'h-6 w-6'}`}
+                    />
+                    <span className={`text-xs font-medium ${paymentMethod === method.value ? 'text-green-700' : 'text-foreground'}`}>
+                      {method.label}
+                    </span>
+                  </div>
+                  {paymentMethod === method.value && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-2 -right-2 h-5 w-5 bg-green-500 rounded-full flex items-center justify-center"
                     >
-                      <img 
-                        src={method.icon} 
-                        alt={method.label} 
-                        className={`object-contain ${method.value === 'mpesa' ? 'h-7 w-7' : 'h-5 w-5'}`} 
-                      />
-                      <span className="text-slate-700">{method.label}</span>
-                    </button>
-                  ))}
-                </motion.div>
-              )}
+                      <Check className="h-3 w-3 text-white" />
+                    </motion.div>
+                  )}
+                </motion.button>
+              ))}
             </div>
           </div>
 
-          {/* Phone Number */}
-          {paymentMethod !== 'cash' && (
+          {/* Card Number */}
+          {paymentMethod === 'card' && (
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Phone Number ({paymentMethod === 'mpesa' ? 'M-Pesa' : 'Card'})
-              </label>
+              <label className="block text-sm font-medium text-foreground mb-1.5">Card Number</label>
+              <Input
+                type="text"
+                value={cardNumber}
+                onChange={(e) => setCardNumber(e.target.value)}
+                className="h-11 w-full px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
+                placeholder="XXXX XXXX XXXX XXXX"
+                maxLength={19}
+              />
+            </div>
+          )}
+
+          {/* M-Pesa Phone Number */}
+          {paymentMethod === 'mpesa' && (
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">M-Pesa Phone Number</label>
               <Input
                 type="text"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="h-11 w-full px-4 text-sm border rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
+                className="h-11 w-full px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
                 placeholder="07XX XXX XXX"
+                maxLength={10}
               />
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 p-4 border-t border-slate-200">
+        <div className="flex gap-3 p-4 border-t border-border">
           <Button
             variant="outline"
             onClick={onClose}
-            className="flex-1 h-11 border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="flex-1 h-11 border-border text-foreground hover:bg-muted"
           >
             Cancel
           </Button>

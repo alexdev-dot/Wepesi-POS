@@ -21,7 +21,7 @@ const maxValue = Math.max(...chartData.map((d) => d.value))
 
 export function SalesOverviewSkeleton() {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm font-sans">
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm font-sans">
       <div className="flex items-center gap-3 mb-4">
         <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
         <div className="flex-1">
@@ -30,7 +30,7 @@ export function SalesOverviewSkeleton() {
         </div>
         <div className="h-8 bg-muted/70 rounded w-20 animate-pulse" />
       </div>
-      <div className="flex gap-4 border-b border-slate-200 mb-5">
+      <div className="flex gap-4 border-b border-border mb-5">
         {Array.from({ length: 4 }).map((_, index) => (
           <div key={index} className="h-4 bg-muted/70 rounded w-16 animate-pulse" />
         ))}
@@ -52,7 +52,7 @@ export function SalesOverview() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
       whileHover={{ y: -2 }}
-      className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 font-sans"
+      className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 font-sans"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
@@ -68,7 +68,7 @@ export function SalesOverview() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.5 }}
-            className="text-base font-semibold text-slate-900"
+            className="text-base font-semibold text-foreground"
           >
             Sales Overview
           </motion.h3>
@@ -76,7 +76,7 @@ export function SalesOverview() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.55 }}
-            className="text-xs text-slate-500"
+            className="text-xs text-muted-foreground"
           >
             Revenue over time
           </motion.p>
@@ -84,10 +84,10 @@ export function SalesOverview() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
+          className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:bg-muted transition-all shadow-sm"
         >
           <span>Daily</span>
-          <ChevronDown className="h-3.5 w-3.5 text-slate-500" />
+          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
         </motion.button>
       </div>
 
@@ -96,7 +96,7 @@ export function SalesOverview() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.6 }}
-        className="flex gap-4 border-b border-slate-200 overflow-x-auto"
+        className="flex gap-4 border-b border-border overflow-x-auto"
       >
         {timeTabs.map((tab, index) => (
           <motion.button
@@ -108,7 +108,7 @@ export function SalesOverview() {
             className={`px-1 pb-3 text-xs font-medium transition-colors relative whitespace-nowrap ${
               tab === "Today"
                 ? "text-blue-600"
-                : "text-slate-500 hover:text-slate-700"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {tab}
@@ -190,8 +190,8 @@ export function SalesOverview() {
               cx={i * 114}
               cy={250 - (d.value / maxValue) * 230}
               r="5"
-              fill="white"
-              stroke="#3B82F6"
+              fill="card"
+              stroke="border"
               strokeWidth="2.5"
               className="hover:r-6 transition-all cursor-pointer"
             />
@@ -203,7 +203,7 @@ export function SalesOverview() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 1.2 }}
-          className="mt-2 flex justify-between text-xs text-slate-500 overflow-x-auto pb-1"
+          className="mt-2 flex justify-between text-xs text-muted-foreground overflow-x-auto pb-1"
         >
           {chartData.map((d) => (
             <span key={d.time} className="shrink-0 px-1">{d.time}</span>

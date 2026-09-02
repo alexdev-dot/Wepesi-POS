@@ -312,7 +312,7 @@ export default function FeaturesPage() {
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-card p-6 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -338,7 +338,7 @@ export default function FeaturesPage() {
       </div>
 
       {/* Main Content */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
         {/* Filters and Search */}
         <div className="p-4 sm:p-6 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -360,7 +360,7 @@ export default function FeaturesPage() {
               <select
                 value={statusFilter}
                 onChange={handleStatusFilterChange}
-                className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base bg-white"
+                className="px-4 py-2.5 sm:py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base bg-card text-foreground"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
@@ -373,7 +373,7 @@ export default function FeaturesPage() {
             <select
               value={categoryFilter}
               onChange={handleCategoryFilterChange}
-              className="px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base bg-white"
+              className="px-4 py-2.5 sm:py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base bg-card text-foreground"
             >
               <option value="all">All Categories</option>
               {categories.map((cat) => (
@@ -456,7 +456,7 @@ export default function FeaturesPage() {
         {/* Mobile Card View */}
         <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
           {filteredFeatures.map((feature) => (
-            <div key={feature.id} className="bg-white border rounded-xl p-4 shadow-sm">
+            <div key={feature.id} className="bg-card border rounded-xl p-4 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold text-sm shrink-0">
                   {feature.name.charAt(0)}

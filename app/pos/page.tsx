@@ -11,13 +11,12 @@ import { PaymentPopup } from "@/components/pos/payment-popup"
 import { ReceiptPopup } from "@/components/pos/receipt-popup"
 import { cn } from "@/lib/utils"
 import { categories, products, keyboardShortcuts } from "@/lib/pos-data"
-import { debounce } from "@/lib/utils-debounce"
+import { useMobile } from "@/lib/hooks/use-mobile"
 
 export default function POSPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Products")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [sidebarVisible, setSidebarVisible] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [cartCollapsed, setCartCollapsed] = useState(true)
   const [cartItems, setCartItems] = useState<any[]>([])
@@ -25,10 +24,9 @@ export default function POSPage() {
   const [amountReceived, setAmountReceived] = useState(0)
   const [paymentMethod, setPaymentMethod] = useState("cash")
   const [phoneNumber, setPhoneNumber] = useState("")
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useMobile()
   const [showPaymentPopup, setShowPaymentPopup] = useState(false)
   const [showReceiptPopup, setShowReceiptPopup] = useState(false)
-  const [loading, setLoading] = useState(true)
 
   // Filter products based on selected category
   const filteredProducts = useMemo(() => 
@@ -38,19 +36,9 @@ export default function POSPage() {
     [selectedCategory]
   )
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
-    const debouncedCheckMobile = debounce(checkMobile, 200)
-    checkMobile()
-    window.addEventListener('resize', debouncedCheckMobile)
-    return () => window.removeEventListener('resize', debouncedCheckMobile)
-  }, [])
-
-  useEffect(() => {
-    // Simulate initial loading
-    const timer = setTimeout(() => setLoading(false), 800)
-    return () => clearTimeout(timer)
-  }, [])
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed)
+  }
 
   const toggleMobileSidebar = () => {
     setMobileSidebarOpen(!mobileSidebarOpen)
@@ -61,10 +49,10 @@ export default function POSPage() {
   }
 
   const handleMenuClick = () => {
-    if (isMobile) {
+    if (window.innerWidth < 1024) {
       toggleMobileSidebar()
     } else {
-      setSidebarVisible(!sidebarVisible)
+      toggleSidebar()
     }
   }
 
@@ -132,17 +120,13 @@ export default function POSPage() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       {/* Sidebar */}
       <Sidebar
         collapsed={sidebarCollapsed}
         currentPath="/pos"
-        mobileOpen={mobileSidebarOpen || sidebarVisible}
-        onMobileClose={() => {
-          closeMobileSidebar()
-          setSidebarVisible(false)
-        }}
-        hideByDefault={true}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={closeMobileSidebar}
       />
 
       {/* Main Content */}
@@ -160,40 +144,27 @@ export default function POSPage() {
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-7xl mx-auto w-full custom-scrollbar">
                 {/* Page Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  {loading ? (
-                    <>
-                      <div>
-                        <div className="h-8 w-48 bg-muted/70 rounded animate-pulse mb-2" />
-                        <div className="h-4 w-64 bg-muted/70 rounded animate-pulse" />
-                      </div>
-                      <div className="w-64 h-10 bg-muted/70 rounded-lg animate-pulse" />
-                    </>
-                  ) : (
-                    <>
-                      <div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Point of Sale</h1>
-                        <p className="text-sm text-slate-500 mt-1">Process sales and manage transactions</p>
-                      </div>
-                      <div className="w-64">
-                        <CategoryDropdown
-                          categories={categories}
-                          selectedCategory={selectedCategory}
-                          onSelectCategory={setSelectedCategory}
-                        />
-                      </div>
-                    </>
-                  )}
+                  <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Point of Sale</h1>
+                    <p className="text-sm text-muted-foreground mt-1">Process sales and manage transactions</p>
+                  </div>
+                  <div className="w-64">
+                    <CategoryDropdown
+                      categories={categories}
+                      selectedCategory={selectedCategory}
+                      onSelectCategory={setSelectedCategory}
+                    />
+                  </div>
                 </div>
 
                 {/* Product Grid */}
-                <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
                   <ProductGrid
                     products={filteredProducts}
                     viewMode={viewMode}
                     onViewModeChange={setViewMode}
                     onAddToCart={handleAddToCart}
                     onClearCart={handleClearCart}
-                    loading={loading}
                   />
                 </div>
 
@@ -203,27 +174,10 @@ export default function POSPage() {
             </div>
 
             {/* Right: Sticky Cart Sidebar */}
-            <div className="hidden lg:flex w-96 border-l border-slate-200 bg-white shrink-0 overflow-y-auto">
+            <div className="hidden lg:flex w-96 border-l border-border bg-card shrink-0 overflow-y-auto">
               <div className="p-4 sm:p-5 w-full">
-                {loading ? (
-                  <>
-                    <div className="h-6 w-32 bg-muted/70 rounded animate-pulse mb-4" />
-                    <div className="space-y-3">
-                      {Array.from({ length: 3 }).map((_, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100">
-                          <div className="h-12 w-12 bg-muted/70 rounded-md animate-pulse" />
-                          <div className="flex-1">
-                            <div className="h-4 w-24 bg-muted/70 rounded animate-pulse mb-2" />
-                            <div className="h-3 w-16 bg-muted/70 rounded animate-pulse" />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <h2 className="text-lg font-semibold text-slate-900 mb-4">Shopping Cart</h2>
-                    <CartSidebar
+                <h2 className="text-lg font-semibold text-foreground mb-4">Shopping Cart</h2>
+                <CartSidebar
                   cartItems={cartItems}
                   subtotal={subtotal}
                   discount={discount}
@@ -244,8 +198,6 @@ export default function POSPage() {
                   onPhoneNumberChange={setPhoneNumber}
                   onPaymentClick={() => setShowPaymentPopup(true)}
                 />
-                  </>
-                )}
               </div>
             </div>
           </div>
@@ -274,31 +226,14 @@ export default function POSPage() {
 
         {/* Mobile Cart Overlay */}
         {cartCollapsed === false && (
-          <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setCartCollapsed(true)} />
+          <div className="lg:hidden fixed inset-0 bg-background/80 z-40" onClick={() => setCartCollapsed(true)} />
         )}
 
         {/* Mobile Cart Sidebar */}
-        <div className={`lg:hidden fixed right-0 top-0 h-full w-full sm:w-96 bg-white z-50 transition-transform duration-300 ${cartCollapsed === false ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className={`lg:hidden fixed right-0 top-0 h-full w-full sm:w-96 bg-card z-50 transition-transform duration-300 ${cartCollapsed === false ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="p-4 sm:p-5 w-full">
-            {loading ? (
-              <>
-                <div className="h-6 w-32 bg-muted/70 rounded animate-pulse mb-4" />
-                <div className="space-y-3">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100">
-                      <div className="h-12 w-12 bg-muted/70 rounded-md animate-pulse" />
-                      <div className="flex-1">
-                        <div className="h-4 w-24 bg-muted/70 rounded animate-pulse mb-2" />
-                        <div className="h-3 w-16 bg-muted/70 rounded animate-pulse" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Shopping Cart</h2>
-                <CartSidebar
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Shopping Cart</h2>
+            <CartSidebar
               cartItems={cartItems}
               subtotal={subtotal}
               discount={discount}
@@ -319,8 +254,6 @@ export default function POSPage() {
               onPhoneNumberChange={setPhoneNumber}
               onPaymentClick={() => setShowPaymentPopup(true)}
             />
-                </>
-              )}
           </div>
         </div>
       </div>

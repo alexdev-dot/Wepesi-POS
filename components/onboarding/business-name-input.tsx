@@ -21,7 +21,7 @@ export function BusinessNameInput({ value, onChange }: BusinessNameInputProps) {
           placeholder="e.g., Alex's Supermarket"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="h-14 w-full rounded-xl border-2 border-slate-200 bg-white pl-28 text-base shadow-sm focus:ring-4 focus:ring-blue-500/10 transition-all"
+          className="h-14 w-full rounded-xl border-2 border-slate-200 bg-card pl-28 text-base shadow-sm focus:ring-4 focus:ring-blue-500/10 transition-all"
         />
       </div>
     </div>

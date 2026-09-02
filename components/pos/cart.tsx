@@ -74,20 +74,20 @@ export const CartSidebar = memo(function CartSidebar({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-all duration-200 flex flex-col h-full"
+      className="rounded-xl border border-border bg-card shadow-sm hover:shadow-md transition-all duration-200 flex flex-col h-full"
     >
       {/* Header - Always Visible */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200"
+        className="flex items-center justify-between p-4 sm:p-5 border-b border-border"
       >
         <div className="flex items-center gap-3">
           <motion.div
             whileHover={{ rotate: 5, scale: 1.1 }}
             transition={{ duration: 0.2 }}
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-purple-600 shadow-sm"
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-purple-600 shadow-sm  "
           >
             <ShoppingCart className="h-5 w-5" strokeWidth={2} />
           </motion.div>
@@ -96,7 +96,7 @@ export const CartSidebar = memo(function CartSidebar({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="text-base font-semibold text-slate-900"
+              className="text-base font-semibold text-foreground"
             >
               Shopping Cart
             </motion.h3>
@@ -104,7 +104,7 @@ export const CartSidebar = memo(function CartSidebar({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.15 }}
-              className="text-xs text-slate-500"
+              className="text-xs text-muted-foreground"
             >
               {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'}
             </motion.p>
@@ -114,7 +114,7 @@ export const CartSidebar = memo(function CartSidebar({
           whileHover={{ scale: 1.05, backgroundColor: "#f1f5f9" }}
           whileTap={{ scale: 0.95 }}
           onClick={onToggleCollapse}
-          className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-all"
+          className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
           title={collapsed ? "Expand Cart" : "Collapse Cart"}
         >
           {collapsed ? (
@@ -140,9 +140,9 @@ export const CartSidebar = memo(function CartSidebar({
               transition={{ duration: 0.3 }}
               className="flex flex-col items-center justify-center py-12 text-center"
             >
-              <ShoppingCart className="h-12 w-12 text-slate-300 mb-3" />
-              <p className="text-sm font-medium text-slate-500">Your cart is empty</p>
-              <p className="text-xs text-slate-400 mt-1">Add products to get started</p>
+              <ShoppingCart className="h-12 w-12 text-muted-foreground/30 mb-3" />
+              <p className="text-sm font-medium text-muted-foreground">Your cart is empty</p>
+              <p className="text-xs text-muted-foreground/60 mt-1">Add products to get started</p>
             </motion.div>
           ) : (
             <motion.div
@@ -162,10 +162,10 @@ export const CartSidebar = memo(function CartSidebar({
                     className="flex justify-between items-start text-sm"
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-slate-900 truncate">{item.name}</p>
-                      <p className="text-xs text-slate-500">Qty: {item.quantity}</p>
+                      <p className="font-medium text-foreground truncate">{item.name}</p>
+                      <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold text-slate-900 ml-2">KSh {(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold text-foreground ml-2">KSh {(item.price * item.quantity).toFixed(2)}</p>
                   </motion.div>
                 ))}
               </div>
@@ -175,27 +175,27 @@ export const CartSidebar = memo(function CartSidebar({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.4 }}
-                className="space-y-2 pt-3 border-t border-slate-200"
+                className="space-y-2 pt-3 border-t border-border"
               >
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-600">Subtotal</span>
-                  <span className="font-semibold text-slate-900">KSh {subtotal.toFixed(2)}</span>
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="font-semibold text-foreground">KSh {subtotal.toFixed(2)}</span>
                 </div>
                 {tax > 0 && (
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">Tax (16%)</span>
-                    <span className="font-semibold text-slate-900">KSh {tax.toFixed(2)}</span>
+                    <span className="text-muted-foreground">Tax (16%)</span>
+                    <span className="font-semibold text-foreground">KSh {tax.toFixed(2)}</span>
                   </div>
                 )}
                 {discount > 0 && (
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">Discount</span>
+                    <span className="text-muted-foreground">Discount</span>
                     <span className="font-semibold text-orange-600">-KSh {discount.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-200">
-                  <span className="text-base font-semibold text-slate-900">Total</span>
-                  <span className="text-xl font-bold text-slate-900">KSh {total.toFixed(2)}</span>
+                <div className="flex items-center justify-between pt-2 border-t border-border">
+                  <span className="text-base font-semibold text-foreground">Total</span>
+                  <span className="text-xl font-bold text-foreground">KSh {total.toFixed(2)}</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -220,9 +220,9 @@ export const CartSidebar = memo(function CartSidebar({
                 transition={{ duration: 0.3 }}
                 className="flex flex-col items-center justify-center py-12 text-center"
               >
-                <ShoppingCart className="h-12 w-12 text-slate-300 mb-3" />
-                <p className="text-sm font-medium text-slate-500">Your cart is empty</p>
-                <p className="text-xs text-slate-400 mt-1">Add products to get started</p>
+                <ShoppingCart className="h-12 w-12 text-muted-foreground/30 mb-3" />
+                <p className="text-sm font-medium text-muted-foreground">Your cart is empty</p>
+                <p className="text-xs text-muted-foreground/60 mt-1">Add products to get started</p>
               </motion.div>
             ) : (
               cartItems.map((item, index) => (
@@ -232,12 +232,12 @@ export const CartSidebar = memo(function CartSidebar({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
                   whileHover={{ x: 2, backgroundColor: "#f8fafc" }}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100 hover:border-slate-200 transition-all cursor-pointer"
+                  className="flex items-center gap-3 p-3 rounded-lg bg-muted border border-border hover:border-border transition-all cursor-pointer"
                 >
                   {/* Product Image */}
                   <motion.div
                     whileHover={{ scale: 1.05 }}
-                    className="h-12 w-12 shrink-0 rounded-md bg-white border border-slate-200 overflow-hidden flex items-center justify-center"
+                    className="h-12 w-12 shrink-0 rounded-md bg-card border border-border overflow-hidden flex items-center justify-center"
                   >
                     <OptimizedImage
                       src={item.image}
@@ -250,8 +250,8 @@ export const CartSidebar = memo(function CartSidebar({
 
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-slate-900 truncate">{item.name}</h4>
-                    <p className="text-xs text-slate-500 font-medium">KSh {item.price.toFixed(2)}</p>
+                    <h4 className="text-sm font-semibold text-foreground truncate">{item.name}</h4>
+                    <p className="text-xs text-muted-foreground font-medium">KSh {item.price.toFixed(2)}</p>
                   </div>
 
                   {/* Quantity Controls */}
@@ -260,16 +260,16 @@ export const CartSidebar = memo(function CartSidebar({
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => onItemDecrement(item.id)}
-                      className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all"
+                      className="h-7 w-7 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
                     >
                       <Minus className="h-3 w-3" />
                     </motion.button>
-                    <span className="text-sm font-semibold text-slate-900 w-8 text-center">{item.quantity}</span>
+                    <span className="text-sm font-semibold text-foreground w-8 text-center">{item.quantity}</span>
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => onItemIncrement(item.id)}
-                      className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all"
+                      className="h-7 w-7 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
                     >
                       <Plus className="h-3 w-3" />
                     </motion.button>
@@ -280,7 +280,7 @@ export const CartSidebar = memo(function CartSidebar({
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => onItemDelete(item.id)}
-                    className="h-7 w-7 flex items-center justify-center rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                    className="h-7 w-7 flex items-center justify-center rounded-md text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-all"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </motion.button>
@@ -297,29 +297,29 @@ export const CartSidebar = memo(function CartSidebar({
               transition={{ duration: 0.3, delay: 0.4 }}
               className="pt-4"
             >
-              <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 space-y-2">
+              <div className="rounded-lg border border-border bg-muted p-4 space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-600">Subtotal</span>
-                  <span className="font-semibold text-slate-900">KSh {subtotal.toFixed(2)}</span>
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="font-semibold text-foreground">KSh {subtotal.toFixed(2)}</span>
                 </div>
 
                 {tax > 0 && (
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">Tax (16%)</span>
-                    <span className="font-semibold text-slate-900">KSh {tax.toFixed(2)}</span>
+                    <span className="text-muted-foreground">Tax (16%)</span>
+                    <span className="font-semibold text-foreground">KSh {tax.toFixed(2)}</span>
                   </div>
                 )}
 
                 {discount > 0 && (
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">Discount</span>
+                    <span className="text-muted-foreground">Discount</span>
                     <span className="font-semibold text-orange-600">-KSh {discount.toFixed(2)}</span>
                   </div>
                 )}
 
-                <div className="flex items-center justify-between pt-2 border-t border-slate-200">
-                  <span className="text-base font-semibold text-slate-900">Total</span>
-                  <span className="text-xl font-bold text-slate-900">KSh {total.toFixed(2)}</span>
+                <div className="flex items-center justify-between pt-2 border-t border-border">
+                  <span className="text-base font-semibold text-foreground">Total</span>
+                  <span className="text-xl font-bold text-foreground">KSh {total.toFixed(2)}</span>
                 </div>
               </div>
             </motion.div>
@@ -333,7 +333,7 @@ export const CartSidebar = memo(function CartSidebar({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.6 }}
-        className="mt-2 pt-4 border-t border-slate-200 mb-4"
+        className="mt-2 pt-4 border-t border-border mb-4"
       >
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
           <Button

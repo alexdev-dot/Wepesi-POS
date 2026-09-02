@@ -6,11 +6,13 @@ import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Users, UserPlus, Download, Filter, Search, MoreVertical, Mail, Phone, MapPin, Calendar, Shield, X, Briefcase, Clock, Lock, KeyRound, Eye, EyeOff } from "lucide-react"
+import { useMobile } from "@/lib/hooks/use-mobile"
 
 export default function EmployeesPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isAddEmployeeOpen, setIsAddEmployeeOpen] = useState(false)
+  const isMobile = useMobile()
   const [isPinModalOpen, setIsPinModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null)
   const [newPin, setNewPin] = useState("")
@@ -78,7 +80,7 @@ export default function EmployeesPage() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/employees" 
@@ -96,8 +98,8 @@ export default function EmployeesPage() {
                   <Users className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-slate-900">Employees</h1>
-                  <p className="text-sm text-slate-500 mt-0.5">Manage your team and staff</p>
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Employees</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">Manage your team and staff</p>
                 </div>
               </div>
 
@@ -105,16 +107,16 @@ export default function EmployeesPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Search */}
                 <div className="relative flex-1 max-w-md">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder="Search employees..."
-                    className="h-10 pl-9 sm:pl-10 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all"
+                    className="h-10 pl-9 sm:pl-10 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all"
                   />
                 </div>
 
                 {/* Department Filter */}
-                <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all shadow-sm">
+                <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all shadow-sm">
                   <option>All Departments</option>
                   <option>Management</option>
                   <option>Sales</option>
@@ -123,7 +125,7 @@ export default function EmployeesPage() {
                 </select>
 
                 {/* Status Filter */}
-                <select className="px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all shadow-sm">
+                <select className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all shadow-sm">
                   <option>All Status</option>
                   <option>Active</option>
                   <option>On Leave</option>
@@ -132,11 +134,11 @@ export default function EmployeesPage() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 ml-auto">
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Filter className="h-4 w-4" />
                     <span className="hidden sm:inline">More Filters</span>
                   </button>
-                  <button className="flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <button className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm">
                     <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </button>
@@ -158,7 +160,7 @@ export default function EmployeesPage() {
               {/* Stats Cards */}
               <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
                 {employeeStats.map((stat) => (
-                  <div key={stat.title} className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+                  <div key={stat.title} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
                     <div className="flex items-start justify-between mb-3 sm:mb-4">
                       <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${
                         stat.isPositive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
@@ -174,64 +176,64 @@ export default function EmployeesPage() {
                       )}
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900">{stat.title}</h4>
-                      <p className="mt-2 text-xl sm:text-2xl font-bold text-slate-900">{stat.value}</p>
+                      <h4 className="text-sm font-semibold text-foreground">{stat.title}</h4>
+                      <p className="mt-2 text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Employees Table */}
-              <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-                  <h3 className="text-base font-semibold text-slate-900">All Employees</h3>
-                  <span className="text-sm text-slate-500">24 employees</span>
+              <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+                <div className="px-4 sm:px-6 py-4 border-b border-border bg-muted flex items-center justify-between">
+                  <h3 className="text-base font-semibold text-foreground">All Employees</h3>
+                  <span className="text-sm text-muted-foreground">24 employees</span>
                 </div>
                 
                 {/* Desktop Table */}
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="border-b border-slate-200">
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Employee</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Contact</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Role</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Department</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">PIN</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Joined</th>
-                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Actions</th>
+                      <tr className="border-b border-border">
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Employee</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Contact</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Role</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Department</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">PIN</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Status</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Joined</th>
+                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-border">
                       {employees.map((employee) => (
-                        <tr key={employee.id} className="hover:bg-slate-50 transition-colors">
+                        <tr key={employee.id} className="hover:bg-muted transition-colors">
                           <td className="px-4 sm:px-6 py-4">
                             <div className="flex items-center gap-3">
                               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-600 font-semibold text-sm">
                                 {employee.name.split(' ').map(n => n[0]).join('')}
                               </div>
                               <div>
-                                <div className="text-sm font-medium text-slate-900">{employee.name}</div>
-                                <div className="text-xs text-slate-500">{employee.email}</div>
+                                <div className="text-sm font-medium text-foreground">{employee.name}</div>
+                                <div className="text-xs text-muted-foreground">{employee.email}</div>
                               </div>
                             </div>
                           </td>
                           <td className="px-4 sm:px-6 py-4">
                             <div className="space-y-1">
-                              <div className="flex items-center gap-1 text-xs text-slate-600">
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <Phone className="h-3 w-3" />
                                 <span>{employee.phone}</span>
                               </div>
                             </div>
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-900">{employee.role}</td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{employee.department}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-foreground">{employee.role}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground">{employee.department}</td>
                           <td className="px-4 sm:px-6 py-4">
                             {employee.pin ? (
                               <div className="flex items-center gap-2">
                                 <Lock className="h-4 w-4 text-green-600" />
-                                <span className="text-sm font-mono text-slate-600">••••</span>
+                                <span className="text-sm font-mono text-muted-foreground">••••</span>
                               </div>
                             ) : (
                               <button
@@ -248,19 +250,19 @@ export default function EmployeesPage() {
                               {employee.status}
                             </span>
                           </td>
-                          <td className="px-4 sm:px-6 py-4 text-sm text-slate-700">{employee.joinDate}</td>
+                          <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground">{employee.joinDate}</td>
                           <td className="px-4 sm:px-6 py-4">
                             <div className="flex items-center gap-1">
                               {employee.pin && (
                                 <button
                                   onClick={() => handleSetPin(employee)}
-                                  className="p-1.5 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-all"
+                                  className="p-1.5 text-muted-foreground hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-all"
                                   title="Edit PIN"
                                 >
                                   <KeyRound className="h-4 w-4" />
                                 </button>
                               )}
-                              <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                              <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
                                 <MoreVertical className="h-4 w-4" />
                               </button>
                             </div>
@@ -274,38 +276,38 @@ export default function EmployeesPage() {
                 {/* Mobile Card View */}
                 <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
                   {employees.map((employee) => (
-                    <div key={employee.id} className="bg-white border rounded-xl p-4 shadow-sm">
+                    <div key={employee.id} className="bg-card border border-border rounded-xl p-4 shadow-sm">
                       <div className="flex items-start gap-3 mb-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-600 font-semibold text-sm shrink-0">
                           {employee.name.split(' ').map(n => n[0]).join('')}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-slate-900 truncate">{employee.name}</span>
+                            <span className="text-sm font-semibold text-foreground truncate">{employee.name}</span>
                             <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border shrink-0 ${getStatusColor(employee.status)}`}>
                               {employee.status}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-500 mt-1 truncate">{employee.email}</p>
-                          <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                          <p className="text-xs text-muted-foreground mt-1 truncate">{employee.email}</p>
+                          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                             <Phone className="h-3 w-3" />
                             {employee.phone}
                           </p>
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-600">
+                      <div className="flex items-center justify-between pt-3 border-t border-border text-xs text-muted-foreground">
                         <div className="flex items-center gap-4">
                           <div>
-                            <p className="text-xs text-slate-500">Role</p>
-                            <p className="text-sm font-semibold text-slate-900">{employee.role}</p>
+                            <p className="text-xs text-muted-foreground">Role</p>
+                            <p className="text-sm font-semibold text-foreground">{employee.role}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-slate-500">PIN</p>
+                            <p className="text-xs text-muted-foreground">PIN</p>
                             {employee.pin ? (
                               <div className="flex items-center gap-1">
                                 <Lock className="h-3 w-3 text-green-600" />
-                                <span className="text-sm font-semibold text-slate-900">••••</span>
+                                <span className="text-sm font-semibold text-foreground">••••</span>
                               </div>
                             ) : (
                               <button
@@ -321,12 +323,12 @@ export default function EmployeesPage() {
                           {employee.pin && (
                             <button
                               onClick={() => handleSetPin(employee)}
-                              className="p-2 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-all"
+                              className="p-2 text-muted-foreground hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-all"
                             >
                               <KeyRound className="h-4 w-4" />
                             </button>
                           )}
-                          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+                          <button className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         </div>
@@ -345,44 +347,44 @@ export default function EmployeesPage() {
         <>
           <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setIsAddEmployeeOpen(false)} />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-              <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+            <div className="bg-card rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+              <div className="px-6 py-4 border-b border-border flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 shadow-sm">
                     <UserPlus className="h-5 w-5" strokeWidth={2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-slate-900">Add Employee</h3>
-                    <p className="text-xs text-slate-500">Add a new team member</p>
+                    <h3 className="text-base font-semibold text-foreground">Add Employee</h3>
+                    <p className="text-xs text-muted-foreground">Add a new team member</p>
                   </div>
                 </div>
-                <button onClick={() => setIsAddEmployeeOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                  <X className="h-5 w-5 text-slate-400" />
+                <button onClick={() => setIsAddEmployeeOpen(false)} className="p-2 hover:bg-muted rounded-lg transition-colors">
+                  <X className="h-5 w-5 text-muted-foreground" />
                 </button>
               </div>
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div className="grid gap-4 grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">First Name</label>
-                    <Input type="text" placeholder="Enter first name" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
+                    <label className="block text-sm font-medium text-foreground mb-1.5">First Name</label>
+                    <Input type="text" placeholder="Enter first name" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Last Name</label>
-                    <Input type="text" placeholder="Enter last name" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Last Name</label>
+                    <Input type="text" placeholder="Enter last name" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
-                  <Input type="email" placeholder="Enter email address" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+                  <Input type="email" placeholder="Enter email address" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Phone</label>
-                  <Input type="tel" placeholder="Enter phone number" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Phone</label>
+                  <Input type="tel" placeholder="Enter phone number" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
                 </div>
                 <div className="grid gap-4 grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Role</label>
-                    <select className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Role</label>
+                    <select className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all">
                       <option>Select role</option>
                       <option>Manager</option>
                       <option>Supervisor</option>
@@ -391,8 +393,8 @@ export default function EmployeesPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Department</label>
-                    <select className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all">
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Department</label>
+                    <select className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all">
                       <option>Select department</option>
                       <option>Management</option>
                       <option>Sales</option>
@@ -402,15 +404,15 @@ export default function EmployeesPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Salary</label>
-                  <Input type="number" placeholder="Enter salary" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Salary</label>
+                  <Input type="number" placeholder="Enter salary" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Join Date</label>
-                  <Input type="date" className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Join Date</label>
+                  <Input type="date" className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all" />
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={() => setIsAddEmployeeOpen(false)} className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
+                  <Button variant="outline" onClick={() => setIsAddEmployeeOpen(false)} className="flex-1 h-10 border-border text-foreground hover:bg-muted">Cancel</Button>
                   <Button className="flex-1 h-10 bg-violet-600 hover:bg-violet-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all">Add Employee</Button>
                 </div>
               </div>
@@ -424,24 +426,24 @@ export default function EmployeesPage() {
         <>
           <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setIsPinModalOpen(false)} />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
-              <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+            <div className="bg-card rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+              <div className="px-6 py-4 border-b border-border flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 shadow-sm">
                     <KeyRound className="h-5 w-5" strokeWidth={2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-slate-900">Set PIN</h3>
-                    <p className="text-xs text-slate-500">For {selectedEmployee.name}</p>
+                    <h3 className="text-base font-semibold text-foreground">Set PIN</h3>
+                    <p className="text-xs text-muted-foreground">For {selectedEmployee.name}</p>
                   </div>
                 </div>
-                <button onClick={() => setIsPinModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                  <X className="h-5 w-5 text-slate-400" />
+                <button onClick={() => setIsPinModalOpen(false)} className="p-2 hover:bg-muted rounded-lg transition-colors">
+                  <X className="h-5 w-5 text-muted-foreground" />
                 </button>
               </div>
               <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">4-Digit PIN</label>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">4-Digit PIN</label>
                   <div className="relative">
                     <Input
                       type={showPin ? "text" : "password"}
@@ -449,18 +451,18 @@ export default function EmployeesPage() {
                       onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
                       placeholder="Enter 4-digit PIN"
                       maxLength={4}
-                      className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all font-mono tracking-widest"
+                      className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all font-mono tracking-widest"
                     />
                     <button
                       onClick={() => setShowPin(!showPin)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-medium"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs font-medium"
                     >
                       {showPin ? "Hide" : "Show"}
                     </button>
                   </div>
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button variant="outline" onClick={() => setIsPinModalOpen(false)} className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50">Cancel</Button>
+                  <Button variant="outline" onClick={() => setIsPinModalOpen(false)} className="flex-1 h-10 border-border text-foreground hover:bg-muted">Cancel</Button>
                   <Button 
                     onClick={handlePinSave}
                     disabled={newPin.length !== 4}

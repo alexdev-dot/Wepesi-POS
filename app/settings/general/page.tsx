@@ -147,7 +147,7 @@ export default function GeneralSettingsPage() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-background font-sans">
       <Sidebar 
         collapsed={sidebarCollapsed} 
         currentPath="/settings/general" 
@@ -161,12 +161,12 @@ export default function GeneralSettingsPage() {
             {/* Page Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">General Settings</h1>
-                <p className="text-sm text-slate-500 mt-1">Configure your POS system preferences and business information</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">General Settings</h1>
+                <p className="text-sm text-muted-foreground mt-1">Configure your POS system preferences and business information</p>
               </div>
               <div className="flex gap-2 w-full sm:w-auto">
                 <Button 
-                  className="h-10 sm:h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold shadow-sm hover:shadow transition-all flex-1 sm:flex-none"
+                  className="h-10 sm:h-11 bg-muted hover:bg-muted/80 text-foreground text-sm font-semibold shadow-sm hover:shadow transition-all flex-1 sm:flex-none"
                   variant="outline"
                   onClick={handleReset}
                 >
@@ -186,11 +186,11 @@ export default function GeneralSettingsPage() {
 
             {/* Success Message */}
             {saveSuccess && (
-              <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3">
-                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                  <Save className="h-4 w-4 text-green-600" />
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3  ">
+                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center bg-green-900/50">
+                  <Save className="h-4 w-4 text-green-600 " />
                 </div>
-                <p className="text-sm font-medium text-green-800">Settings saved successfully!</p>
+                <p className="text-sm font-medium text-green-800 ">Settings saved successfully!</p>
               </div>
             )}
 

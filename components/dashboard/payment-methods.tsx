@@ -14,7 +14,7 @@ const totalAmount = "KSh 45,678"
 
 export function PaymentMethodsSkeleton() {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm font-sans">
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm font-sans">
       <div className="flex items-center gap-3 mb-4">
         <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
         <div>
@@ -52,7 +52,7 @@ export function PaymentMethods() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
       whileHover={{ y: -2 }}
-      className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 font-sans"
+      className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 font-sans"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
@@ -68,7 +68,7 @@ export function PaymentMethods() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.55 }}
-            className="text-base font-semibold text-slate-900"
+            className="text-base font-semibold text-foreground"
           >
             Sales by Payment Method
           </motion.h3>
@@ -76,7 +76,7 @@ export function PaymentMethods() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.6 }}
-            className="text-xs text-slate-500"
+            className="text-xs text-muted-foreground"
           >
             Payment distribution
           </motion.p>
@@ -116,7 +116,7 @@ export function PaymentMethods() {
                   whileHover={{ scale: 1.05 }}
                   d={`M 50 50 L ${x1} ${y1} A 40 40 0 ${largeArcFlag} 1 ${x2} ${y2} Z`}
                   fill={method.color}
-                  stroke="white"
+                  stroke="card"
                   strokeWidth="2"
                   className="hover:opacity-90 transition-opacity cursor-pointer"
                 />
@@ -130,7 +130,7 @@ export function PaymentMethods() {
               cx="50"
               cy="50"
               r="25"
-              fill="white"
+              fill="card"
               className="shadow-inner"
             />
           </svg>
@@ -143,8 +143,8 @@ export function PaymentMethods() {
             className="absolute inset-0 flex items-center justify-center"
           >
             <div className="text-center">
-              <p className="text-xs text-slate-500">Total</p>
-              <p className="text-sm font-bold text-slate-900">{totalAmount}</p>
+              <p className="text-xs text-white/80">Total</p>
+              <p className="text-sm font-bold text-white">{totalAmount}</p>
             </div>
           </motion.div>
         </div>
@@ -157,7 +157,7 @@ export function PaymentMethods() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.75 + index * 0.1 }}
-              whileHover={{ x: 4, backgroundColor: "#f8fafc" }}
+              whileHover={{ x: 4, backgroundColor: "var(--muted)" }}
               className="flex items-center justify-between rounded-lg px-3 py-2 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
@@ -166,11 +166,11 @@ export function PaymentMethods() {
                   className="h-3.5 w-3.5 rounded-full shadow-sm shrink-0"
                   style={{ backgroundColor: method.color }}
                 />
-                <span className="text-xs font-medium text-slate-700">{method.name}</span>
+                <span className="text-xs font-medium text-foreground">{method.name}</span>
               </div>
               <div className="text-right ml-4">
-                <p className="text-xs font-semibold text-slate-900">{method.amount}</p>
-                <p className="text-xs text-slate-500">{method.percentage}%</p>
+                <p className="text-xs font-semibold text-foreground">{method.amount}</p>
+                <p className="text-xs text-muted-foreground">{method.percentage}%</p>
               </div>
             </motion.div>
           ))}

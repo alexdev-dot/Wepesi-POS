@@ -194,12 +194,12 @@ export default function LandingPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-background"
+      className="min-h-screen bg-white"
     >
       {/* Navigation */}
-      <motion.nav 
+      <motion.nav
         style={{ y: navY, opacity: navOpacity, boxShadow: navShadow ? `0 1px 3px rgba(0,0,0,${navShadow})` : 'none' }}
-        className="sticky top-0 z-50 bg-navy border-b border-border backdrop-blur-sm"
+        className="sticky top-0 z-50 bg-navy border-b border-slate-200 backdrop-blur-sm"
       >
         <div className="container mx-auto flex h-24 items-center justify-between px-6 lg:px-8">
           <div className="flex items-center">
@@ -214,19 +214,19 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-6">
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <Link href="#features" className="text-sm sm:text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
+              <Link href="#features" className="text-sm sm:text-base font-medium text-white/80 hover:text-white transition-colors">
                 Features
               </Link>
-              <Link href="#pricing" className="text-sm sm:text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
+              <Link href="#pricing" className="text-sm sm:text-base font-medium text-white/80 hover:text-white transition-colors">
                 Pricing
               </Link>
-              <Link href="#support" className="text-sm sm:text-base font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors">
+              <Link href="#support" className="text-sm sm:text-base font-medium text-white/80 hover:text-white transition-colors">
                 Support
               </Link>
             </div>
             <div className="hidden md:flex items-center gap-3">
               <Link href="/login">
-                <Button variant="ghost" className="text-sm sm:text-base font-medium text-navy-foreground hover:bg-white/10 h-10 sm:h-11 px-4 sm:px-5">
+                <Button variant="ghost" className="text-sm sm:text-base font-medium text-white hover:bg-white/10 h-10 sm:h-11 px-4 sm:px-5">
                   Login
                 </Button>
               </Link>
@@ -237,7 +237,7 @@ export default function LandingPage() {
               </Link>
             </div>
             <motion.button
-              className="md:hidden p-2 text-navy-foreground hover:bg-white/10 rounded-lg transition-colors"
+              className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -280,30 +280,30 @@ export default function LandingPage() {
               className="md:hidden border-t border-white/10 bg-navy overflow-hidden"
             >
               <div className="container mx-auto px-6 py-6 space-y-4">
-                <Link 
-                  href="#features" 
-                  className="block text-lg font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-3"
+                <Link
+                  href="#features"
+                  className="block text-lg font-medium text-white/80 hover:text-white transition-colors py-3"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Features
                 </Link>
-                <Link 
-                  href="#pricing" 
-                  className="block text-lg font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-3"
+                <Link
+                  href="#pricing"
+                  className="block text-lg font-medium text-white/80 hover:text-white transition-colors py-3"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Pricing
                 </Link>
-                <Link 
-                  href="#support" 
-                  className="block text-lg font-medium text-navy-foreground/80 hover:text-navy-foreground transition-colors py-3"
+                <Link
+                  href="#support"
+                  className="block text-lg font-medium text-white/80 hover:text-white transition-colors py-3"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Support
                 </Link>
                 <div className="pt-4 space-y-3">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full text-lg font-medium text-navy-foreground hover:bg-white/10 h-12">
+                    <Button variant="ghost" className="w-full text-lg font-medium text-white hover:bg-white/10 h-12">
                       Login
                     </Button>
                   </Link>
@@ -320,7 +320,7 @@ export default function LandingPage() {
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative bg-background">
+      <section className="relative bg-linear-to-br from-blue-50 via-white to-indigo-50">
         <div className="container mx-auto px-6 lg:px-8 py-20 md:py-28 lg:py-36">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div 
@@ -424,7 +424,7 @@ export default function LandingPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 md:py-24 lg:py-28 bg-background">
+      <section className="py-20 md:py-24 lg:py-28 bg-white">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal variants={fadeInLeft}>

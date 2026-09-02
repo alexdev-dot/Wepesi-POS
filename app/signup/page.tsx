@@ -1,3 +1,5 @@
+"use client"
+
 import { BrandPanel } from "@/components/auth/brand-panel"
 import { SignupForm } from "@/components/auth/signup-form"
 

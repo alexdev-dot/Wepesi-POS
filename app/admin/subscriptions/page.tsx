@@ -330,7 +330,7 @@ export default function SubscriptionsPage() {
         {stats.map((stat) => (
           <div
             key={stat.title}
-            className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-card p-4 sm:p-5 shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -371,7 +371,7 @@ export default function SubscriptionsPage() {
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`relative rounded-xl border-2 bg-white p-6 shadow-sm transition-all hover:shadow-lg ${
+              className={`relative rounded-xl border-2 bg-card p-6 shadow-sm transition-all hover:shadow-lg ${
                 plan.popular 
                   ? 'border-green-500 ring-4 ring-green-500/10' 
                   : 'border-slate-200 hover:border-slate-300'
@@ -430,7 +430,7 @@ export default function SubscriptionsPage() {
       </div>
 
       {/* Subscriptions Table */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
         {/* Filters and Search */}
         <div className="p-6 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -452,7 +452,7 @@ export default function SubscriptionsPage() {
               <select
                 value={statusFilter}
                 onChange={handleStatusFilterChange}
-                className="px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-white"
+                className="px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-card text-foreground"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
@@ -466,7 +466,7 @@ export default function SubscriptionsPage() {
             <select
               value={planFilter}
               onChange={handlePlanFilterChange}
-              className="px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-white"
+              className="px-4 py-2.5 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm bg-card text-foreground"
             >
               <option value="all">All Plans</option>
               <option value="Starter">Starter</option>
@@ -553,7 +553,7 @@ export default function SubscriptionsPage() {
         {/* Mobile Card View */}
         <div className="md:hidden px-4 sm:px-6 py-4 space-y-3">
           {filteredSubscriptions.map((subscription) => (
-            <div key={subscription.id} className="bg-white border rounded-xl p-4 shadow-sm">
+            <div key={subscription.id} className="bg-card border rounded-xl p-4 shadow-sm">
               <div className="flex items-start gap-3 mb-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-semibold text-sm shrink-0">
                   {subscription.tenant.charAt(0)}
@@ -618,8 +618,8 @@ export default function SubscriptionsPage() {
 
       {/* Plan Form Modal */}
       {isPlanModalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 sm:p-6">
-          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl flex flex-col">
+        <div className="fixed inset-0 bg-background/80 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-card rounded-xl shadow-2xl flex flex-col">
             <PlanForm
               mode={editingPlan ? "edit" : "create"}
               initialData={editingPlan || undefined}

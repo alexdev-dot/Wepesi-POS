@@ -75,29 +75,29 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/50 z-40"
+        className="fixed inset-0 bg-background/80 z-40"
         onClick={onClose}
       />
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="bg-card rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0">
+          <div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100 text-green-600 shadow-sm">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100 text-green-600 shadow-sm  ">
                 <ShoppingCart className="h-5 w-5" strokeWidth={2} />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-slate-900">New Purchase Order</h3>
-                <p className="text-xs text-slate-500">Create a new purchase order</p>
+                <h3 className="text-base font-semibold text-foreground">New Purchase Order</h3>
+                <p className="text-xs text-muted-foreground">Create a new purchase order</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
             >
-              <X className="h-5 w-5 text-slate-400" />
+              <X className="h-5 w-5 text-muted-foreground" />
             </button>
           </div>
 
@@ -105,13 +105,13 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
           <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4">
             {/* Supplier */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Supplier <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.supplier}
                 onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
-                className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
+                className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
                 required
               >
                 <option value="">Select Supplier</option>
@@ -128,50 +128,50 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
 
             {/* Date */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Order Date <span className="text-red-500">*</span>
               </label>
               <Input
                 type="date"
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
+                className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
                 required
               />
             </div>
 
             {/* Add Item Section */}
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <h4 className="text-sm font-semibold text-slate-900 mb-3">Add Items</h4>
+            <div className="rounded-xl border border-border bg-muted p-4">
+              <h4 className="text-sm font-semibold text-foreground mb-3">Add Items</h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-1">
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Item Name</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Item Name</label>
                   <Input
                     type="text"
                     value={newItem.name}
                     onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-                    className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
+                    className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
                     placeholder="Item name"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Quantity</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Quantity</label>
                   <Input
                     type="number"
                     value={newItem.quantity}
                     onChange={(e) => setNewItem({ ...newItem, quantity: parseInt(e.target.value) || 0 })}
-                    className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
+                    className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
                     placeholder="Qty"
                     min="1"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 mb-1">Cost Price</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Cost Price</label>
                   <Input
                     type="number"
                     value={newItem.costPrice}
                     onChange={(e) => setNewItem({ ...newItem, costPrice: parseFloat(e.target.value) || 0 })}
-                    className="h-10 px-3 text-sm border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
+                    className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
                     placeholder="Price"
                     min="0"
                     step="0.01"
@@ -190,29 +190,29 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
 
             {/* Items List */}
             {items.length > 0 && (
-              <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+              <div className="rounded-xl border border-border bg-card overflow-hidden">
                 <table className="w-full">
-                  <thead className="bg-slate-50 border-b border-slate-200">
+                  <thead className="bg-muted border-b border-border">
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Item</th>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Qty</th>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Cost</th>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Total</th>
-                      <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Actions</th>
+                      <th className="px-4 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Item</th>
+                      <th className="px-4 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Qty</th>
+                      <th className="px-4 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Cost</th>
+                      <th className="px-4 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Total</th>
+                      <th className="px-4 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-border">
                     {items.map((item) => (
                       <tr key={item.id}>
-                        <td className="px-4 py-3 text-sm text-slate-900">{item.name}</td>
-                        <td className="px-4 py-3 text-sm text-slate-700">{item.quantity}</td>
-                        <td className="px-4 py-3 text-sm text-slate-700">KSh {item.costPrice.toFixed(2)}</td>
-                        <td className="px-4 py-3 text-sm font-semibold text-slate-900">KSh {item.total.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-sm text-foreground">{item.name}</td>
+                        <td className="px-4 py-3 text-sm text-muted-foreground">{item.quantity}</td>
+                        <td className="px-4 py-3 text-sm text-muted-foreground">KSh {item.costPrice.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-sm font-semibold text-foreground">KSh {item.total.toFixed(2)}</td>
                         <td className="px-4 py-3">
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(item.id)}
-                            className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                            className="p-1.5  hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -220,10 +220,10 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
                       </tr>
                     ))}
                   </tbody>
-                  <tfoot className="bg-slate-50 border-t border-slate-200">
+                  <tfoot className="bg-muted border-t border-border">
                     <tr>
-                      <td colSpan={3} className="px-4 py-3 text-sm font-semibold text-slate-900 text-right">Total Amount</td>
-                      <td className="px-4 py-3 text-sm font-bold text-green-600">KSh {getTotalAmount().toFixed(2)}</td>
+                      <td colSpan={3} className="px-4 py-3 text-sm font-semibold text-foreground text-right">Total Amount</td>
+                      <td className="px-4 py-3 text-sm font-bold text-green-600 ">KSh {getTotalAmount().toFixed(2)}</td>
                       <td></td>
                     </tr>
                   </tfoot>
@@ -234,13 +234,13 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
             {/* Status */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Order Status
                 </label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
                 >
                   <option value="Pending">Pending</option>
                   <option value="In Transit">In Transit</option>
@@ -249,13 +249,13 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                <label className="block text-sm font-medium text-foreground mb-1.5">
                   Payment Status
                 </label>
                 <select
                   value={formData.paymentStatus}
                   onChange={(e) => setFormData({ ...formData, paymentStatus: e.target.value })}
-                  className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all"
                 >
                   <option value="Unpaid">Unpaid</option>
                   <option value="Partial">Partial</option>
@@ -267,13 +267,13 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
 
             {/* Notes */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-foreground mb-1.5">
                 Notes
               </label>
               <textarea
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all resize-none"
+                className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all resize-none"
                 rows={3}
                 placeholder="Add any additional notes..."
               />
@@ -285,7 +285,7 @@ export function PurchaseForm({ isOpen, onClose, onSubmit }: PurchaseFormProps) {
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="flex-1 h-10 border-slate-200 text-slate-700 hover:bg-slate-50 transition-all"
+                className="flex-1 h-10 border-border text-foreground hover:bg-muted transition-all"
               >
                 Cancel
               </Button>

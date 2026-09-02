@@ -125,8 +125,8 @@ function OnboardingContent() {
   }
 
   return (
-    <main className="flex min-h-svh items-stretch justify-center bg-background p-2 sm:p-3 md:p-4 lg:p-6">
-      <div className="grid w-full max-w-352 overflow-hidden rounded-2xl md:rounded-3xl bg-card shadow-lg lg:grid-cols-2">
+    <main className="flex min-h-svh items-stretch justify-center bg-[#F8FAFC] p-2 sm:p-3 md:p-4 lg:p-6">
+      <div className="grid w-full max-w-352 overflow-hidden rounded-2xl md:rounded-3xl bg-white shadow-lg lg:grid-cols-2">
         <div className="hidden lg:block bg-slate-50">
           <OnboardingBrandPanel currentStep={currentStep} />
         </div>

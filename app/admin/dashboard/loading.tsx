@@ -13,7 +13,7 @@ export default function DashboardLoading() {
       {/* Stats grid skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div key={i} className="rounded-xl border border-slate-200 bg-card p-6 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="h-4 bg-slate-200 rounded animate-pulse w-24 mb-2" />
@@ -28,7 +28,7 @@ export default function DashboardLoading() {
       
       {/* Content grid skeleton */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="lg:col-span-2 rounded-xl border border-slate-200 bg-card p-6 shadow-sm">
           <div className="h-6 bg-slate-200 rounded animate-pulse w-40 mb-6" />
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
@@ -36,7 +36,7 @@ export default function DashboardLoading() {
             ))}
           </div>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-card p-6 shadow-sm">
           <div className="h-6 bg-slate-200 rounded animate-pulse w-32 mb-6" />
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
@@ -50,7 +50,7 @@ export default function DashboardLoading() {
       </div>
       
       {/* Quick actions skeleton */}
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-card p-6 shadow-sm">
         <div className="h-6 bg-slate-200 rounded animate-pulse w-32 mb-4" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (

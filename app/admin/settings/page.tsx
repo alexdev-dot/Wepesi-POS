@@ -70,7 +70,7 @@ export default function SettingsPage() {
       {/* Settings Grid */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Logo & Branding */}
-        <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
           <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
             <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
               <Image className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
@@ -89,7 +89,7 @@ export default function SettingsPage() {
                     <img
                       src={logoPreview}
                       alt="Logo Preview"
-                      className="h-24 w-24 object-contain rounded-lg border border-slate-200 bg-white"
+                      className="h-24 w-24 object-contain rounded-lg border border-slate-200 bg-card"
                       onError={() => setLogoError(true)}
                     />
                   ) : (
@@ -135,7 +135,7 @@ export default function SettingsPage() {
                     <img
                       src={faviconPreview}
                       alt="Favicon Preview"
-                      className="h-16 w-16 object-contain rounded-lg border border-slate-200 bg-white"
+                      className="h-16 w-16 object-contain rounded-lg border border-slate-200 bg-card"
                       onError={() => setFaviconError(true)}
                     />
                   ) : (
@@ -201,7 +201,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Colors & Theme */}
-        <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
           <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
             <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
               <Palette className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
@@ -337,7 +337,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Contact Information */}
-        <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
           <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
             <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
               <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />
@@ -416,7 +416,7 @@ export default function SettingsPage() {
         </div>
 
         {/* System Preferences */}
-        <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-slate-200 bg-card shadow-sm">
           <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
             <h2 className="text-base sm:text-lg font-semibold text-slate-800 flex items-center gap-2">
               <Settings className="h-5 w-5 sm:h-6 sm:w-6 text-slate-400" />

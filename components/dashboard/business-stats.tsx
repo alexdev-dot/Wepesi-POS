@@ -65,7 +65,7 @@ export function BusinessStatsSkeleton() {
   return (
     <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full font-sans">
       {Array.from({ length: 5 }).map((_, index) => (
-        <div key={index} className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+        <div key={index} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
           <div className="flex items-start justify-between mb-3 sm:mb-4">
             <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
             <div className="h-6 w-16 rounded-full bg-muted/70 animate-pulse" />
@@ -90,7 +90,7 @@ export function BusinessStats() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1 + index * 0.1, ease: "easeOut" }}
           whileHover={{ scale: 1.02, y: -4 }}
-          className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 font-sans"
+          className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200 font-sans"
         >
           {/* Header with Icon */}
           <div className="flex items-start justify-between mb-3 sm:mb-4">
@@ -118,7 +118,7 @@ export function BusinessStats() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 1.3 + index * 0.1 }}
-              className="text-sm font-semibold text-slate-900"
+              className="text-sm font-semibold text-foreground"
             >
               {stat.title}
             </motion.h4>
@@ -126,7 +126,7 @@ export function BusinessStats() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 1.35 + index * 0.1 }}
-              className="text-xs text-slate-500 mt-0.5"
+              className="text-xs text-muted-foreground mt-0.5"
             >
               {stat.subtitle}
             </motion.p>
@@ -134,7 +134,7 @@ export function BusinessStats() {
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 1.4 + index * 0.1 }}
-              className="mt-2 text-xl sm:text-2xl font-bold text-slate-900"
+              className="mt-2 text-xl sm:text-2xl font-bold text-foreground"
             >
               {stat.value}
             </motion.p>
@@ -142,7 +142,7 @@ export function BusinessStats() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 1.45 + index * 0.1 }}
-              className="mt-1 text-xs text-slate-500"
+              className="mt-1 text-xs text-muted-foreground"
             >
               {stat.changeLabel}
             </motion.p>

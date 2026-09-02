@@ -137,21 +137,21 @@ export function ReceiptPopup({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2 }}
-        className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-auto"
+        className="bg-card rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-auto"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-900">Receipt</h2>
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <h2 className="text-lg font-semibold text-foreground">Receipt</h2>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="h-8 w-8 p-0 hover:bg-slate-100"
+            className="h-8 w-8 p-0 hover:bg-muted"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -164,21 +164,21 @@ export function ReceiptPopup({
             {receiptSettings?.showLogo && receiptSettings.logo && (
               <img src={receiptSettings.logo} alt="Logo" className="h-16 w-auto mx-auto mb-2" />
             )}
-            <h3 className="text-xl font-bold text-slate-900 mb-1">{receiptSettings?.businessName || 'POS System'}</h3>
+            <h3 className="text-xl font-bold text-foreground mb-1">{receiptSettings?.businessName || 'POS System'}</h3>
             {receiptSettings?.showContactInfo && (
               <>
-                <p className="text-sm text-slate-600">{receiptSettings.address}</p>
-                <p className="text-xs text-slate-500">{receiptSettings.phone}</p>
+                <p className="text-sm text-muted-foreground">{receiptSettings.address}</p>
+                <p className="text-xs text-muted-foreground">{receiptSettings.phone}</p>
               </>
             )}
-            <p className="text-xs text-slate-500 mt-1">{formatDate()}</p>
+            <p className="text-xs text-muted-foreground mt-1">{formatDate()}</p>
           </div>
 
           {/* Items */}
-          <div className="border-t border-b border-slate-200 py-4 mb-4">
+          <div className="border-t border-b border-border py-4 mb-4">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-slate-600 font-medium">
+                <tr className="text-left text-muted-foreground font-medium">
                   <th className="pb-2">Item</th>
                   <th className="pb-2 text-center">Qty</th>
                   <th className="pb-2 text-right">Price</th>
@@ -186,10 +186,10 @@ export function ReceiptPopup({
               </thead>
               <tbody>
                 {cartItems.map((item) => (
-                  <tr key={item.id} className="border-t border-slate-100">
-                    <td className="py-2 text-slate-900">{item.name}</td>
-                    <td className="py-2 text-center text-slate-600">{item.quantity}</td>
-                    <td className="py-2 text-right text-slate-900">
+                  <tr key={item.id} className="border-t border-border">
+                    <td className="py-2 text-foreground">{item.name}</td>
+                    <td className="py-2 text-center text-muted-foreground">{item.quantity}</td>
+                    <td className="py-2 text-right text-foreground">
                       KSh {(item.price * item.quantity).toFixed(2)}
                     </td>
                   </tr>
@@ -200,12 +200,12 @@ export function ReceiptPopup({
 
           {/* Totals */}
           <div className="space-y-2 text-sm mb-4">
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between text-muted-foreground">
               <span>Subtotal</span>
               <span>KSh {subtotal.toFixed(2)}</span>
             </div>
             {tax > 0 && (
-              <div className="flex justify-between text-slate-600">
+              <div className="flex justify-between text-muted-foreground">
                 <span>Tax (16%)</span>
                 <span>KSh {tax.toFixed(2)}</span>
               </div>
@@ -216,41 +216,41 @@ export function ReceiptPopup({
                 <span>-KSh {discount.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between pt-2 border-t border-slate-200 font-bold text-slate-900 text-base">
+            <div className="flex justify-between pt-2 border-t border-border font-bold text-foreground text-base">
               <span>Total</span>
               <span>KSh {total.toFixed(2)}</span>
             </div>
           </div>
 
           {/* Payment Info */}
-          <div className="border-t border-slate-200 pt-4 space-y-2 text-sm">
-            <div className="flex justify-between text-slate-600">
+          <div className="border-t border-border pt-4 space-y-2 text-sm">
+            <div className="flex justify-between text-muted-foreground">
               <span>Payment Method</span>
-              <span className="font-medium text-slate-900">{getPaymentMethodLabel(paymentMethod)}</span>
+              <span className="font-medium text-foreground">{getPaymentMethodLabel(paymentMethod)}</span>
             </div>
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between text-muted-foreground">
               <span>Amount Received</span>
-              <span className="font-medium text-slate-900">KSh {amountReceived.toFixed(2)}</span>
+              <span className="font-medium text-foreground">KSh {amountReceived.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between text-muted-foreground">
               <span>Change</span>
               <span className={`font-medium ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 KSh {change.toFixed(2)}
               </span>
             </div>
             {phoneNumber && (
-              <div className="flex justify-between text-slate-600">
+              <div className="flex justify-between text-muted-foreground">
                 <span>Phone Number</span>
-                <span className="font-medium text-slate-900">{phoneNumber}</span>
+                <span className="font-medium text-foreground">{phoneNumber}</span>
               </div>
             )}
           </div>
 
           {/* Footer */}
-          <div className="text-center mt-6 pt-4 border-t border-slate-200">
-            <p className="text-xs text-slate-500">{receiptSettings?.footerText || 'Thank you for your purchase!'}</p>
+          <div className="text-center mt-6 pt-4 border-t border-border">
+            <p className="text-xs text-muted-foreground">{receiptSettings?.footerText || 'Thank you for your purchase!'}</p>
             {receiptSettings?.showContactInfo && (
-              <div className="text-xs text-slate-400 mt-1">
+              <div className="text-xs text-muted-foreground/60 mt-1">
                 {receiptSettings.email && <p>{receiptSettings.email}</p>}
                 {receiptSettings.website && <p>{receiptSettings.website}</p>}
               </div>
@@ -259,18 +259,18 @@ export function ReceiptPopup({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 p-4 border-t border-slate-200">
+        <div className="flex gap-3 p-4 border-t border-border">
           <Button
             variant="outline"
             onClick={onClose}
-            className="flex-1 h-11 border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="flex-1 h-11 border-border text-foreground hover:bg-muted"
           >
             Close
           </Button>
           <Button
             variant="outline"
             onClick={handleDownload}
-            className="flex-1 h-11 border-slate-200 text-slate-700 hover:bg-slate-50"
+            className="flex-1 h-11 border-border text-foreground hover:bg-muted"
           >
             <Download className="h-4 w-4 mr-2" />
             Download
