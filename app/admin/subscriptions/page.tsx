@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react"
 import { CreditCard, TrendingUp, Users, DollarSign, Search, Plus, MoreVertical, Eye, Edit, Trash2, CheckCircle, Clock, XCircle, Filter, Download, ArrowUpRight, ArrowDownRight, Zap, Crown, Sparkles } from "lucide-react"
-import { PlanForm, PlanFormData } from "@/components/admin/plan-form"
+import { PlanForm, PlanFormData } from "@/components/admin/forms/plan-form"
 
 // Static data moved outside component
 const stats = [

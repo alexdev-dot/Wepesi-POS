@@ -1,4 +1,4 @@
-import { CartItem } from "@/components/pos/cart"
+import { CartItem } from "@/components/domains/pos/cart"
 
 export interface CartState {
   items: CartItem[]

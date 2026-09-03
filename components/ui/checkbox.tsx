@@ -13,12 +13,10 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         "peer relative flex size-4 shrink-0 items-center justify-center rounded-lg border transition-colors outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
         "[data-checked='false']:border-input data-checked:bg-primary data-checked:text-primary-foreground",
         "focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring",
-        "group-has-focus-visible/field-label:ring-0",
+        "group-focus-within/field-label:ring-0",
         "aria-invalid:ring-3 aria-invalid:ring-destructive/20",
         "[[aria-invalid='true'][data-checked='true']]:border-primary",
         "[[aria-invalid='true'][data-checked='false']]:border-destructive",
-        "[.group\\:has-focus\\/field-label[data-checked='false']]:border-input",
-        "[.group\\:has-focus\\/field-label[data-checked='true']]:border-primary",
         "data-checked:border-primary",
         className
       )}

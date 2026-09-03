@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback, lazy, Suspense } from "react"
 import { Receipt, DollarSign, Clock, CheckCircle, AlertCircle, Search, Download, Filter, MoreVertical, Eye, FileText, Mail, Trash2, ArrowUpRight, ArrowDownRight, Calendar } from "@/components/admin/icons"
 
-const InvoiceForm = lazy(() => import("@/components/admin/invoice-form").then(m => ({ default: m.InvoiceForm })))
+const InvoiceForm = lazy(() => import("@/components/admin/forms/invoice-form").then(m => ({ default: m.InvoiceForm })))
 type InvoiceFormData = any
 
 // Static data moved outside component

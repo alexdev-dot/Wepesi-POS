@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react"
 import { Star, Plus, MoreVertical, Eye, Edit, Trash2, CheckCircle, Clock, XCircle, Search, Filter, Download } from "@/components/admin/icons"
-import { FeatureView } from "@/components/admin/feature-view"
+import { FeatureView } from "@/components/admin/views/feature-view"
 
 // Static data moved outside component
 const stats = [

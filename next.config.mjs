@@ -27,7 +27,6 @@ const nextConfig = {
   turbopack: {},
   allowedDevOrigins: ['10.1.1.3'],
   compress: true,
-  swcMinify: true,
   poweredByHeader: false,
   reactStrictMode: true,
 }

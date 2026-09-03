@@ -2,11 +2,11 @@
 
 import { useState, useEffect, createContext, useContext, Suspense } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { AdminHeader } from "@/components/admin/admin-header"
-import { AdminSidebar } from "@/components/admin/admin-sidebar"
+import { AdminHeader } from "@/components/admin/layout/admin-header"
+import { AdminSidebar } from "@/components/admin/layout/admin-sidebar"
 import { isSuperAdminLoggedIn } from "@/lib/auth"
 import { cn } from "@/lib/utils"
-import AdminLoading from "@/components/admin/loading"
+import AdminLoading from "@/components/admin/views/loading"
 
 interface FullscreenContextType {
   isAppFullscreen: boolean

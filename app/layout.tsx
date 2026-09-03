@@ -1,8 +1,8 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Poppins, Inter } from 'next/font/google'
-import { ScrollToTop } from '@/components/scroll-to-top'
-import PWAInstallPrompt from '@/components/pwa-install-prompt'
+import { ScrollToTop } from '@/components/core/layout/scroll-to-top'
+import PWAInstallPrompt from '@/components/core/shared/pwa-install-prompt'
 import './globals.css'
 
 const poppins = Poppins({

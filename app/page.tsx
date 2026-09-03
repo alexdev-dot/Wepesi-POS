@@ -727,10 +727,10 @@ export default function LandingPage() {
                   <Link href="#" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">About Us</Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Privacy Policy</Link>
+                  <Link href="/privacy-policy" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Privacy Policy</Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Terms of Service</Link>
+                  <Link href="/terms-of-use" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Terms of Service</Link>
                 </li>
               </ul>
             </motion.div>
