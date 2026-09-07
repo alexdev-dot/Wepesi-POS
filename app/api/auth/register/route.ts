@@ -43,37 +43,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Hash password
+    // Hash password for later use (will be stored in localStorage)
     const passwordHash = await bcrypt.hash(password, 12)
 
-    // Create user
-    const { data: user, error: insertError } = await supabase
-      .from('users')
-      .insert({
-        email: email.toLowerCase(),
-        password_hash: passwordHash,
-        name,
-        onboarded: false,
-        is_active: true
-      })
-      .select('id, email, name, onboarded')
-      .single()
-
-    if (insertError) {
-      console.error('User creation error:', insertError)
-      return NextResponse.json(
-        { error: 'Failed to create user' },
-        { status: 500 }
-      )
-    }
-
+    // Return validation success without creating account
+    // Account will be created after onboarding and subscription
     return NextResponse.json({
       success: true,
-      user
+      message: 'Email available. Proceed to onboarding.',
+      data: {
+        name,
+        email: email.toLowerCase(),
+        passwordHash // Send hashed password to store in localStorage temporarily
+      }
     })
 
   } catch (error) {
-    console.error('Registration error:', error)
+    console.error('Registration validation error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

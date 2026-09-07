@@ -68,11 +68,13 @@ export function SignupForm() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        // Store user data in localStorage for session
-        localStorage.setItem('user_id', data.user.id)
-        localStorage.setItem('user_email', data.user.email)
-        localStorage.setItem('user_name', data.user.name)
-        localStorage.setItem('user_onboarded', data.user.onboarded.toString())
+        // Store registration data in localStorage for onboarding
+        // Account will be created after onboarding and subscription
+        localStorage.setItem('pending_registration_name', data.data.name)
+        localStorage.setItem('pending_registration_email', data.data.email)
+        localStorage.setItem('pending_registration_password_hash', data.data.passwordHash)
+        localStorage.setItem('pending_registration_timestamp', Date.now().toString())
+        
         router.push("/onboarding")
       } else {
         setError(data.error || "Registration failed")

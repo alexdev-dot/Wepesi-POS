@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowRight, Building2, Check, MapPin, Receipt, Store } from 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getCurrentUser, completeUserOnboarding } from "@/lib/auth"
 import { AuthSessionHandler } from "@/components/auth/auth-session-handler"
 
 const steps = [
@@ -41,22 +40,30 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const user = getCurrentUser()
-    if (!user) {
-      router.replace("/login")
+    // Check for pending registration data from signup
+    const pendingName = localStorage.getItem('pending_registration_name')
+    const pendingEmail = localStorage.getItem('pending_registration_email')
+    const pendingPasswordHash = localStorage.getItem('pending_registration_password_hash')
+    const pendingTimestamp = localStorage.getItem('pending_registration_timestamp')
+
+    // Redirect to signup if no pending registration or expired (1 hour)
+    if (!pendingName || !pendingEmail || !pendingPasswordHash || !pendingTimestamp) {
+      router.replace("/signup")
       return
     }
 
-    if (user.onboarded) {
-      router.replace("/dashboard")
+    const timestamp = parseInt(pendingTimestamp)
+    const oneHour = 60 * 60 * 1000
+    if (Date.now() - timestamp > oneHour) {
+      // Clear expired data and redirect
+      localStorage.removeItem('pending_registration_name')
+      localStorage.removeItem('pending_registration_email')
+      localStorage.removeItem('pending_registration_password_hash')
+      localStorage.removeItem('pending_registration_timestamp')
+      router.replace("/signup")
       return
     }
 
-    setForm((current) => ({
-      ...current,
-      businessName: user.businessName || "",
-      businessType: user.businessType || "retail",
-    }))
     setIsLoading(false)
   }, [router])
 
@@ -86,18 +93,62 @@ export default function OnboardingPage() {
     setStep((current) => Math.min(current + 1, steps.length - 1))
   }
 
-  function finishOnboarding() {
-    const user = getCurrentUser()
-    if (!user) {
-      router.replace("/login")
+  async function finishOnboarding() {
+    // Get pending registration data from localStorage
+    const pendingName = localStorage.getItem('pending_registration_name')
+    const pendingEmail = localStorage.getItem('pending_registration_email')
+    const pendingPasswordHash = localStorage.getItem('pending_registration_password_hash')
+
+    if (!pendingName || !pendingEmail || !pendingPasswordHash) {
+      setError("Registration data not found. Please start over.")
+      router.replace("/signup")
       return
     }
 
-    completeUserOnboarding(user.id, {
-      ...form,
-      taxRate: form.taxEnabled ? Number(form.taxRate) : undefined,
-    })
-    router.push("/dashboard")
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch('/api/auth/onboarding', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // Registration data
+          pendingName,
+          pendingEmail,
+          pendingPasswordHash,
+          // Onboarding data
+          ...form,
+          taxRate: form.taxEnabled ? Number(form.taxRate) : undefined,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        // Clear pending registration data
+        localStorage.removeItem('pending_registration_name')
+        localStorage.removeItem('pending_registration_email')
+        localStorage.removeItem('pending_registration_password_hash')
+        localStorage.removeItem('pending_registration_timestamp')
+
+        // Store user session
+        localStorage.setItem('user_id', data.user.id)
+        localStorage.setItem('user_email', data.user.email)
+        localStorage.setItem('user_name', data.user.name)
+        localStorage.setItem('user_onboarded', data.user.onboarded.toString())
+
+        router.push("/dashboard")
+      } else {
+        setError(data.error || "Failed to complete onboarding")
+        setIsLoading(false)
+      }
+    } catch (err) {
+      setError("Network error. Please try again.")
+      setIsLoading(false)
+    }
   }
 
   if (isLoading) return null
