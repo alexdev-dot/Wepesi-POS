@@ -1,12 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { Download, X } from 'lucide-react'
 
 export default function PWAInstallPrompt() {
+  const pathname = usePathname()
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
   const [showPrompt, setShowPrompt] = useState(false)
   const [isInstalled, setIsInstalled] = useState(false)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const dragRef = useRef<HTMLDivElement>(null)
+  const dragOffsetRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     // Check if already installed
@@ -77,11 +83,60 @@ export default function PWAInstallPrompt() {
     }
   }, [])
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!dragRef.current) return
+    setIsDragging(true)
+    const rect = dragRef.current.getBoundingClientRect()
+    dragOffsetRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    }
+  }
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging) return
+    const x = e.clientX - dragOffsetRef.current.x
+    const y = e.clientY - dragOffsetRef.current.y
+    setPosition({ x, y })
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDragging])
+
   if (!showPrompt || isInstalled) return null
 
+  // Hide on super admin login and admin pages
+  if (pathname?.startsWith('/super-admin-login') || pathname?.startsWith('/admin')) {
+    return null
+  }
+
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-auto z-50 animate-in slide-in-from-bottom-4 fade-in duration-300">
-      <div className="bg-white rounded-xl shadow-2xl border border-gray-200 p-4 md:p-3 max-w-md mx-auto md:mx-0 md:max-w-xs">
+    <div 
+      className="fixed z-50 animate-in slide-in-from-bottom-4 fade-in duration-300"
+      style={{
+        left: position.x || '50%',
+        top: position.y || 'auto',
+        bottom: position.y ? 'auto' : '16px',
+        transform: position.x ? 'none' : 'translateX(-50%)'
+      }}
+    >
+      <div 
+        ref={dragRef}
+        onMouseDown={handleMouseDown}
+        className="bg-white rounded-xl shadow-2xl border border-gray-200 p-4 md:p-3 max-w-md md:max-w-xs w-full cursor-move select-none"
+      >
         <button
           onClick={handleDismiss}
           className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"

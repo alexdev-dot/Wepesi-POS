@@ -9,25 +9,51 @@ import { X, Upload } from "lucide-react"
 interface AddProductFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (product: any) => void
+  categories: string[]
+  onSubmit: (product: {
+    name: string
+    barcode: string
+    category: string
+    costPrice: number
+    sellingPrice: number
+    stockQty: number
+    image: File | null
+  }) => Promise<void> | void
 }
 
-export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProps) {
+export function AddProductForm({ isOpen, onClose, categories, onSubmit }: AddProductFormProps) {
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
-    sku: "",
     barcode: "",
     category: "",
-    brand: "",
     costPrice: "",
     sellingPrice: "",
     stockQty: "",
-    status: "In Stock",
     image: null as File | null
   })
 
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const selectImage = (file: File | undefined) => {
+    if (!file) return
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/avif', 'image/heic', 'image/heif']
+    if (!allowedTypes.includes(file.type)) {
+      setError("Choose a PNG, JPG, WebP, AVIF, or HEIC image.")
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Images must be 5MB or smaller.")
+      return
+    }
+
+    setError(null)
+    setFormData(prev => ({ ...prev, image: file }))
+    const reader = new FileReader()
+    reader.onloadend = () => setImagePreview(reader.result as string)
+    reader.readAsDataURL(file)
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -35,46 +61,51 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setFormData(prev => ({ ...prev, image: file }))
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
+    selectImage(e.target.files?.[0])
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    const productData = {
-      ...formData,
-      costPrice: parseFloat(formData.costPrice),
-      sellingPrice: parseFloat(formData.sellingPrice),
-      stockQty: parseInt(formData.stockQty),
-      id: Date.now() // Temporary ID generation
+
+    const costPrice = parseFloat(formData.costPrice)
+    const sellingPrice = parseFloat(formData.sellingPrice)
+    const stockQty = parseInt(formData.stockQty, 10)
+
+    if (!Number.isFinite(costPrice) || !Number.isFinite(sellingPrice) || !Number.isInteger(stockQty) || stockQty < 0) {
+      setError("Enter valid prices and a stock quantity of zero or more.")
+      return
     }
-    
-    onSubmit(productData)
-    
-    // Reset form
-    setFormData({
-      name: "",
-      description: "",
-      sku: "",
-      barcode: "",
-      category: "",
-      brand: "",
-      costPrice: "",
-      sellingPrice: "",
-      stockQty: "",
-      status: "In Stock",
-      image: null
-    })
-    setImagePreview(null)
-    onClose()
+
+    setError(null)
+    setIsSubmitting(true)
+
+    try {
+      await onSubmit({
+        name: formData.name.trim(),
+        barcode: formData.barcode.trim(),
+        category: formData.category,
+        costPrice,
+        sellingPrice,
+        stockQty,
+        image: formData.image,
+      })
+
+      setFormData({
+        name: "",
+        barcode: "",
+        category: "",
+        costPrice: "",
+        sellingPrice: "",
+        stockQty: "",
+        image: null
+      })
+      setImagePreview(null)
+      onClose()
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Unable to save the product.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (!isOpen) return null
@@ -98,12 +129,22 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {error && (
+            <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+              {error}
+            </p>
+          )}
           {/* Product Image Upload */}
           <div>
             <Label className="text-sm font-semibold text-foreground mb-2 block">Product Image</Label>
             <div 
               className="border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-blue-400 transition-colors cursor-pointer"
               onClick={() => document.getElementById('product-image')?.click()}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => {
+                event.preventDefault()
+                selectImage(event.dataTransfer.files?.[0])
+              }}
             >
               {imagePreview ? (
                 <div className="relative">
@@ -128,7 +169,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
                 <div>
                   <Upload className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>
-                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
+                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG, WebP, AVIF, HEIC up to 5MB</p>
                 </div>
               )}
               <input
@@ -141,46 +182,20 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
             </div>
           </div>
 
-          {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="name" className="text-sm font-semibold text-foreground mb-1.5 block">Product Name *</Label>
-              <Input
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="e.g., Coca Cola 500ml"
-                className="h-10"
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="description" className="text-sm font-semibold text-foreground mb-1.5 block">Description</Label>
-              <Input
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="e.g., Bottle"
-                className="h-10"
-              />
-            </div>
+          <div>
+            <Label htmlFor="name" className="text-sm font-semibold text-foreground mb-1.5 block">Product Name *</Label>
+            <Input
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="e.g., Coca Cola 500ml"
+              className="h-10"
+              required
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="sku" className="text-sm font-semibold text-foreground mb-1.5 block">SKU *</Label>
-              <Input
-                id="sku"
-                name="sku"
-                value={formData.sku}
-                onChange={handleInputChange}
-                placeholder="e.g., CC500"
-                className="h-10"
-                required
-              />
-            </div>
             <div>
               <Label htmlFor="barcode" className="text-sm font-semibold text-foreground mb-1.5 block">Barcode</Label>
               <Input
@@ -194,7 +209,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
             </div>
           </div>
 
-          {/* Category and Brand */}
+          {/* Category */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="category" className="text-sm font-semibold text-foreground mb-1.5 block">Category *</Label>
@@ -207,32 +222,7 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
                 required
               >
                 <option value="">Select Category</option>
-                <option value="Beverages">Beverages</option>
-                <option value="Bakery">Bakery</option>
-                <option value="Dairy">Dairy</option>
-                <option value="Snacks">Snacks</option>
-                <option value="Stationery">Stationery</option>
-                <option value="Personal Care">Personal Care</option>
-              </select>
-            </div>
-            <div>
-              <Label htmlFor="brand" className="text-sm font-semibold text-foreground mb-1.5 block">Brand *</Label>
-              <select
-                id="brand"
-                name="brand"
-                value={formData.brand}
-                onChange={handleInputChange}
-                className="h-10 w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                required
-              >
-                <option value="">Select Brand</option>
-                <option value="Coca Cola">Coca Cola</option>
-                <option value="BakeHouse">BakeHouse</option>
-                <option value="Brookside">Brookside</option>
-                <option value="Lays">Lays</option>
-                <option value="Double A">Double A</option>
-                <option value="Colgate">Colgate</option>
-                <option value="Dettol">Dettol</option>
+                {categories.map((category) => <option key={category} value={category}>{category}</option>)}
               </select>
             </div>
           </div>
@@ -269,10 +259,8 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
             </div>
           </div>
 
-          {/* Stock */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="stockQty" className="text-sm font-semibold text-foreground mb-1.5 block">Stock Quantity *</Label>
+          <div>
+              <Label htmlFor="stockQty" className="text-sm font-semibold text-foreground mb-1.5 block">Quantity *</Label>
               <Input
                 id="stockQty"
                 name="stockQty"
@@ -283,21 +271,6 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
                 className="h-10"
                 required
               />
-            </div>
-            <div>
-              <Label htmlFor="status" className="text-sm font-semibold text-foreground mb-1.5 block">Status</Label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleInputChange}
-                className="h-10 w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              >
-                <option value="In Stock">In Stock</option>
-                <option value="Low Stock">Low Stock</option>
-                <option value="Out of Stock">Out of Stock</option>
-              </select>
-            </div>
           </div>
 
           {/* Actions */}
@@ -312,9 +285,10 @@ export function AddProductForm({ isOpen, onClose, onSubmit }: AddProductFormProp
             </Button>
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Add Product
+              {isSubmitting ? "Saving..." : "Add Product"}
             </Button>
           </div>
         </form>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, ShoppingBag } from "lucide-react"
-import { validateSuperAdmin, setSuperAdminSession } from "@/lib/auth"
+import { loginSuperAdmin } from "@/lib/auth"
 
 export default function SuperAdminLoginPage() {
   const router = useRouter()
@@ -12,6 +12,22 @@ export default function SuperAdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  // Check if already logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch('/api/auth/super-admin/validate')
+        const data = await response.json()
+        if (data.valid) {
+          router.push('/admin/dashboard')
+        }
+      } catch (error) {
+        // Ignore error, user needs to login
+      }
+    }
+    checkSession()
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,23 +41,16 @@ export default function SuperAdminLoginPage() {
       return
     }
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Call secure API login
+    const result = await loginSuperAdmin(email, password)
 
-    // Validate credentials using auth library
-    if (validateSuperAdmin(email, password)) {
-      // Store super admin session
-      setSuperAdminSession({
-        email,
-        role: "super_admin",
-        loginTime: new Date().toISOString()
-      })
-      setIsLoading(false)
+    setIsLoading(false)
+
+    if (result.success) {
       // Use window.location for reliable redirect
       window.location.href = "/admin/dashboard"
     } else {
-      setError("Invalid super admin credentials")
-      setIsLoading(false)
+      setError(result.error || "Login failed")
     }
   }
 
@@ -159,15 +168,6 @@ export default function SuperAdminLoginPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Demo Credentials */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-slate-500 mb-2">Demo Credentials:</p>
-          <div className="bg-white border border-slate-200 rounded-lg p-3 text-xs text-slate-600 space-y-1">
-            <p><span className="text-slate-700">Email:</span> superadmin@pos-system.com</p>
-            <p><span className="text-slate-700">Password:</span> SuperAdmin@2025</p>
           </div>
         </div>
 

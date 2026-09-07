@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getCurrentUser, completeUserOnboarding } from "@/lib/auth"
+import { AuthSessionHandler } from "@/components/auth/auth-session-handler"
 
 const steps = [
   { title: "Your business", icon: Building2 },
@@ -105,6 +106,7 @@ export default function OnboardingPage() {
 
   return (
     <main className="min-h-svh bg-[#f5f7f4] px-4 py-8 sm:px-6 lg:px-8">
+      <AuthSessionHandler />
       <div className="mx-auto max-w-5xl">
         <header className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -173,7 +175,7 @@ export default function OnboardingPage() {
 function BusinessStep({ form, updateForm }: { form: OnboardingForm; updateForm: (field: keyof OnboardingForm, value: string | boolean) => void }) {
   return <div className="space-y-6">
     <Field label="Business name" id="businessName"><Input id="businessName" value={form.businessName} onChange={(event) => updateForm("businessName", event.target.value)} placeholder="e.g. Wepesi Market" /></Field>
-    <Field label="Business type" id="businessType"><select id="businessType" value={form.businessType} onChange={(event) => updateForm("businessType", event.target.value)} className="flex h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-[#30B54A]">
+    <Field label="Business type" id="businessType"><select id="businessType" value={form.businessType} onChange={(event) => updateForm("businessType", event.target.value)} className="flex h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-[#30B54A]">
       <option value="retail">Retail store</option><option value="grocery">Grocery store</option><option value="restaurant">Restaurant</option><option value="wholesale">Wholesale</option><option value="other">Other</option>
     </select></Field>
   </div>
@@ -190,7 +192,7 @@ function LocationStep({ form, updateForm }: { form: OnboardingForm; updateForm: 
 
 function TaxStep({ form, updateForm }: { form: OnboardingForm; updateForm: (field: keyof OnboardingForm, value: string | boolean) => void }) {
   return <div className="space-y-6">
-    <Field label="Currency" id="currency"><select id="currency" value={form.currency} onChange={(event) => updateForm("currency", event.target.value)} className="flex h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-[#30B54A]"><option value="USD">USD - US Dollar</option><option value="KES">KES - Kenyan Shilling</option><option value="NGN">NGN - Nigerian Naira</option><option value="GBP">GBP - Pound Sterling</option><option value="EUR">EUR - Euro</option></select></Field>
+    <Field label="Currency" id="currency"><select id="currency" value={form.currency} onChange={(event) => updateForm("currency", event.target.value)} className="flex h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-[#30B54A]"><option value="USD">USD - US Dollar</option><option value="KES">KES - Kenyan Shilling</option><option value="NGN">NGN - Nigerian Naira</option><option value="GBP">GBP - Pound Sterling</option><option value="EUR">EUR - Euro</option></select></Field>
     <label className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-200 p-4"><span><span className="block font-semibold text-slate-900">Collect tax</span><span className="text-sm text-slate-500">Apply tax to sales and receipts.</span></span><input type="checkbox" checked={form.taxEnabled} onChange={(event) => updateForm("taxEnabled", event.target.checked)} className="h-5 w-5 accent-[#30B54A]" /></label>
     {form.taxEnabled && <div className="grid gap-6 sm:grid-cols-2"><Field label="Tax name" id="taxName"><Input id="taxName" value={form.taxName} onChange={(event) => updateForm("taxName", event.target.value)} /></Field><Field label="Tax rate (%)" id="taxRate"><Input id="taxRate" type="number" min="0" max="100" step="0.01" value={form.taxRate} onChange={(event) => updateForm("taxRate", event.target.value)} /></Field></div>}
   </div>

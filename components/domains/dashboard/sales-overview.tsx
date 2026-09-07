@@ -5,47 +5,25 @@ import { motion } from "framer-motion"
 
 const timeTabs = ["Today", "This Week", "This Month", "This Year"]
 
-// Sample data for the chart
-const chartData = [
-  { time: "12 AM", value: 5200 },
-  { time: "3 AM", value: 2800 },
-  { time: "6 AM", value: 8500 },
-  { time: "9 AM", value: 18500 },
-  { time: "12 PM", value: 32450 },
-  { time: "3 PM", value: 28900 },
-  { time: "6 PM", value: 22100 },
-  { time: "9 PM", value: 15600 },
-]
-
-const maxValue = Math.max(...chartData.map((d) => d.value))
-
-export function SalesOverviewSkeleton() {
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm font-sans">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
-        <div className="flex-1">
-          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
-          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
-        </div>
-        <div className="h-8 bg-muted/70 rounded w-20 animate-pulse" />
-      </div>
-      <div className="flex gap-4 border-b border-border mb-5">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="h-4 bg-muted/70 rounded w-16 animate-pulse" />
-        ))}
-      </div>
-      <div className="h-52 bg-muted/30 rounded-lg animate-pulse" />
-      <div className="mt-2 flex justify-between">
-        {Array.from({ length: 8 }).map((_, index) => (
-          <div key={index} className="h-3 bg-muted/70 rounded w-12 animate-pulse" />
-        ))}
-      </div>
-    </div>
-  )
+interface ChartData {
+  time: string
+  value: number
 }
 
-export function SalesOverview() {
+interface SalesOverviewProps {
+  data?: ChartData[] | null
+  isLoading?: boolean
+}
+
+export function SalesOverview({ data, isLoading = true }: SalesOverviewProps) {
+  const chartData = data || []
+
+  const maxValue = chartData.length > 0 ? Math.max(...chartData.map((d) => d.value)) : 0
+
+  if (isLoading) {
+    return <SalesOverviewSkeleton />
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -131,85 +109,119 @@ export function SalesOverview() {
         transition={{ duration: 0.5, delay: 0.7 }}
         className="mt-5 h-48 sm:h-52 overflow-hidden"
       >
-        <svg className="h-full w-full" viewBox="0 0 800 250" preserveAspectRatio="xMidYMid meet">
-          {/* Grid lines */}
-          {[0, 25, 50, 75, 100].map((percent) => (
-            <line
-              key={percent}
-              x1="0"
-              y1={`${percent}%`}
-              x2="100%"
-              y2={`${percent}%`}
-              stroke="currentColor"
-              strokeWidth="1"
-              className="text-slate-100"
-              strokeDasharray="4 4"
+        {chartData.length > 0 ? (
+          <svg className="h-full w-full" viewBox="0 0 800 250" preserveAspectRatio="xMidYMid meet">
+            {/* Grid lines */}
+            {[0, 25, 50, 75, 100].map((percent) => (
+              <line
+                key={percent}
+                x1="0"
+                y1={`${percent}%`}
+                x2="100%"
+                y2={`${percent}%`}
+                stroke="currentColor"
+                strokeWidth="1"
+                className="text-slate-100"
+                strokeDasharray="4 4"
+              />
+            ))}
+
+            {/* Area fill with gradient */}
+            <defs>
+              <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <motion.path
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 1.5, delay: 0.8, ease: "easeInOut" }}
+              d={`M 0 ${250 - (chartData[0].value / maxValue) * 230} ${chartData
+                .map((d, i) => `L ${i * 114} ${250 - (d.value / maxValue) * 230}`)
+                .join(" ")} L 800 250 L 0 250 Z`}
+              fill="url(#chartGradient)"
             />
-          ))}
 
-          {/* Area fill with gradient */}
-          <defs>
-            <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <motion.path
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 1.5, delay: 0.8, ease: "easeInOut" }}
-            d={`M 0 ${250 - (chartData[0].value / maxValue) * 230} ${chartData
-              .map((d, i) => `L ${i * 114} ${250 - (d.value / maxValue) * 230}`)
-              .join(" ")} L 800 250 L 0 250 Z`}
-            fill="url(#chartGradient)"
-          />
-
-          {/* Line */}
-          <motion.path
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1.5, delay: 0.8, ease: "easeInOut" }}
-            d={`M 0 ${250 - (chartData[0].value / maxValue) * 230} ${chartData
-              .map((d, i) => `L ${i * 114} ${250 - (d.value / maxValue) * 230}`)
-              .join(" ")}`}
-            fill="none"
-            stroke="#3B82F6"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-
-          {/* Data points */}
-          {chartData.map((d, i) => (
-            <motion.circle
-              key={i}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.3, delay: 1 + i * 0.1, type: "spring" }}
-              whileHover={{ scale: 1.5 }}
-              cx={i * 114}
-              cy={250 - (d.value / maxValue) * 230}
-              r="5"
-              fill="card"
-              stroke="border"
-              strokeWidth="2.5"
-              className="hover:r-6 transition-all cursor-pointer"
+            {/* Line */}
+            <motion.path
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.5, delay: 0.8, ease: "easeInOut" }}
+              d={`M 0 ${250 - (chartData[0].value / maxValue) * 230} ${chartData
+                .map((d, i) => `L ${i * 114} ${250 - (d.value / maxValue) * 230}`)
+                .join(" ")}`}
+              fill="none"
+              stroke="#3B82F6"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
-          ))}
-        </svg>
+
+            {/* Data points */}
+            {chartData.map((d, i) => (
+              <motion.circle
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.3, delay: 1 + i * 0.1, type: "spring" }}
+                whileHover={{ scale: 1.5 }}
+                cx={i * 114}
+                cy={250 - (d.value / maxValue) * 230}
+                r="5"
+                fill="card"
+                stroke="border"
+                strokeWidth="2.5"
+                className="hover:r-6 transition-all cursor-pointer"
+              />
+            ))}
+          </svg>
+        ) : (
+          <div className="h-full w-full flex items-center justify-center text-muted-foreground text-sm">
+            No sales data yet
+          </div>
+        )}
 
         {/* X-axis labels */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 1.2 }}
-          className="mt-2 flex justify-between text-xs text-muted-foreground overflow-x-auto pb-1"
-        >
-          {chartData.map((d) => (
-            <span key={d.time} className="shrink-0 px-1">{d.time}</span>
-          ))}
-        </motion.div>
+        {chartData.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 1.2 }}
+            className="mt-2 flex justify-between text-xs text-muted-foreground overflow-x-auto pb-1"
+          >
+            {chartData.map((d) => (
+              <span key={d.time} className="shrink-0 px-1">{d.time}</span>
+            ))}
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
+  )
+}
+
+export function SalesOverviewSkeleton() {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm font-sans">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+        <div className="flex-1">
+          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+        </div>
+        <div className="h-8 bg-muted/70 rounded w-20 animate-pulse" />
+      </div>
+      <div className="flex gap-4 border-b border-border mb-5">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="h-4 bg-muted/70 rounded w-16 animate-pulse" />
+        ))}
+      </div>
+      <div className="h-52 bg-muted/30 rounded-lg animate-pulse" />
+      <div className="mt-2 flex justify-between">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <div key={index} className="h-3 bg-muted/70 rounded w-12 animate-pulse" />
+        ))}
+      </div>
+    </div>
   )
 }

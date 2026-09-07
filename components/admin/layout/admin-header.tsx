@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Bell, ChevronDown, Menu, Mail, LogOut, ShieldCheck } from "@/components/admin/icons"
-import { clearSuperAdminSession } from "@/lib/auth"
+import { logoutSuperAdmin } from "@/lib/auth"
 import { useRouter } from "next/navigation"
 
 export function AdminHeader({ onMenuClick }: { onMenuClick?: () => void }) {
@@ -47,8 +47,8 @@ export function AdminHeader({ onMenuClick }: { onMenuClick?: () => void }) {
     }
   }, [])
 
-  const handleLogout = () => {
-    clearSuperAdminSession()
+  const handleLogout = async () => {
+    await logoutSuperAdmin()
     router.push("/super-admin-login")
   }
 

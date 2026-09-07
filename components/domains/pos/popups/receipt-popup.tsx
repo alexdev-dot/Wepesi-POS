@@ -8,7 +8,7 @@ import { getReceiptSettings, ReceiptSettings } from "@/lib/receipt-settings"
 import html2canvas from "html2canvas"
 
 interface CartItem {
-  id: number
+  id: string | number
   name: string
   price: number
   quantity: number

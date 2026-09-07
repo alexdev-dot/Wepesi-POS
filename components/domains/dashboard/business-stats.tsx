@@ -3,84 +3,92 @@
 import { Package, Users, Truck, UsersRound, DollarSign, ArrowUp } from "lucide-react"
 import { motion } from "framer-motion"
 
-const stats = [
-  {
-    title: "Total Products",
-    subtitle: "In inventory",
-    value: "1,248",
-    change: "+12",
-    changeLabel: "new this week",
-    icon: Package,
-    iconBg: "bg-blue-100",
-    iconColor: "text-blue-600",
-    trend: "up",
-  },
-  {
-    title: "Total Customers",
-    subtitle: "Registered users",
-    value: "3,456",
-    change: "+48",
-    changeLabel: "new this week",
-    icon: Users,
-    iconBg: "bg-green-100",
-    iconColor: "text-green-600",
-    trend: "up",
-  },
-  {
-    title: "Total Suppliers",
-    subtitle: "Active partners",
-    value: "89",
-    change: "+3",
-    changeLabel: "new this week",
-    icon: Truck,
-    iconBg: "bg-purple-100",
-    iconColor: "text-purple-600",
-    trend: "up",
-  },
-  {
-    title: "Total Employees",
-    subtitle: "Staff members",
-    value: "24",
-    change: "+2",
-    changeLabel: "new this month",
-    icon: UsersRound,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    trend: "up",
-  },
-  {
-    title: "Stock Value",
-    subtitle: "Total inventory worth",
-    value: "KSh 2.4M",
-    change: "+8.5%",
-    changeLabel: "vs last month",
-    icon: DollarSign,
-    iconBg: "bg-rose-100",
-    iconColor: "text-rose-600",
-    trend: "up",
-  },
-]
-
-export function BusinessStatsSkeleton() {
-  return (
-    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full font-sans">
-      {Array.from({ length: 5 }).map((_, index) => (
-        <div key={index} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-          <div className="flex items-start justify-between mb-3 sm:mb-4">
-            <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
-            <div className="h-6 w-16 rounded-full bg-muted/70 animate-pulse" />
-          </div>
-          <div className="h-4 bg-muted/70 rounded w-1/2 mb-2 animate-pulse" />
-          <div className="h-3 bg-muted/70 rounded w-1/3 mb-2 animate-pulse" />
-          <div className="h-7 bg-muted/70 rounded w-2/3 mb-2 animate-pulse" />
-          <div className="h-3 bg-muted/70 rounded w-1/4 animate-pulse" />
-        </div>
-      ))}
-    </div>
-  )
+interface BusinessStat {
+  title: string
+  subtitle: string
+  value: string
+  change: string
+  changeLabel: string
+  icon: any
+  iconBg: string
+  iconColor: string
+  trend: string
 }
 
-export function BusinessStats() {
+interface BusinessStatsProps {
+  data?: {
+    totalProducts: number
+    totalCustomers: number
+    totalSuppliers: number
+    totalEmployees: number
+    stockValue: number
+  } | null
+  isLoading?: boolean
+}
+
+export function BusinessStats({ data, isLoading = true }: BusinessStatsProps) {
+  const stats = data ? [
+    {
+      title: "Total Products",
+      subtitle: "In inventory",
+      value: data.totalProducts.toLocaleString(),
+      change: "0",
+      changeLabel: "total",
+      icon: Package,
+      iconBg: "bg-blue-100",
+      iconColor: "text-blue-600",
+      trend: "up",
+    },
+    {
+      title: "Total Customers",
+      subtitle: "Registered users",
+      value: data.totalCustomers.toLocaleString(),
+      change: "0",
+      changeLabel: "total",
+      icon: Users,
+      iconBg: "bg-green-100",
+      iconColor: "text-green-600",
+      trend: "up",
+    },
+    {
+      title: "Total Suppliers",
+      subtitle: "Active partners",
+      value: data.totalSuppliers.toLocaleString(),
+      change: "0",
+      changeLabel: "total",
+      icon: Truck,
+      iconBg: "bg-purple-100",
+      iconColor: "text-purple-600",
+      trend: "up",
+    },
+    {
+      title: "Total Employees",
+      subtitle: "Staff members",
+      value: data.totalEmployees.toLocaleString(),
+      change: "0",
+      changeLabel: "total",
+      icon: UsersRound,
+      iconBg: "bg-amber-100",
+      iconColor: "text-amber-600",
+      trend: "up",
+    },
+    {
+      title: "Stock Value",
+      subtitle: "Total inventory worth",
+      value: `KSh ${(data.stockValue / 1000000).toFixed(1)}M`,
+      change: "0",
+      changeLabel: "total",
+      icon: DollarSign,
+      iconBg: "bg-rose-100",
+      iconColor: "text-rose-600",
+      trend: "up",
+    },
+  ] : []
+
+  if (isLoading) {
+    return <BusinessStatsSkeleton />
+  }
+
   return (
     <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full font-sans">
       {stats.map((stat, index) => (
@@ -148,6 +156,25 @@ export function BusinessStats() {
             </motion.p>
           </div>
         </motion.div>
+      ))}
+    </div>
+  )
+}
+
+export function BusinessStatsSkeleton() {
+  return (
+    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full font-sans">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div key={index} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+          <div className="flex items-start justify-between mb-3 sm:mb-4">
+            <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+            <div className="h-6 w-16 rounded-full bg-muted/70 animate-pulse" />
+          </div>
+          <div className="h-4 bg-muted/70 rounded w-1/2 mb-2 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 mb-2 animate-pulse" />
+          <div className="h-7 bg-muted/70 rounded w-2/3 mb-2 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/4 animate-pulse" />
+        </div>
       ))}
     </div>
   )

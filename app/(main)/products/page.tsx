@@ -9,21 +9,54 @@ import { ProductTable, Product } from "@/components/domains/products/product-tab
 import { AddProductForm } from "@/components/domains/products/add-product-form"
 import { Package, Tag, AlertCircle, DollarSign, Plus, Upload, Download, Filter, Search, ChevronDown } from "lucide-react"
 import { useMobile } from "@/lib/hooks/use-mobile"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { getBusinessId, getProductStatus, type ProductRecord } from "@/lib/supabase/database"
 
 export default function ProductsPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isAddProductOpen, setIsAddProductOpen] = useState(false)
   const isMobile = useMobile()
-  const [products, setProducts] = useState<Product[]>([
-    { id: 1, image: "/products/Coca cola 500ml.jpg", name: "Coca Cola 500ml", description: "Bottle", sku: "CC500", barcode: "5449000012345", category: "Beverages", brand: "Coca Cola", costPrice: 60, sellingPrice: 120, stockQty: 120, status: "In Stock" },
-    { id: 2, image: "/products/bread loaf.avif", name: "Bread Loaf", description: "400g", sku: "BRD400", barcode: "6161107891234", category: "Bakery", brand: "BakeHouse", costPrice: 45, sellingPrice: 80, stockQty: 85, status: "In Stock" },
-    { id: 3, image: "/products/Milk 1l.avif", name: "Milk 1L", description: "1 Litre", sku: "MLK1L", barcode: "6161107895677", category: "Dairy", brand: "Brookside", costPrice: 70, sellingPrice: 120, stockQty: 64, status: "In Stock" },
-    { id: 4, image: "/products/indomie chicken noodles.avif", name: "Lays Chips 150g", description: "150g", sku: "LAY150", barcode: "0284002345678", category: "Snacks", brand: "Lays", costPrice: 55, sellingPrice: 100, stockQty: 45, status: "Low Stock" },
-    { id: 5, image: "/products/A4 copy paper.jpg", name: "A4 Copy Paper", description: "Ream", sku: "A4R500", barcode: "5901234123457", category: "Stationery", brand: "Double A", costPrice: 450, sellingPrice: 600, stockQty: 40, status: "Low Stock" },
-    { id: 6, image: "/products/colgate toothpaste.avif", name: "Colgate Toothpaste", description: "100g", sku: "CLG100", barcode: "6161100123456", category: "Personal Care", brand: "Colgate", costPrice: 85, sellingPrice: 150, stockQty: 0, status: "Out of Stock" },
-    { id: 7, image: "/products/dettol soap 170g.jpg", name: "Dettol Soap", description: "175g", sku: "DTL175", barcode: "6161100789123", category: "Personal Care", brand: "Dettol", costPrice: 95, sellingPrice: 180, stockQty: 0, status: "Out of Stock" },
-  ])
+  const [products, setProducts] = useState<Product[]>([])
+  const [categoryOptions, setCategoryOptions] = useState<string[]>([])
+
+  const mapProduct = (product: ProductRecord): Product => ({
+    id: product.id,
+    image: product.image_url || "",
+    name: product.name,
+    description: product.description || "",
+    sku: product.sku,
+    barcode: product.barcode || "",
+    category: product.category,
+    costPrice: Number(product.cost_price),
+    sellingPrice: Number(product.selling_price),
+    stockQty: product.current_stock,
+    status: getProductStatus(product.current_stock, product.reorder_level),
+  })
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      const businessId = getBusinessId()
+      if (!businessId) return
+
+      const query = `businessId=${encodeURIComponent(businessId)}`
+      const [productsResponse, categoriesResponse] = await Promise.all([
+        fetch(`/api/products?${query}`),
+        fetch(`/api/categories?${query}`),
+      ])
+      const result = await productsResponse.json() as { products?: ProductRecord[]; error?: string }
+      const categoriesResult = await categoriesResponse.json() as { categories?: Array<{ name: string }> }
+      if (!productsResponse.ok || !result.products) {
+        console.warn("Products could not be loaded:", result.error)
+        return
+      }
+
+      setProducts(result.products.map(mapProduct))
+      setCategoryOptions((categoriesResult.categories || []).filter((category) => category.name).map((category) => category.name))
+    }
+
+    void loadProducts()
+  }, [])
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed)
@@ -46,11 +79,14 @@ export default function ProductsPage() {
   }
 
   // Stats data
+  const lowStockCount = products.filter((product) => product.status === "Low Stock").length
+  const outOfStockCount = products.filter((product) => product.status === "Out of Stock").length
+  const totalValue = products.reduce((total, product) => total + product.costPrice * product.stockQty, 0)
   const productStats = [
-    { title: "Total Products", value: "1,248", description: "All time", icon: Package, color: "text-blue-600", bgColor: "bg-blue-100" },
-    { title: "Low Stock", value: "32", description: "Below reorder level", icon: Tag, color: "text-orange-600", bgColor: "bg-orange-100" },
-    { title: "Out of Stock", value: "8", description: "Unavailable", icon: AlertCircle, color: "text-red-600", bgColor: "bg-red-100" },
-    { title: "Total Value", value: "KSh 1,245,780.00", description: "Stock value", icon: DollarSign, color: "text-purple-600", bgColor: "bg-purple-100" },
+    { title: "Total Products", value: products.length.toLocaleString(), description: "Saved products", icon: Package, color: "text-blue-600", bgColor: "bg-blue-100" },
+    { title: "Low Stock", value: lowStockCount.toLocaleString(), description: "Below reorder level", icon: Tag, color: "text-orange-600", bgColor: "bg-orange-100" },
+    { title: "Out of Stock", value: outOfStockCount.toLocaleString(), description: "Unavailable", icon: AlertCircle, color: "text-red-600", bgColor: "bg-red-100" },
+    { title: "Total Value", value: `KSh ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, description: "Stock value", icon: DollarSign, color: "text-purple-600", bgColor: "bg-purple-100" },
   ]
 
   const handleEditProduct = (product: Product) => {
@@ -58,13 +94,86 @@ export default function ProductsPage() {
     // TODO: Implement edit functionality
   }
 
-  const handleDeleteProduct = (product: Product) => {
-    console.log("Delete product:", product)
-    // TODO: Implement delete functionality
+  const handleDeleteProduct = async (product: Product) => {
+    if (!window.confirm(`Archive ${product.name}? It will be removed from Products, Inventory, and POS.`)) return
+
+    const businessId = getBusinessId()
+    if (!businessId) return
+
+    const response = await fetch("/api/products", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ businessId, id: product.id }),
+    })
+
+    if (!response.ok) {
+      const result = await response.json() as { error?: string }
+      window.alert(result.error || "Unable to archive product.")
+      return
+    }
+
+    setProducts((currentProducts) => currentProducts.filter((item) => item.id !== product.id))
   }
 
-  const handleAddProduct = (newProduct: any) => {
-    setProducts(prev => [...prev, newProduct])
+  const handleAddProduct = async (newProduct: {
+    name: string
+    barcode: string
+    category: string
+    costPrice: number
+    sellingPrice: number
+    stockQty: number
+    image: File | null
+  }) => {
+    const supabase = getSupabaseClient()
+    const businessId = getBusinessId()
+
+    if (!supabase || !businessId) throw new Error("Database is not available. Check your Supabase configuration.")
+
+    let uploadedPath: string | null = null
+    let imageUrl: string | null = null
+    if (newProduct.image) {
+      const uploadForm = new FormData()
+      uploadForm.append("file", newProduct.image)
+      uploadForm.append("businessId", businessId)
+
+      let uploadResponse: Response
+      try {
+        uploadResponse = await fetch("/api/product-image", { method: "POST", body: uploadForm })
+      } catch {
+        throw new Error("Image upload could not reach the server. Check that the app is running and try again.")
+      }
+
+      const uploadResult = await uploadResponse.json() as { path?: string; imageUrl?: string; error?: string }
+      if (!uploadResponse.ok || !uploadResult.path || !uploadResult.imageUrl) {
+        throw new Error(uploadResult.error || "Image upload failed.")
+      }
+
+      uploadedPath = uploadResult.path
+      imageUrl = uploadResult.imageUrl
+    }
+
+    const { data, error } = await supabase.rpc("create_product_with_stock", {
+      product_business_id: businessId,
+      product_name: newProduct.name,
+      product_description: "",
+      product_sku: newProduct.barcode || `ITEM-${crypto.randomUUID()}`,
+      product_barcode: newProduct.barcode,
+      product_category: newProduct.category,
+      product_cost_price: newProduct.costPrice,
+      product_selling_price: newProduct.sellingPrice,
+      product_reorder_level: 0,
+      opening_quantity: newProduct.stockQty,
+      opening_supplier: "",
+      opening_notes: "",
+      product_image_url: imageUrl,
+    })
+
+    if (error || !data) {
+      if (uploadedPath) await supabase.storage.from("product-images").remove([uploadedPath])
+      throw new Error(error?.message || "Unable to save the product.")
+    }
+
+    setProducts(prev => [mapProduct(data as ProductRecord), ...prev])
   }
 
   return (
@@ -131,23 +240,7 @@ export default function ProductsPage() {
                   <div className="flex flex-wrap gap-2">
                     <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
                       <option>All Categories</option>
-                      <option>Beverages</option>
-                      <option>Bakery</option>
-                      <option>Dairy</option>
-                      <option>Snacks</option>
-                      <option>Stationery</option>
-                      <option>Personal Care</option>
-                    </select>
-
-                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
-                      <option>All Brands</option>
-                      <option>Coca Cola</option>
-                      <option>BakeHouse</option>
-                      <option>Brookside</option>
-                      <option>Lays</option>
-                      <option>Double A</option>
-                      <option>Colgate</option>
-                      <option>Dettol</option>
+                      {categoryOptions.map((category) => <option key={category}>{category}</option>)}
                     </select>
 
                     <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
@@ -192,6 +285,7 @@ export default function ProductsPage() {
       <AddProductForm
         isOpen={isAddProductOpen}
         onClose={() => setIsAddProductOpen(false)}
+        categories={categoryOptions}
         onSubmit={handleAddProduct}
       />
     </div>

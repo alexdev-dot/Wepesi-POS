@@ -76,7 +76,7 @@ export function ProductListItemSkeleton() {
 
 // ProductCard Component
 interface ProductCardProps {
-  id: number
+  id: string | number
   name: string
   stock: number
   price: number
@@ -232,7 +232,7 @@ export function TopActionBar({ onAddCustomer, onSuspendSale, onHoldSale, onClear
 
 // ProductGrid Component
 interface Product {
-  id: number
+  id: string | number
   name: string
   stock: number
   price: number

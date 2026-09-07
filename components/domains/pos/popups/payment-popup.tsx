@@ -10,7 +10,7 @@ interface PaymentPopupProps {
   isOpen: boolean
   onClose: () => void
   total: number
-  onCompletePayment: (paymentData: { amountReceived: number; paymentMethod: string; phoneNumber: string }) => void
+  onCompletePayment: (paymentData: { amountReceived: number; paymentMethod: string; phoneNumber: string }) => Promise<void> | void
 }
 
 export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: PaymentPopupProps) {
@@ -18,6 +18,8 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
   const [paymentMethod, setPaymentMethod] = useState("cash")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [cardNumber, setCardNumber] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const paymentMethods = [
     { value: 'cash', label: 'Cash', icon: '/icons/dollars.png' },
@@ -30,13 +32,17 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
 
   if (!isOpen) return null
 
-  const handleCompletePayment = () => {
-    onCompletePayment({
-      amountReceived,
-      paymentMethod,
-      phoneNumber
-    })
-    onClose()
+  const handleCompletePayment = async () => {
+    setError(null)
+    setIsSubmitting(true)
+    try {
+      await onCompletePayment({ amountReceived, paymentMethod, phoneNumber })
+      onClose()
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Unable to complete payment.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -62,6 +68,7 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
 
         {/* Content */}
         <div className="p-6 space-y-4">
+          {error && <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
           {/* Total Amount */}
           <div className="bg-muted rounded-lg p-4 border border-border">
             <div className="text-sm text-muted-foreground mb-1">Total Amount</div>
@@ -174,10 +181,11 @@ export function PaymentPopup({ isOpen, onClose, total, onCompletePayment }: Paym
           </Button>
           <Button
             onClick={handleCompletePayment}
+            disabled={isSubmitting}
             className="flex-1 h-11 bg-green-600 hover:bg-green-700 text-sm font-semibold shadow-sm hover:shadow-md transition-all"
           >
             <CreditCard className="h-4 w-4 mr-2" />
-            Complete Payment
+            {isSubmitting ? "Saving..." : "Complete Payment"}
           </Button>
         </div>
       </motion.div>

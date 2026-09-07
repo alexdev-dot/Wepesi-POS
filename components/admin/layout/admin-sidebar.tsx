@@ -19,7 +19,7 @@ import {
 } from "@/components/admin/icons"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
-import { clearSuperAdminSession } from "@/lib/auth"
+import { logoutSuperAdmin } from "@/lib/auth"
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin/dashboard" },
@@ -37,8 +37,8 @@ const navItems = [
 export function AdminSidebar({ collapsed = false, currentPath = "", mobileOpen = false, onMobileClose = () => {} }: { collapsed?: boolean; currentPath?: string; mobileOpen?: boolean; onMobileClose?: () => void }) {
   const router = useRouter()
 
-  const handleLogout = () => {
-    clearSuperAdminSession()
+  const handleLogout = async () => {
+    await logoutSuperAdmin()
     router.push("/super-admin-login")
   }
 
@@ -72,13 +72,10 @@ export function AdminSidebar({ collapsed = false, currentPath = "", mobileOpen =
           />
         </div>
         <span className="text-xs font-semibold text-white">Super Admin Portal</span>
-        {/* Mobile Close Button */}
+        {/* Mobile Close Button - Only show on mobile */}
         <button
           onClick={onMobileClose}
-          className={cn(
-            "p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all",
-            collapsed ? "lg:mt-2 mt-0 lg:ml-0 ml-auto" : "lg:mt-2 mt-0"
-          )}
+          className="md:hidden p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all ml-auto"
         >
           <X className="h-6 w-6" strokeWidth={2} />
         </button>

@@ -4,44 +4,26 @@ import Image from "next/image"
 import { AlertTriangle } from "lucide-react"
 import { motion } from "framer-motion"
 
-const lowStockItems = [
-  { name: "Blue Band 500g", sku: "BB-500", stock: 30, minStock: 50, image: "/products/blue band 500g.jpg" },
-  { name: "A4 Copy Paper", sku: "A4-PAPER", stock: 40, minStock: 60, image: "/products/A4 copy paper.jpg" },
-  { name: "Colgate Toothpaste", sku: "CG-TP", stock: 48, minStock: 70, image: "/products/colgate toothpaste.avif" },
-  { name: "Dettol Soap 175g", sku: "DT-175", stock: 60, minStock: 80, image: "/products/dettol soap 170g.jpg" },
-]
-
-export function LowStockAlertsSkeleton() {
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
-        <div className="flex-1">
-          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
-          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
-        </div>
-        <div className="h-4 bg-muted/70 rounded w-12 animate-pulse" />
-      </div>
-      <div className="space-y-2 flex-1">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="flex items-center gap-3 rounded-lg p-2">
-            <div className="h-10 w-10 rounded-lg bg-muted/70 animate-pulse shrink-0" />
-            <div className="flex-1">
-              <div className="h-3 bg-muted/70 rounded w-3/4 mb-1 animate-pulse" />
-              <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
-            </div>
-            <div className="text-right shrink-0">
-              <div className="h-3 bg-muted/70 rounded w-8 mb-1 animate-pulse" />
-              <div className="h-3 bg-muted/70 rounded w-12 animate-pulse" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+interface LowStockItem {
+  name: string
+  sku: string
+  stock: number
+  minStock: number
+  image: string | null
 }
 
-export function LowStockAlerts() {
+interface LowStockAlertsProps {
+  data?: { lowStockItems: LowStockItem[] } | null
+  isLoading?: boolean
+}
+
+export function LowStockAlerts({ data, isLoading = true }: LowStockAlertsProps) {
+  const lowStockItems = data?.lowStockItems || []
+
+  if (isLoading) {
+    return <LowStockAlertsSkeleton />
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -95,7 +77,7 @@ export function LowStockAlerts() {
         transition={{ duration: 0.3, delay: 0.9 }}
         className="space-y-2 flex-1 overflow-y-auto max-h-64"
       >
-        {lowStockItems.map((item, index) => (
+        {lowStockItems.length > 0 ? lowStockItems.map((item, index: number) => (
           <motion.div
             key={item.name}
             initial={{ opacity: 0, x: -10 }}
@@ -134,8 +116,42 @@ export function LowStockAlerts() {
               </motion.p>
             </div>
           </motion.div>
-        ))}
+        )) : (
+          <div className="text-center text-sm text-muted-foreground py-8">
+            All items are in stock
+          </div>
+        )}
       </motion.div>
     </motion.div>
+  )
+}
+
+export function LowStockAlertsSkeleton() {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+        <div className="flex-1">
+          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+        </div>
+        <div className="h-4 bg-muted/70 rounded w-12 animate-pulse" />
+      </div>
+      <div className="space-y-2 flex-1">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="flex items-center gap-3 rounded-lg p-2">
+            <div className="h-10 w-10 rounded-lg bg-muted/70 animate-pulse shrink-0" />
+            <div className="flex-1">
+              <div className="h-3 bg-muted/70 rounded w-3/4 mb-1 animate-pulse" />
+              <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+            </div>
+            <div className="text-right shrink-0">
+              <div className="h-3 bg-muted/70 rounded w-8 mb-1 animate-pulse" />
+              <div className="h-3 bg-muted/70 rounded w-12 animate-pulse" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }

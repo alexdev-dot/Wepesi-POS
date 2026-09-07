@@ -1,23 +1,33 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Sidebar } from "@/components/core/layout/sidebar"
 import { Header } from "@/components/core/layout/header"
 import { Button } from "@/components/ui/button"
-import { Save, RotateCcw } from "lucide-react"
+import { Save, RotateCcw, Building2, Settings, Bell, Shield } from "lucide-react"
 import { BusinessInfoCard } from "@/components/domains/settings/cards/business-info-card"
 import { SystemPrefsCard } from "@/components/domains/settings/cards/system-prefs-card"
-import { DisplaySettingsCard } from "@/components/domains/settings/cards/display-settings-card"
-import { ReceiptSettingsCard } from "@/components/domains/settings/cards/receipt-settings-card"
 import { NotificationSettingsCard } from "@/components/domains/settings/cards/notification-settings-card"
 import { SecuritySettingsCard } from "@/components/domains/settings/cards/security-settings-card"
 
+type TabType = "business" | "system" | "notifications" | "security"
+
 export default function GeneralSettingsPage() {
+  const router = useRouter()
+  const [activeTab, setActiveTab] = useState<TabType>("business")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+
+  const tabs = [
+    { id: "business" as TabType, label: "Business Information", icon: Building2 },
+    { id: "system" as TabType, label: "System Preferences", icon: Settings },
+    { id: "notifications" as TabType, label: "Notifications", icon: Bell },
+    { id: "security" as TabType, label: "Security", icon: Shield },
+  ]
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024)
@@ -26,14 +36,54 @@ export default function GeneralSettingsPage() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
+  useEffect(() => {
+    const userId = localStorage.getItem('user_id')
+    const userOnboarded = localStorage.getItem('user_onboarded')
+
+    if (!userId || userOnboarded !== 'true') {
+      router.replace('/login')
+      return
+    }
+
+    // Fetch tenant data in background
+    const fetchTenantData = async () => {
+      try {
+        const response = await fetch('/api/tenant', {
+          headers: {
+            'x-user-id': userId
+          }
+        })
+        const data = await response.json()
+
+        if (response.ok && data.tenant) {
+          setBusinessInfo(prev => ({
+            ...prev,
+            businessName: data.tenant.business_name,
+            businessType: data.tenant.business_type,
+            address: data.tenant.branch_address || `${data.tenant.branch_name}, ${data.tenant.city}, ${data.tenant.country}`,
+            subdomain: data.tenant.branch_name.toLowerCase().replace(/\s+/g, '-'),
+          }))
+          setSystemPrefs(prev => ({
+            ...prev,
+            currency: data.tenant.currency === 'USD' ? '$' : data.tenant.currency === 'KES' ? 'KSh' : data.tenant.currency,
+          }))
+        }
+      } catch (err) {
+        console.error('Failed to fetch tenant data:', err)
+      }
+    }
+
+    fetchTenantData()
+  }, [router])
+
   // Business Information State
   const [businessInfo, setBusinessInfo] = useState({
-    businessName: "My Business",
+    businessName: "",
     businessType: "retail",
-    phone: "+254 700 000 000",
-    email: "contact@mybusiness.com",
-    address: "123 Main Street, Nairobi, Kenya",
-    subdomain: "mybusiness",
+    phone: "",
+    email: "",
+    address: "",
+    subdomain: "",
   })
 
   // System Preferences State
@@ -43,21 +93,6 @@ export default function GeneralSettingsPage() {
     timeFormat: "24h",
     language: "en",
     timezone: "Africa/Nairobi",
-  })
-
-  // Display Settings State
-  const [displaySettings, setDisplaySettings] = useState({
-    theme: "light",
-    sidebarDefault: "expanded",
-    itemsPerPage: "25",
-  })
-
-  // Receipt Settings State
-  const [receiptSettings, setReceiptSettings] = useState({
-    showLogo: true,
-    showCustomerDetails: true,
-    footerText: "Thank you for your business!",
-    defaultPrinter: "thermal",
   })
 
   // Notification Settings State
@@ -108,12 +143,12 @@ export default function GeneralSettingsPage() {
   const handleReset = () => {
     // Reset to defaults
     setBusinessInfo({
-      businessName: "My Business",
+      businessName: "",
       businessType: "retail",
-      phone: "+254 700 000 000",
-      email: "contact@mybusiness.com",
-      address: "123 Main Street, Nairobi, Kenya",
-      subdomain: "mybusiness",
+      phone: "",
+      email: "",
+      address: "",
+      subdomain: "",
     })
     setSystemPrefs({
       currency: "KSh",
@@ -121,17 +156,6 @@ export default function GeneralSettingsPage() {
       timeFormat: "24h",
       language: "en",
       timezone: "Africa/Nairobi",
-    })
-    setDisplaySettings({
-      theme: "light",
-      sidebarDefault: "expanded",
-      itemsPerPage: "25",
-    })
-    setReceiptSettings({
-      showLogo: true,
-      showCustomerDetails: true,
-      footerText: "Thank you for your business!",
-      defaultPrinter: "thermal",
     })
     setNotificationSettings({
       lowStockAlerts: true,
@@ -194,14 +218,54 @@ export default function GeneralSettingsPage() {
               </div>
             )}
 
-            {/* Settings Grid */}
-            <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
-              <BusinessInfoCard businessInfo={businessInfo} onChange={setBusinessInfo} />
-              <SystemPrefsCard systemPrefs={systemPrefs} onChange={setSystemPrefs} />
-              <DisplaySettingsCard displaySettings={displaySettings} onChange={setDisplaySettings} />
-              <ReceiptSettingsCard receiptSettings={receiptSettings} onChange={setReceiptSettings} />
-              <NotificationSettingsCard notificationSettings={notificationSettings} onChange={setNotificationSettings} />
-              <SecuritySettingsCard securitySettings={securitySettings} onChange={setSecuritySettings} />
+            {/* Tab Navigation */}
+            <div className="border-b border-border">
+              <nav className="flex gap-1 overflow-x-auto" aria-label="Settings tabs">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                        activeTab === tab.id
+                          ? "border-blue-600 text-blue-600"
+                          : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {tab.label}
+                    </button>
+                  )
+                })}
+              </nav>
+            </div>
+
+            {/* Tab Content */}
+            <div className="min-h-100">
+              {activeTab === "business" && (
+                <div className="w-full max-w-3xl mx-auto">
+                  <BusinessInfoCard businessInfo={businessInfo} onChange={setBusinessInfo} />
+                </div>
+              )}
+
+              {activeTab === "system" && (
+                <div className="w-full max-w-3xl mx-auto">
+                  <SystemPrefsCard systemPrefs={systemPrefs} onChange={setSystemPrefs} />
+                </div>
+              )}
+
+              {activeTab === "notifications" && (
+                <div className="w-full max-w-3xl mx-auto">
+                  <NotificationSettingsCard notificationSettings={notificationSettings} onChange={setNotificationSettings} />
+                </div>
+              )}
+
+              {activeTab === "security" && (
+                <div className="w-full max-w-3xl mx-auto">
+                  <SecuritySettingsCard securitySettings={securitySettings} onChange={setSecuritySettings} />
+                </div>
+              )}
             </div>
           </div>
         </main>

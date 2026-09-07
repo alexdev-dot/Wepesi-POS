@@ -4,42 +4,29 @@ import Image from "next/image"
 import { TrendingUp } from "lucide-react"
 import { motion } from "framer-motion"
 
-const topProducts = [
-  { name: "Coca Cola 500ml", sold: 128, revenue: "KSh 4,096.00", image: "/products/Coca cola 500ml.jpg" },
-  { name: "Bread Loaf", sold: 96, revenue: "KSh 2,880.00", image: "/products/bread loaf.avif" },
-  { name: "Milk 1L", sold: 84, revenue: "KSh 2,520.00", image: "/products/Milk 1l.avif" },
-  { name: "A4 Copy Paper", sold: 72, revenue: "KSh 2,160.00", image: "/products/A4 copy paper.jpg" },
-  { name: "Indomie Noodles", sold: 64, revenue: "KSh 1,920.00", image: "/products/indomie chicken noodles.avif" },
-]
-
-export function TopProductsSkeleton() {
-  return (
-    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
-        <div className="flex-1">
-          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
-          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
-        </div>
-        <div className="h-4 bg-muted/70 rounded w-12 animate-pulse" />
-      </div>
-      <div className="flex-1 space-y-3">
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className="flex items-center gap-3 py-3 border-b border-border">
-            <div className="h-10 w-10 rounded-lg bg-muted/70 animate-pulse shrink-0" />
-            <div className="flex-1">
-              <div className="h-3 bg-muted/70 rounded w-3/4 mb-1 animate-pulse" />
-            </div>
-            <div className="h-3 bg-muted/70 rounded w-8 animate-pulse" />
-            <div className="h-3 bg-muted/70 rounded w-16 animate-pulse" />
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+interface Product {
+  name: string
+  sold: number
+  revenue: number
+  image: string | null
 }
 
-export function TopProducts() {
+interface TopProductsProps {
+  data?: { products: Product[] } | null
+  isLoading?: boolean
+}
+
+export function TopProducts({ data, isLoading = true }: TopProductsProps) {
+  const products = data?.products || []
+
+  const formatCurrency = (value: number) => {
+    return `KSh ${value.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  }
+
+  if (isLoading) {
+    return <TopProductsSkeleton />
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -104,7 +91,7 @@ export function TopProducts() {
               </tr>
             </thead>
             <tbody>
-              {topProducts.map((product, index) => (
+              {products.length > 0 ? products.map((product, index: number) => (
                 <motion.tr
                   key={product.name}
                   initial={{ opacity: 0, x: -10 }}
@@ -135,16 +122,22 @@ export function TopProducts() {
                     </div>
                   </td>
                   <td className="py-3 text-xs text-muted-foreground">{product.sold}</td>
-                  <td className="py-3 text-xs font-semibold text-foreground">{product.revenue}</td>
+                  <td className="py-3 text-xs font-semibold text-foreground">{formatCurrency(product.revenue)}</td>
                 </motion.tr>
-              ))}
+              )) : (
+                <tr>
+                  <td colSpan={3} className="py-8 text-center text-sm text-muted-foreground">
+                    No sales data yet
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
 
         {/* Mobile Card View */}
         <div className="md:hidden space-y-3">
-          {topProducts.map((product, index) => (
+          {products.length > 0 ? products.map((product, index: number) => (
             <motion.div
               key={product.name}
               initial={{ opacity: 0, y: 10 }}
@@ -170,11 +163,42 @@ export function TopProducts() {
                 <p className="text-xs font-semibold text-foreground truncate">{product.name}</p>
                 <p className="text-xs text-muted-foreground">{product.sold} sold</p>
               </div>
-              <p className="text-xs font-semibold text-foreground">{product.revenue}</p>
+              <p className="text-xs font-semibold text-foreground">{formatCurrency(product.revenue)}</p>
             </motion.div>
-          ))}
+          )) : (
+            <div className="py-8 text-center text-sm text-muted-foreground">
+              No sales data yet
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>
+  )
+}
+
+export function TopProductsSkeleton() {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm h-full flex flex-col font-sans">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+        <div className="flex-1">
+          <div className="h-5 bg-muted/70 rounded w-1/2 mb-1 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 animate-pulse" />
+        </div>
+        <div className="h-4 bg-muted/70 rounded w-12 animate-pulse" />
+      </div>
+      <div className="flex-1 space-y-3">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div key={index} className="flex items-center gap-3 py-3 border-b border-border">
+            <div className="h-10 w-10 rounded-lg bg-muted/70 animate-pulse shrink-0" />
+            <div className="flex-1">
+              <div className="h-3 bg-muted/70 rounded w-3/4 mb-1 animate-pulse" />
+            </div>
+            <div className="h-3 bg-muted/70 rounded w-8 animate-pulse" />
+            <div className="h-3 bg-muted/70 rounded w-16 animate-pulse" />
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }

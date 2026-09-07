@@ -6,14 +6,13 @@ import { MoreHorizontal, Edit, Trash } from "lucide-react"
 import Image from "next/image"
 
 export interface Product {
-  id: number
+  id: string | number
   image: string
   name: string
   description: string
   sku: string
   barcode: string
   category: string
-  brand: string
   costPrice: number
   sellingPrice: number
   stockQty: number
@@ -54,10 +53,8 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
           <thead className="bg-muted border-b border-border">
             <tr>
               <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Product</th>
-              <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">SKU</th>
               <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Barcode</th>
               <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Category</th>
-              <th className="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Brand</th>
               <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Cost Price</th>
               <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Selling Price</th>
               <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Stock Qty</th>
@@ -89,10 +86,8 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
                     </div>
                   </div>
                 </td>
-                <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground font-mono font-medium">{product.sku}</td>
                 <td className="hidden md:table-cell px-4 sm:px-6 py-4 text-sm text-muted-foreground font-mono">{product.barcode}</td>
                 <td className="hidden lg:table-cell px-4 sm:px-6 py-4 text-sm text-muted-foreground">{product.category}</td>
-                <td className="hidden lg:table-cell px-4 sm:px-6 py-4 text-sm text-muted-foreground">{product.brand}</td>
                 <td className="hidden sm:table-cell px-4 sm:px-6 py-4 text-sm text-muted-foreground font-medium">KSh {product.costPrice.toFixed(2)}</td>
                 <td className="px-4 sm:px-6 py-4 text-sm text-foreground font-semibold">KSh {product.sellingPrice.toFixed(2)}</td>
                 <td className="px-4 sm:px-6 py-4 text-sm text-muted-foreground font-medium">{product.stockQty}</td>
@@ -149,7 +144,6 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">{product.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{product.description}</p>
-                <p className="text-xs text-muted-foreground font-mono mt-1">{product.sku}</p>
               </div>
               <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(product.status)}`}>
                 {product.status}
@@ -160,10 +154,6 @@ export function ProductTable({ products, onEdit, onDelete }: ProductTableProps) 
               <div>
                 <p className="text-xs text-muted-foreground">Category</p>
                 <p className="text-sm font-medium text-foreground">{product.category}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Brand</p>
-                <p className="text-sm font-medium text-foreground">{product.brand}</p>
               </div>
             </div>
             

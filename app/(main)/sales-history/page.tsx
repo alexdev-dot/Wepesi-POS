@@ -1,514 +1,260 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Sidebar } from "@/components/core/layout/sidebar"
 import { Header } from "@/components/core/layout/header"
 import { SalesHistoryTable, Sale } from "@/components/domains/sales/sales-history-table"
-import { SaleDetailsPane, SaleDetails } from "@/components/domains/sales/sale-details-pane"
-import { X, Receipt, Calendar, Filter, Download, Printer } from "lucide-react"
+import { SaleDetailsPane, SaleDetails, SaleItem } from "@/components/domains/sales/sale-details-pane"
+import { X, Receipt, Download, Printer } from "lucide-react"
 import { motion } from "framer-motion"
 import { useMobile } from "@/lib/hooks/use-mobile"
+import { getBusinessId } from "@/lib/supabase/database"
 
-// Mock data for sales
-const salesData: Sale[] = [
-  {
-    id: "INV-000129",
-    date: "2025-05-15 14:32",
-    customer: "John Doe",
-    cashier: "Alex Kariuki",
-    items: 5,
-    total: 1250.00,
-    paymentMethod: "Cash",
-    status: "Completed"
-  },
-  {
-    id: "INV-000128",
-    date: "2025-05-15 13:45",
-    customer: "Jane Smith",
-    cashier: "Alex Kariuki",
-    items: 3,
-    total: 850.00,
-    paymentMethod: "M-Pesa",
-    status: "Completed"
-  },
-  {
-    id: "INV-000127",
-    date: "2025-05-15 12:20",
-    customer: "Mike Johnson",
-    cashier: "Alex Kariuki",
-    items: 2,
-    total: 450.00,
-    paymentMethod: "Card",
-    status: "Refunded"
-  },
-  {
-    id: "INV-000126",
-    date: "2025-05-15 11:15",
-    customer: "Sarah Williams",
-    cashier: "Alex Kariuki",
-    items: 4,
-    total: 1800.00,
-    paymentMethod: "Cash",
-    status: "Completed"
-  },
-  {
-    id: "INV-000125",
-    date: "2025-05-15 10:30",
-    customer: "David Brown",
-    cashier: "Alex Kariuki",
-    items: 1,
-    total: 100.00,
-    paymentMethod: "M-Pesa",
-    status: "Voided"
-  },
-  {
-    id: "INV-000124",
-    date: "2025-05-14 16:45",
-    customer: "Emily Davis",
-    cashier: "Alex Kariuki",
-    items: 6,
-    total: 2100.00,
-    paymentMethod: "Card",
-    status: "Completed"
-  },
-  {
-    id: "INV-000123",
-    date: "2025-05-14 15:20",
-    customer: "Robert Wilson",
-    cashier: "Alex Kariuki",
-    items: 2,
-    total: 700.00,
-    paymentMethod: "Cash",
-    status: "Completed"
-  },
-  {
-    id: "INV-000122",
-    date: "2025-05-14 14:10",
-    customer: "Lisa Anderson",
-    cashier: "Alex Kariuki",
-    items: 3,
-    total: 950.00,
-    paymentMethod: "M-Pesa",
-    status: "Completed"
-  },
-  {
-    id: "INV-000121",
-    date: "2025-05-14 13:00",
-    customer: "James Taylor",
-    cashier: "Alex Kariuki",
-    items: 4,
-    total: 1600.00,
-    paymentMethod: "Card",
-    status: "Completed"
-  },
-  {
-    id: "INV-000120",
-    date: "2025-05-14 11:45",
-    customer: "Patricia Moore",
-    cashier: "Alex Kariuki",
-    items: 2,
-    total: 450.00,
-    paymentMethod: "Cash",
-    status: "Completed"
-  }
-]
+interface ApiSale {
+  id: string
+  receipt_number: string
+  cashier: string
+  customer: string
+  subtotal: number
+  discount: number
+  tax: number
+  total: number
+  payment_method: string
+  amount_paid: number
+  change_amount: number
+  status: string
+  created_at: string
+  sale_items: Array<{
+    product_name: string
+    quantity: number
+    unit_price: number
+    line_total: number
+  }>
+}
 
-// Mock data for sale details
-const saleDetailsData: Record<string, SaleDetails> = {
-  "INV-000129": {
-    id: "INV-000129",
-    date: "2025-05-15 14:32",
-    cashier: "Alex Kariuki",
-    customer: "John Doe",
-    itemsList: [
-      { name: "Coca cola 500ml", qty: 2, price: 100, total: 200 },
-      { name: "AA battery 2 pcs", qty: 1, price: 350, total: 350 },
-      { name: "A4 copy paper", qty: 2, price: 350, total: 700 }
-    ],
-    discount: 0,
-    tax: 100,
-    total: 1250.00,
-    paymentMethod: "Cash",
-    amountPaid: 1500,
-    change: 250
-  },
-  "INV-000128": {
-    id: "INV-000128",
-    date: "2025-05-15 13:45",
-    cashier: "Alex Kariuki",
-    customer: "Jane Smith",
-    itemsList: [
-      { name: "AA battery 2 pcs", qty: 1, price: 350, total: 350 },
-      { name: "A4 copy paper", qty: 1, price: 500, total: 500 }
-    ],
-    discount: 0,
-    tax: 50,
-    total: 850.00,
-    paymentMethod: "M-Pesa",
-    amountPaid: 850,
-    change: 0
-  },
-  "INV-000127": {
-    id: "INV-000127",
-    date: "2025-05-15 12:20",
-    cashier: "Alex Kariuki",
-    customer: "Mike Johnson",
-    itemsList: [
-      { name: "Coca cola 500ml", qty: 3, price: 100, total: 300 },
-      { name: "AA battery 2 pcs", qty: 1, price: 150, total: 150 }
-    ],
-    discount: 0,
-    tax: 30,
-    total: 450.00,
-    paymentMethod: "Card",
-    amountPaid: 450,
-    change: 0
-  },
-  "INV-000126": {
-    id: "INV-000126",
-    date: "2025-05-15 11:15",
-    cashier: "Alex Kariuki",
-    customer: "Sarah Williams",
-    itemsList: [
-      { name: "A4 copy paper", qty: 3, price: 500, total: 1500 },
-      { name: "AA battery 2 pcs", qty: 2, price: 150, total: 300 }
-    ],
-    discount: 50,
-    tax: 120,
-    total: 1800.00,
-    paymentMethod: "Cash",
-    amountPaid: 2000,
-    change: 200
-  },
-  "INV-000125": {
-    id: "INV-000125",
-    date: "2025-05-15 10:30",
-    cashier: "Alex Kariuki",
-    customer: "David Brown",
-    itemsList: [
-      { name: "Coca cola 500ml", qty: 1, price: 100, total: 100 }
-    ],
-    discount: 0,
-    tax: 10,
-    total: 100.00,
-    paymentMethod: "M-Pesa",
-    amountPaid: 100,
-    change: 0
-  },
-  "INV-000124": {
-    id: "INV-000124",
-    date: "2025-05-14 16:45",
-    cashier: "Alex Kariuki",
-    customer: "Emily Davis",
-    itemsList: [
-      { name: "A4 copy paper", qty: 4, price: 500, total: 2000 },
-      { name: "Coca cola 500ml", qty: 1, price: 100, total: 100 }
-    ],
-    discount: 100,
-    tax: 150,
-    total: 2100.00,
-    paymentMethod: "Card",
-    amountPaid: 2100,
-    change: 0
-  },
-  "INV-000123": {
-    id: "INV-000123",
-    date: "2025-05-14 15:20",
-    cashier: "Alex Kariuki",
-    customer: "Robert Wilson",
-    itemsList: [
-      { name: "AA battery 2 pcs", qty: 2, price: 350, total: 700 }
-    ],
-    discount: 0,
-    tax: 50,
-    total: 700.00,
-    paymentMethod: "Cash",
-    amountPaid: 700,
-    change: 0
-  },
-  "INV-000122": {
-    id: "INV-000122",
-    date: "2025-05-14 14:10",
-    cashier: "Alex Kariuki",
-    customer: "Lisa Anderson",
-    itemsList: [
-      { name: "A4 copy paper", qty: 1, price: 500, total: 500 },
-      { name: "Coca cola 500ml", qty: 4, price: 100, total: 400 },
-      { name: "AA battery 2 pcs", qty: 1, price: 50, total: 50 }
-    ],
-    discount: 25,
-    tax: 70,
-    total: 950.00,
-    paymentMethod: "M-Pesa",
-    amountPaid: 950,
-    change: 0
-  },
-  "INV-000121": {
-    id: "INV-000121",
-    date: "2025-05-14 13:00",
-    cashier: "Alex Kariuki",
-    customer: "James Taylor",
-    itemsList: [
-      { name: "A4 copy paper", qty: 3, price: 500, total: 1500 },
-      { name: "Coca cola 500ml", qty: 1, price: 100, total: 100 }
-    ],
-    discount: 0,
-    tax: 110,
-    total: 1600.00,
-    paymentMethod: "Card",
-    amountPaid: 1600,
-    change: 0
-  },
-  "INV-000120": {
-    id: "INV-000120",
-    date: "2025-05-14 11:45",
-    cashier: "Alex Kariuki",
-    customer: "Patricia Moore",
-    itemsList: [
-      { name: "AA battery 2 pcs", qty: 1, price: 350, total: 350 },
-      { name: "Coca cola 500ml", qty: 1, price: 100, total: 100 }
-    ],
-    discount: 0,
-    tax: 30,
-    total: 450.00,
-    paymentMethod: "Cash",
-    amountPaid: 500,
-    change: 50
+function formatPaymentMethod(method: string) {
+  return method === "mpesa" ? "M-Pesa" : method.charAt(0).toUpperCase() + method.slice(1)
+}
+
+function mapSale(apiSale: ApiSale): { summary: Sale; details: SaleDetails } {
+  const itemsList: SaleItem[] = (apiSale.sale_items || []).map((item) => ({
+    name: item.product_name,
+    qty: item.quantity,
+    price: Number(item.unit_price),
+    total: Number(item.line_total),
+  }))
+  const paymentMethod = formatPaymentMethod(apiSale.payment_method)
+  const status = apiSale.status.charAt(0).toUpperCase() + apiSale.status.slice(1)
+  const date = new Date(apiSale.created_at).toLocaleString("en-KE", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  })
+
+  // Debug: log the sale data to check if UUID is present
+  console.log('Mapping sale:', { id: apiSale.id, receipt_number: apiSale.receipt_number })
+
+  return {
+    summary: {
+      id: apiSale.receipt_number,
+      uuid: apiSale.id || '',
+      date,
+      customer: apiSale.customer,
+      cashier: apiSale.cashier,
+      items: itemsList.reduce((count, item) => count + item.qty, 0),
+      total: Number(apiSale.total),
+      paymentMethod,
+      status,
+    },
+    details: {
+      id: apiSale.receipt_number,
+      date,
+      cashier: apiSale.cashier,
+      customer: apiSale.customer,
+      itemsList,
+      discount: Number(apiSale.discount),
+      tax: Number(apiSale.tax),
+      total: Number(apiSale.total),
+      paymentMethod,
+      amountPaid: Number(apiSale.amount_paid),
+      change: Number(apiSale.change_amount),
+    },
   }
 }
 
 export default function SalesHistoryPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [sales, setSales] = useState<Array<{ summary: Sale; details: SaleDetails }>>([])
   const [selectedSale, setSelectedSale] = useState<Sale | null>(null)
-  const [dateRange, setDateRange] = useState("01 May 2025 - 31 May 2025")
+  const [searchQuery, setSearchQuery] = useState("")
   const [cashier, setCashier] = useState("All Cashiers")
   const [paymentMethod, setPaymentMethod] = useState("All Payment Methods")
   const [status, setStatus] = useState("All Status")
-  const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [mobileDetailsOpen, setMobileDetailsOpen] = useState(false)
+  const [businessId, setBusinessId] = useState<string | null>(null)
   const isMobile = useMobile()
   const itemsPerPage = 10
 
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed)
-  }
+  useEffect(() => {
+    const loadTenantAndSales = async () => {
+      const userId = localStorage.getItem('user_id')
+      if (!userId) return
 
-  const toggleMobileSidebar = () => {
-    setMobileSidebarOpen(!mobileSidebarOpen)
-  }
+      try {
+        // Fetch tenant data to get the actual business_id
+        const tenantResponse = await fetch('/api/tenant', {
+          headers: {
+            'x-user-id': userId
+          }
+        })
+        const tenantData = await tenantResponse.json()
 
-  const closeMobileSidebar = () => {
-    setMobileSidebarOpen(false)
-  }
+        if (tenantResponse.ok && tenantData.tenant) {
+          const actualBusinessId = tenantData.tenant.id
+          setBusinessId(actualBusinessId)
 
-  const handleMenuClick = () => {
-    if (isMobile) {
-      toggleMobileSidebar()
-    } else {
-      toggleSidebar()
+          // Load sales for this business
+          const salesResponse = await fetch(`/api/sales?businessId=${encodeURIComponent(actualBusinessId)}`)
+          const salesResult = await salesResponse.json() as { sales?: ApiSale[] }
+          if (salesResponse.ok && salesResult.sales) setSales(salesResult.sales.map(mapSale))
+        } else {
+          console.error('Failed to fetch tenant data:', tenantData.error)
+        }
+      } catch (err) {
+        console.error('Failed to load tenant or sales:', err)
+      }
     }
-  }
 
-  const handleSaleSelect = (sale: Sale) => {
+    void loadTenantAndSales()
+  }, [])
+
+  const cashiers = useMemo(() => ["All Cashiers", ...new Set(sales.map(({ summary }) => summary.cashier))], [sales])
+  const filteredSales = useMemo(() => sales.filter(({ summary }) => {
+    const query = searchQuery.toLowerCase()
+    const matchesSearch = !query || [summary.id, summary.customer, summary.cashier].some((value) => value.toLowerCase().includes(query))
+    const matchesCashier = cashier === "All Cashiers" || summary.cashier === cashier
+    const matchesPayment = paymentMethod === "All Payment Methods" || summary.paymentMethod === paymentMethod
+    const matchesStatus = status === "All Status" || summary.status === status
+    return matchesSearch && matchesCashier && matchesPayment && matchesStatus
+  }), [sales, searchQuery, cashier, paymentMethod, status])
+
+  const totalPages = Math.max(1, Math.ceil(filteredSales.length / itemsPerPage))
+  const visibleSales = filteredSales.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  const totalRevenue = filteredSales.reduce((sum, { summary }) => sum + summary.total, 0)
+
+  const selectSale = (sale: Sale) => {
     setSelectedSale(sale)
     setMobileDetailsOpen(true)
   }
 
-  const handleCloseDetails = () => {
-    setSelectedSale(null)
-    setMobileDetailsOpen(false)
+  const handleDeleteSale = async (saleUuid: string, receiptNumber: string) => {
+    if (!businessId) {
+      alert('Unable to delete sale: Business ID not found. Please refresh the page and try again.')
+      return
+    }
+
+    if (!saleUuid || saleUuid === 'undefined') {
+      alert('Unable to delete sale: Missing sale ID. Please refresh the page and try again.')
+      return
+    }
+
+    if (!confirm('Are you sure you want to delete this sale? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      const params = new URLSearchParams({
+        businessId,
+        saleId: saleUuid,
+        receiptNumber
+      })
+      const response = await fetch(`/api/sales?${params.toString()}`, {
+        method: 'DELETE'
+      })
+
+      if (response.ok) {
+        // Remove the deleted sale from the list
+        setSales(prevSales => prevSales.filter(({ summary }) => summary.uuid !== saleUuid))
+        // Clear selected sale if it was the deleted one
+        if (selectedSale?.uuid === saleUuid) {
+          setSelectedSale(null)
+          setMobileDetailsOpen(false)
+        }
+      } else {
+        const error = await response.json()
+        console.error('Failed to delete sale:', error.error)
+        alert(`Failed to delete sale: ${error.error}`)
+      }
+    } catch (err) {
+      console.error('Failed to delete sale:', err)
+      alert('Failed to delete sale. Please try again.')
+    }
   }
 
-  const selectedSaleDetails = selectedSale ? saleDetailsData[selectedSale.id] : null
-
-  const totalPages = Math.ceil(salesData.length / itemsPerPage)
+  const selectedSaleDetails = sales.find(({ summary }) => summary.id === selectedSale?.id)?.details || null
 
   return (
     <div className="flex h-screen bg-background font-sans">
-      <Sidebar
-        collapsed={sidebarCollapsed}
-        currentPath="/sales-history"
-        mobileOpen={mobileSidebarOpen}
-        onMobileClose={closeMobileSidebar}
-      />
-      <div className="flex flex-1 flex-col overflow-hidden font-sans">
-        <Header onMenuClick={handleMenuClick} />
+      <Sidebar collapsed={sidebarCollapsed} currentPath="/sales-history" mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} />
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <Header onMenuClick={() => isMobile ? setMobileSidebarOpen((open) => !open) : setSidebarCollapsed((collapsed) => !collapsed)} />
         <main className="flex-1 flex flex-col bg-muted/30 overflow-auto">
-          {/* Page Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="px-4 sm:px-6 py-4 sm:py-5"
-          >
+          <div className="px-4 sm:px-6 py-4 sm:py-5">
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <motion.div
-                  whileHover={{ rotate: 5, scale: 1.1 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600 shadow-sm  "
-                >
-                  <Receipt className="h-5 w-5" strokeWidth={2} />
-                </motion.div>
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600"><Receipt className="h-5 w-5" /></div>
                 <div>
-                  <motion.h1
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    className="text-lg sm:text-xl font-semibold text-foreground"
-                  >
-                    Sales History
-                  </motion.h1>
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.15 }}
-                    className="text-sm text-muted-foreground mt-0.5"
-                  >
-                    View and manage all sales transactions
-                  </motion.p>
+                  <h1 className="text-lg sm:text-xl font-semibold text-foreground">Sales History</h1>
+                  <p className="text-sm text-muted-foreground mt-0.5">View saved sales transactions</p>
                 </div>
               </div>
 
-              {/* Filters Section */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.2 }}
-                className="flex flex-col sm:flex-row gap-3"
-              >
-                  {/* Date Range */}
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card shadow-sm"
-                  >
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm text-foreground">{dateRange}</span>
-                  </motion.div>
-
-                  {/* Filter Dropdowns Row */}
-                  <div className="flex flex-wrap gap-2">
-                    {/* Cashier Dropdown */}
-                    <motion.select
-                      whileHover={{ scale: 1.01 }}
-                      value={cashier}
-                      onChange={(e) => setCashier(e.target.value)}
-                      className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
-                    >
-                      <option>All Cashiers</option>
-                      <option>Alex Kariuki</option>
-                      <option>John Doe</option>
-                    </motion.select>
-
-                    {/* Payment Method Dropdown */}
-                    <motion.select
-                      whileHover={{ scale: 1.01 }}
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
-                    >
-                      <option>All Payment Methods</option>
-                      <option>Cash</option>
-                      <option>M-Pesa</option>
-                      <option>Card</option>
-                    </motion.select>
-
-                    {/* Status Dropdown */}
-                    <motion.select
-                      whileHover={{ scale: 1.01 }}
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                      className="px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
-                    >
-                      <option>All Status</option>
-                      <option>Completed</option>
-                      <option>Refunded</option>
-                      <option>Voided</option>
-                    </motion.select>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-wrap gap-2 ml-auto">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm"
-                    >
-                      <Filter className="h-4 w-4" />
-                      <span className="hidden sm:inline">More Filters</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm"
-                    >
-                      <Download className="h-4 w-4" />
-                      <span className="hidden sm:inline">Export</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg bg-card text-sm text-foreground hover:bg-muted transition-all shadow-sm"
-                    >
-                      <Printer className="h-4 w-4" />
-                      <span className="hidden sm:inline">Print</span>
-                    </motion.button>
-                  </div>
-                </motion.div>
+              <div className="flex flex-wrap items-center gap-2">
+                <select value={cashier} onChange={(event) => { setCashier(event.target.value); setCurrentPage(1) }} className="px-3 py-2 border border-border rounded-lg bg-card text-sm">
+                  {cashiers.map((option) => <option key={option}>{option}</option>)}
+                </select>
+                <select value={paymentMethod} onChange={(event) => { setPaymentMethod(event.target.value); setCurrentPage(1) }} className="px-3 py-2 border border-border rounded-lg bg-card text-sm">
+                  <option>All Payment Methods</option><option>Cash</option><option>M-Pesa</option><option>Card</option>
+                </select>
+                <select value={status} onChange={(event) => { setStatus(event.target.value); setCurrentPage(1) }} className="px-3 py-2 border border-border rounded-lg bg-card text-sm">
+                  <option>All Status</option><option>Completed</option><option>Refunded</option><option>Voided</option>
+                </select>
+                <div className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
+                  <span>{filteredSales.length} sales</span>
+                  <span className="font-semibold text-foreground">KSh {totalRevenue.toFixed(2)}</span>
+                  <button className="p-2 border border-border rounded-lg bg-card" title="Export sales"><Download className="h-4 w-4" /></button>
+                  <button className="p-2 border border-border rounded-lg bg-card" title="Print sales"><Printer className="h-4 w-4" /></button>
+                </div>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Main Content */}
           <div className="flex-1 overflow-auto">
             <SalesHistoryTable
-              salesData={salesData}
+              salesData={visibleSales.map(({ summary }) => summary)}
               selectedSale={selectedSale}
-              onSaleSelect={handleSaleSelect}
+              onSaleSelect={selectSale}
               searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
+              onSearchChange={(value) => { setSearchQuery(value); setCurrentPage(1) }}
               currentPage={currentPage}
               onPageChange={setCurrentPage}
               totalPages={totalPages}
+              onDeleteSale={handleDeleteSale}
             />
           </div>
         </main>
       </div>
 
-      {/* Floating Details Overlay */}
       {selectedSale && (
         <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 z-40"
-            onClick={handleCloseDetails}
-          />
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed inset-y-0 right-0 w-full sm:w-96 lg:w-112.5 bg-card z-50 overflow-y-auto shadow-2xl"
-          >
+          <motion.div className="fixed inset-0 bg-black/50 z-40" onClick={() => { setSelectedSale(null); setMobileDetailsOpen(false) }} />
+          <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} className="fixed inset-y-0 right-0 w-full sm:w-96 lg:w-112.5 bg-card z-50 overflow-y-auto shadow-2xl">
             <div className="sticky top-0 bg-card border-b border-border px-4 py-3 flex items-center justify-between z-10">
               <h2 className="text-base font-semibold text-foreground">Sale Details</h2>
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={handleCloseDetails}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
-              >
-                <X className="h-5 w-5 text-muted-foreground" />
-              </motion.button>
+              <button onClick={() => { setSelectedSale(null); setMobileDetailsOpen(false) }} className="p-2 hover:bg-muted rounded-lg"><X className="h-5 w-5 text-muted-foreground" /></button>
             </div>
-            <SaleDetailsPane
-              selectedSale={selectedSaleDetails}
-              onClose={handleCloseDetails}
-            />
+            <SaleDetailsPane selectedSale={selectedSaleDetails} onClose={() => { setSelectedSale(null); setMobileDetailsOpen(false) }} />
           </motion.div>
         </>
       )}

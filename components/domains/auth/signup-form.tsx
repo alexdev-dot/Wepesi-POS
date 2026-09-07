@@ -4,22 +4,25 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ShoppingBag, Mail, Lock, Eye, EyeOff, ArrowRight, User, AlertCircle, ArrowLeft } from "lucide-react"
+import { ShoppingBag, Mail, Lock, Eye, EyeOff, ArrowRight, User, AlertCircle, ArrowLeft, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { saveUser, findUserByEmail, setCurrentUser } from "@/lib/auth"
+import { signInWithGoogle } from "@/lib/supabase/auth"
 
 export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const router = useRouter()
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError("")
+    setIsLoading(true)
 
     const form = e.target as HTMLFormElement
     const name = (form.elements.namedItem('name') as HTMLInputElement).value
@@ -31,43 +34,66 @@ export function SignupForm() {
     // Validation
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields")
+      setIsLoading(false)
       return
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match")
+      setIsLoading(false)
       return
     }
 
     if (password.length < 6) {
       setError("Password must be at least 6 characters")
+      setIsLoading(false)
       return
     }
 
     if (!terms) {
       setError("You must agree to the terms and conditions")
+      setIsLoading(false)
       return
     }
 
-    // Check if user already exists
-    const existingUser = findUserByEmail(email)
-    if (existingUser) {
-      setError("An account with this email already exists")
-      return
-    }
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      })
 
-    // Create user
-    const newUser = {
-      id: Date.now().toString(),
-      name,
-      email,
-      password,
-      createdAt: new Date().toISOString()
-    }
+      const data = await response.json()
 
-    saveUser(newUser)
-    setCurrentUser(newUser)
-    router.push("/onboarding")
+      if (response.ok && data.success) {
+        // Store user data in localStorage for session
+        localStorage.setItem('user_id', data.user.id)
+        localStorage.setItem('user_email', data.user.email)
+        localStorage.setItem('user_name', data.user.name)
+        localStorage.setItem('user_onboarded', data.user.onboarded.toString())
+        router.push("/onboarding")
+      } else {
+        setError(data.error || "Registration failed")
+      }
+    } catch (err) {
+      setError("Network error. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function handleGoogleSignUp() {
+    setIsGoogleLoading(true)
+    setError("")
+    
+    try {
+      await signInWithGoogle()
+    } catch (err) {
+      setError("Failed to sign up with Google. Please try again.")
+      setIsGoogleLoading(false)
+    }
   }
 
   return (
@@ -203,9 +229,22 @@ export function SignupForm() {
         </div>
 
         {/* Submit */}
-        <Button type="submit" className="group h-10 sm:h-12 rounded-full bg-[#30B54A] hover:bg-[#25913b] text-sm sm:text-base font-semibold shadow-sm transition-all">
-          Create Account
-          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        <Button 
+          type="submit" 
+          disabled={isLoading}
+          className="group h-10 sm:h-12 rounded-full bg-[#30B54A] hover:bg-[#25913b] text-sm sm:text-base font-semibold shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creating Account...
+            </>
+          ) : (
+            <>
+              Create Account
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </>
+          )}
         </Button>
 
         {/* Divider */}
@@ -219,10 +258,21 @@ export function SignupForm() {
         <Button
           type="button"
           variant="outline"
-          className="h-10 sm:h-12 rounded-full border-slate-200 bg-white text-sm sm:text-base font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all"
+          disabled={isGoogleLoading}
+          onClick={handleGoogleSignUp}
+          className="h-10 sm:h-12 rounded-full border-slate-200 bg-white text-sm sm:text-base font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <GoogleIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-          Sign up with Google
+          {isGoogleLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+              Connecting...
+            </>
+          ) : (
+            <>
+              <GoogleIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              Sign up with Google
+            </>
+          )}
         </Button>
       </form>
 

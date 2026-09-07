@@ -97,7 +97,7 @@ export function completeUserOnboarding(userId: string, onboardingData: Partial<U
   }
 }
 
-// Super Admin Authentication
+// Super Admin Authentication - Updated to use secure API routes
 export interface SuperAdminSession {
   email: string
   role: "super_admin"
@@ -106,29 +106,78 @@ export interface SuperAdminSession {
 
 const SUPER_ADMIN_SESSION_KEY = 'super_admin_session'
 
-export function validateSuperAdmin(email: string, password: string): boolean {
-  // In production, this should be validated server-side
-  const SUPER_ADMIN_CREDENTIALS = {
-    email: "superadmin@pos-system.com",
-    password: "SuperAdmin@2025"
+// Login using secure API route
+export async function loginSuperAdmin(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const response = await fetch('/api/auth/super-admin/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+
+    const data = await response.json()
+
+    if (response.ok && data.success) {
+      return { success: true }
+    } else {
+      return { success: false, error: data.error || 'Login failed' }
+    }
+  } catch (error) {
+    console.error('Login error:', error)
+    return { success: false, error: 'Network error' }
   }
-  return email === SUPER_ADMIN_CREDENTIALS.email && password === SUPER_ADMIN_CREDENTIALS.password
+}
+
+// Logout using secure API route
+export async function logoutSuperAdmin(): Promise<void> {
+  try {
+    await fetch('/api/auth/super-admin/logout', {
+      method: 'POST',
+    })
+  } catch (error) {
+    console.error('Logout error:', error)
+  }
+}
+
+// Validate session using API route
+export async function validateSuperAdminSession(): Promise<{ valid: boolean; admin?: any }> {
+  try {
+    const response = await fetch('/api/auth/super-admin/validate')
+    const data = await response.json()
+
+    if (response.ok && data.valid) {
+      return { valid: true, admin: data.admin }
+    } else {
+      return { valid: false }
+    }
+  } catch (error) {
+    console.error('Session validation error:', error)
+    return { valid: false }
+  }
+}
+
+// Legacy functions for backward compatibility (deprecated)
+export function validateSuperAdmin(email: string, password: string): boolean {
+  console.warn('validateSuperAdmin is deprecated. Use loginSuperAdmin API instead.')
+  return false
 }
 
 export function setSuperAdminSession(session: SuperAdminSession): void {
-  localStorage.setItem(SUPER_ADMIN_SESSION_KEY, JSON.stringify(session))
+  console.warn('setSuperAdminSession is deprecated. Session is now managed via httpOnly cookies.')
 }
 
 export function getSuperAdminSession(): SuperAdminSession | null {
-  if (typeof window === 'undefined') return null
-  const stored = localStorage.getItem(SUPER_ADMIN_SESSION_KEY)
-  return stored ? JSON.parse(stored) : null
+  console.warn('getSuperAdminSession is deprecated. Use validateSuperAdminSession API instead.')
+  return null
 }
 
 export function isSuperAdminLoggedIn(): boolean {
-  return getSuperAdminSession() !== null
+  console.warn('isSuperAdminLoggedIn is deprecated. Use validateSuperAdminSession API instead.')
+  return false
 }
 
 export function clearSuperAdminSession(): void {
-  localStorage.removeItem(SUPER_ADMIN_SESSION_KEY)
+  console.warn('clearSuperAdminSession is deprecated. Use logoutSuperAdmin API instead.')
 }

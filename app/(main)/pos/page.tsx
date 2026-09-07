@@ -10,8 +10,18 @@ import { CartSidebar } from "@/components/domains/pos/cart"
 import { PaymentPopup } from "@/components/domains/pos/popups/payment-popup"
 import { ReceiptPopup } from "@/components/domains/pos/popups/receipt-popup"
 import { cn } from "@/lib/utils"
-import { categories, products, keyboardShortcuts } from "@/lib/pos-data"
+import { keyboardShortcuts } from "@/lib/pos-data"
 import { useMobile } from "@/lib/hooks/use-mobile"
+import { getBusinessId, type ProductRecord } from "@/lib/supabase/database"
+
+interface POSProduct {
+  id: string
+  name: string
+  stock: number
+  price: number
+  image: string | null
+  category: string
+}
 
 export default function POSPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Products")
@@ -27,13 +37,50 @@ export default function POSPage() {
   const isMobile = useMobile()
   const [showPaymentPopup, setShowPaymentPopup] = useState(false)
   const [showReceiptPopup, setShowReceiptPopup] = useState(false)
+  const [products, setProducts] = useState<POSProduct[]>([])
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      const businessId = getBusinessId()
+      if (!businessId) return
+
+      const response = await fetch(`/api/products?businessId=${encodeURIComponent(businessId)}`)
+      const result = await response.json() as { products?: ProductRecord[] }
+      if (!response.ok || !result.products) return
+
+      setProducts(result.products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        stock: product.current_stock,
+        price: Number(product.selling_price),
+        image: product.image_url,
+        category: product.category,
+      })))
+    }
+
+    void loadProducts()
+  }, [])
+
+  const categories = useMemo(() => {
+    const counts = products.reduce<Record<string, number>>((result, product) => {
+      result[product.category] = (result[product.category] || 0) + 1
+      return result
+    }, {})
+
+    return [
+      { name: "All Products", count: products.length },
+      ...Object.entries(counts)
+        .sort(([first], [second]) => first.localeCompare(second))
+        .map(([name, count]) => ({ name, count })),
+    ]
+  }, [products])
 
   // Filter products based on selected category
   const filteredProducts = useMemo(() => 
     selectedCategory === "All Products"
       ? products
       : products.filter(product => product.category === selectedCategory),
-    [selectedCategory]
+    [products, selectedCategory]
   )
 
   const toggleSidebar = () => {
@@ -78,7 +125,7 @@ export default function POSPage() {
     })
   }
 
-  const handleItemIncrement = (id: number) => {
+  const handleItemIncrement = (id: string | number) => {
     setCartItems(prevItems =>
       prevItems.map(item =>
         item.id === id
@@ -88,7 +135,7 @@ export default function POSPage() {
     )
   }
 
-  const handleItemDecrement = (id: number) => {
+  const handleItemDecrement = (id: string | number) => {
     setCartItems(prevItems =>
       prevItems.map(item => {
         if (item.id === id && item.quantity > 1) {
@@ -99,7 +146,7 @@ export default function POSPage() {
     )
   }
 
-  const handleItemDelete = (id: number) => {
+  const handleItemDelete = (id: string | number) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== id))
   }
 
@@ -109,14 +156,38 @@ export default function POSPage() {
     setAmountReceived(0)
   }
 
-  const handleCompletePayment = (paymentData: { amountReceived: number; paymentMethod: string; phoneNumber: string }) => {
+  const handleCompletePayment = async (paymentData: { amountReceived: number; paymentMethod: string; phoneNumber: string }) => {
+    const businessId = getBusinessId()
+    if (!businessId) throw new Error("You must be signed in to complete a sale.")
+
+    const response = await fetch("/api/sales", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        businessId,
+        cashier: "Cashier",
+        customer: "Walk-in Customer",
+        subtotal,
+        discount,
+        tax,
+        total,
+        paymentMethod: paymentData.paymentMethod,
+        amountPaid: paymentData.amountReceived,
+        changeAmount: paymentData.amountReceived - total,
+        items: cartItems.map((item) => ({
+          productId: item.id,
+          quantity: item.quantity,
+          unitPrice: item.price,
+        })),
+      }),
+    })
+    const result = await response.json() as { error?: string }
+    if (!response.ok) throw new Error(result.error || "Unable to save the sale.")
+
     setAmountReceived(paymentData.amountReceived)
     setPaymentMethod(paymentData.paymentMethod)
     setPhoneNumber(paymentData.phoneNumber)
-    setShowPaymentPopup(false)
     setShowReceiptPopup(true)
-    // Here you would typically process the payment
-    console.log("Payment completed:", paymentData)
   }
 
   return (

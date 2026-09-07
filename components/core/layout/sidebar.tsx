@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { ShoppingBag, LayoutDashboard, ShoppingCart, History, Package, Warehouse, ShoppingCart as PurchasesIcon, Users, Truck, Receipt, BarChart3, Users as EmployeesIcon, Landmark, Settings, ChevronRight, ChevronDown, LogOut, X, FolderTree, Bell, Sliders, CreditCard, Barcode, Sparkles, FileText, DollarSign, Layers, UserCircle, TrendingUp, Shield, CircleHelp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { logout } from "@/lib/auth"
 
 const navItems = [
@@ -12,19 +13,19 @@ const navItems = [
   { icon: History, label: "Sales History", href: "/sales-history" },
   {
     icon: Package,
-    label: "Inventory",
+    label: "Stock & Products",
     href: "/inventory",
     children: [
       { icon: Package, label: "Products", href: "/products" },
       { icon: Warehouse, label: "Inventory", href: "/inventory" },
       { icon: PurchasesIcon, label: "Purchases", href: "/purchases" },
-      { icon: FolderTree, label: "Categories & Brands", href: "/categories" },
+      { icon: FolderTree, label: "Categories", href: "/categories" },
     ]
   },
   {
     icon: UserCircle,
     label: "People",
-    href: "/people",
+    href: "/customers",
     children: [
       { icon: Users, label: "Customers", href: "/customers" },
       { icon: Truck, label: "Suppliers", href: "/suppliers" },
@@ -34,7 +35,7 @@ const navItems = [
   {
     icon: DollarSign,
     label: "Financial",
-    href: "/financial",
+    href: "/expenses",
     children: [
       { icon: Receipt, label: "Expenses", href: "/expenses" },
       { icon: Landmark, label: "Cash Register", href: "/cash-register" },
@@ -42,16 +43,16 @@ const navItems = [
     ]
   },
   { icon: Bell, label: "Notifications", href: "/notifications" },
-  { icon: Barcode, label: "Barcode Generator", href: "/settings/barcodes" },
   {
     icon: Settings,
     label: "Settings",
-    href: "/settings",
+    href: "/settings/general",
     children: [
       { icon: Sliders, label: "General Settings", href: "/settings/general" },
       { icon: Shield, label: "Roles & Permissions", href: "/settings/roles" },
-      { icon: CreditCard, label: "Payment Methods", href: "/settings/payments" },
+      { icon: Barcode, label: "Barcode Generator", href: "/settings/barcodes" },
       { icon: FileText, label: "Receipt Templates", href: "/settings/receipts" },
+      { icon: CreditCard, label: "Payment Methods", href: "/settings/payments" },
       { icon: Sparkles, label: "Upgrade Subscription", href: "/settings/upgrade" }
     ]
   },
@@ -106,6 +107,11 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [collapsedDropdown])
+
+  // Close dropdown when navigating to a different page
+  useEffect(() => {
+    closeCollapsedDropdown()
+  }, [currentPath])
 
   return (
     <>
@@ -168,44 +174,49 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                 <li key={item.label}>
                   {hasChildren ? (
                     <>
-                      <button
-                        onClick={(e) => {
-                          if (collapsed) {
-                            handleCollapsedClick(item.label, e)
-                          } else {
-                            toggleDropdown(item.label)
-                          }
-                        }}
-                        className={cn(
-                          "flex items-center rounded-lg px-3 py-2.5 sm:py-3 text-sm sm:text-base font-medium transition-all duration-200 w-full group",
-                          (isActive || isChildActive)
-                            ? "bg-[#30B54A] text-white shadow-md shadow-black/10"
-                            : "text-white/65 hover:bg-white/10 hover:text-white",
-                          collapsed ? "justify-center" : "gap-3"
-                        )}
-                        title={collapsed ? item.label : undefined}
+                      <div className={cn(
+                        "flex items-center rounded-lg text-sm sm:text-base font-medium transition-all duration-200 w-full group cursor-pointer",
+                        (isActive || isChildActive)
+                          ? "bg-[#30B54A] text-white shadow-md shadow-black/10"
+                          : "text-white/65 hover:bg-white/10 hover:text-white"
+                      )}
+                      onClick={(event) => {
+                        if (collapsed) {
+                          handleCollapsedClick(item.label, event)
+                        } else {
+                          toggleDropdown(item.label)
+                        }
+                      }}
                       >
-                        <item.icon className={cn(
-                          "h-5 w-5 shrink-0 sm:h-6 sm:w-6",
-                          (isActive || isChildActive) ? "text-white" : "text-white/50 group-hover:text-white transition-colors"
-                        )} strokeWidth={2} />
+                        <div className={cn("flex min-w-0 flex-1 items-center px-3 py-2.5 sm:py-3", collapsed ? "justify-center" : "gap-3")}
+                          title={collapsed ? item.label : undefined}
+                        >
+                          <item.icon className={cn(
+                            "h-5 w-5 shrink-0 sm:h-6 sm:w-6",
+                            (isActive || isChildActive) ? "text-white" : "text-white/50 group-hover:text-white transition-colors"
+                          )} strokeWidth={2} />
+                          {!collapsed && <span className="flex-1 text-left">{item.label}</span>}
+                        </div>
                         {!collapsed && (
-                          <>
-                            <span className="flex-1 text-left">{item.label}</span>
-                              <ChevronDown className={cn(
-                              "h-4 w-4 shrink-0 text-white/45 transition-transform group-hover:text-white sm:h-5 sm:w-5",
-                              isDropdownOpen ? "rotate-180" : ""
-                            )} strokeWidth={2} />
-                          </>
+                          <button
+                            aria-label={`${isDropdownOpen ? "Collapse" : "Expand"} ${item.label}`}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleDropdown(item.label)
+                            }}
+                            className="rounded-r-lg px-3 py-3 text-white/45 hover:text-white"
+                          >
+                            <ChevronDown className={cn("h-4 w-4 transition-transform sm:h-5 sm:w-5", isDropdownOpen ? "rotate-180" : "")} strokeWidth={2} />
+                          </button>
                         )}
-                      </button>
+                      </div>
                       {!collapsed && isDropdownOpen && (
                         <ul className="ml-4 mt-1 space-y-0.5">
                           {item.children?.map((child) => {
                             const childIsActive = currentPath === child.href
                             return (
                               <li key={child.label}>
-                                <a
+                                <Link
                                   href={child.href}
                                   onClick={onMobileClose}
                                   className={cn(
@@ -221,7 +232,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                                     childIsActive ? "text-[#8be39a]" : "text-white/40 group-hover:text-white transition-colors"
                                   )} strokeWidth={2} />
                                   <span>{child.label}</span>
-                                </a>
+                                </Link>
                               </li>
                             )
                           })}
@@ -230,10 +241,13 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                       {/* Collapsed Dropdown Popup */}
                       {collapsed && collapsedDropdown?.label === item.label && (
                         <div
-                          className="sidebar-dropdown fixed left-20 top-0 z-50 w-64 bg-card rounded-xl shadow-2xl border border-border py-2"
-                          style={{ top: collapsedDropdown.y }}
+                          className="sidebar-dropdown fixed z-100 w-64 bg-[#1a1a2e] rounded-xl shadow-2xl border border-white/10 py-2"
+                          style={{ 
+                            left: `${collapsedDropdown.x}px`,
+                            top: `${collapsedDropdown.y}px`
+                          }}
                         >
-                          <div className="px-4 py-2 border-b border-border bg-muted">
+                          <div className="px-4 py-2 border-b border-white/10 bg-white/5">
                             <span className="text-sm font-semibold text-white">{item.label}</span>
                           </div>
                           <ul className="py-1">
@@ -241,7 +255,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                               const childIsActive = currentPath === child.href
                               return (
                                 <li key={child.label}>
-                                  <a
+                                  <Link
                                     href={child.href}
                                     onClick={() => {
                                       closeCollapsedDropdown()
@@ -250,7 +264,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                                     className={cn(
                                       "flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors",
                                       childIsActive
-                                        ? "bg-[#30B54A]/15 text-[#8be39a]"
+                                        ? "bg-[#30B54A]/20 text-[#8be39a]"
                                         : "text-white/75 hover:bg-white/10 hover:text-white"
                                     )}
                                   >
@@ -259,7 +273,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                                         childIsActive ? "text-[#8be39a]" : "text-white/45"
                                     )} strokeWidth={2} />
                                     <span>{child.label}</span>
-                                  </a>
+                                  </Link>
                                 </li>
                               )
                             })}
@@ -268,7 +282,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                       )}
                     </>
                   ) : (
-                    <a
+                    <Link
                       href={item.href}
                       onClick={onMobileClose}
                       className={cn(
@@ -285,7 +299,7 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
                         isActive ? "text-white" : "text-white/50 group-hover:text-white transition-colors"
                       )} strokeWidth={2} />
                       {!collapsed && <span className="flex-1 text-left">{item.label}</span>}
-                    </a>
+                    </Link>
                   )}
                 </li>
               )
@@ -312,11 +326,6 @@ export function Sidebar({ collapsed = false, currentPath = "", mobileOpen = fals
               </span>
             )}
           </button>
-          {!collapsed && (
-            <div className="mt-2 flex items-center gap-2 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#63d477]" /> All systems operational
-            </div>
-          )}
         </div>
       </aside>
     </>

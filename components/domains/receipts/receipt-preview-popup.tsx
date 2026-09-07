@@ -1,15 +1,35 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { X, RotateCw, Printer, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { getReceiptSettings, ReceiptSettings } from "@/lib/receipt-settings"
 import html2canvas from "html2canvas"
+
+interface TemplateSettings {
+  header: {
+    businessName: string
+    logo: string
+    address: string
+    phone: string
+    email: string
+  }
+  body: {
+    fontSize: string
+    showTax: boolean
+    showDiscount: boolean
+    showBarcode: boolean
+  }
+  footer: {
+    thankYouMessage: string
+    returnPolicy: string
+  }
+}
 
 interface ReceiptPreviewPopupProps {
   isOpen: boolean
   onClose: () => void
   selectedTemplate: string
+  templateSettings: TemplateSettings
   backReceiptData?: {
     title: string
     text: string
@@ -17,23 +37,14 @@ interface ReceiptPreviewPopupProps {
   }
 }
 
-export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backReceiptData }: ReceiptPreviewPopupProps) {
-  const [isFlipped, setIsFlipped] = useState(false)
-  const [receiptSettings, setReceiptSettings] = useState<ReceiptSettings | null>(null)
+export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, templateSettings, backReceiptData }: ReceiptPreviewPopupProps) {
   const receiptRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    setReceiptSettings(getReceiptSettings())
-  }, [])
-
   const getFontSizeClass = () => {
-    if (!receiptSettings) return 'text-xs'
-    switch (receiptSettings.fontSize) {
-      case 'small': return 'text-[10px]'
-      case 'medium': return 'text-xs'
-      case 'large': return 'text-sm'
-      default: return 'text-xs'
-    }
+    const fontSize = parseInt(templateSettings?.body.fontSize || '12')
+    if (fontSize <= 10) return 'text-[10px]'
+    if (fontSize >= 14) return 'text-sm'
+    return 'text-xs'
   }
 
   const formatDate = () => {
@@ -101,11 +112,9 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
       <body>
         <div class="receipt">
           <div class="center mb-2">
-            <div class="bold" style="font-size: ${parseInt(fontSize) + 4}px;">${receiptSettings?.businessName || 'WEPESI MART'}</div>
-            ${receiptSettings?.showContactInfo ? `
-              <div class="mb-1">${receiptSettings.address}</div>
-              <div class="mb-1">Tel: ${receiptSettings.phone}</div>
-            ` : ''}
+            <div class="bold" style="font-size: ${parseInt(fontSize) + 4}px;">${templateSettings?.header.businessName || 'WEPESI MART'}</div>
+            <div class="mb-1">${templateSettings?.header.address}</div>
+            <div class="mb-1">Tel: ${templateSettings?.header.phone}</div>
           </div>
           
           <div class="divider"></div>
@@ -182,8 +191,8 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
           <div class="divider"></div>
           
           <div class="center">
-            <div class="bold">${receiptSettings?.footerText || 'THANK YOU!'}</div>
-            <div class="mt-1">Please come again.</div>
+            <div class="bold">${templateSettings?.footer.thankYouMessage || 'THANK YOU!'}</div>
+            <div class="mt-1">${templateSettings?.footer.returnPolicy || 'Please come again.'}</div>
           </div>
         </div>
         
@@ -191,15 +200,15 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
         
         <div class="receipt">
           <div class="center mb-2">
-            <div class="bold mb-1">${backReceiptData?.title || receiptSettings?.backReceiptTitle || "Return Policy"}</div>
-            <div class="mb-2">${backReceiptData?.text || receiptSettings?.backReceiptText || "Returns accepted within 7 days with original receipt"}</div>
+            <div class="bold mb-1">${backReceiptData?.title || "Return Policy"}</div>
+            <div class="mb-2">${backReceiptData?.text || "Returns accepted within 7 days with original receipt"}</div>
           </div>
           
           <div class="divider"></div>
           
           <div class="center">
             <div class="bold mb-1">Contact Us</div>
-            <div>Email: ${backReceiptData?.email || receiptSettings?.backContactEmail || "support@mybusiness.com"}</div>
+            <div>Email: ${backReceiptData?.email || templateSettings?.header.email || "support@mybusiness.com"}</div>
           </div>
         </div>
       </body>
@@ -240,7 +249,7 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
       <body>
         <div class="receipt">
           <div class="center bold mb-2">
-            <div style="font-size: ${parseInt(fontSize) + 2}px;">${receiptSettings?.businessName || 'WEPESI MART'}</div>
+            <div style="font-size: ${parseInt(fontSize) + 2}px;">${templateSettings?.header.businessName || 'WEPESI MART'}</div>
             <div>Receipt #001245</div>
           </div>
           
@@ -269,7 +278,7 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
           <div class="divider"></div>
           
           <div class="center">
-            <div>${receiptSettings?.footerText || 'Thank you!'}</div>
+            <div>${templateSettings?.footer.thankYouMessage || 'Thank you!'}</div>
           </div>
         </div>
       </body>
@@ -329,13 +338,11 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
       <body>
         <div class="receipt">
           <div class="center mb-2">
-            ${receiptSettings?.showLogo && receiptSettings.logo ? `<img src="${receiptSettings.logo}" class="logo" alt="Logo">` : ''}
-            <div class="bold" style="font-size: ${parseInt(fontSize) + 6}px;">${receiptSettings?.businessName || 'WEPESI MART'}</div>
-            ${receiptSettings?.showContactInfo ? `
-              <div class="mb-1">${receiptSettings.address}</div>
-              <div class="mb-1">${receiptSettings.phone}</div>
-              ${receiptSettings.email ? `<div class="mb-1">${receiptSettings.email}</div>` : ''}
-            ` : ''}
+            ${templateSettings?.header.logo ? `<img src="${templateSettings.header.logo}" class="logo" alt="Logo">` : ''}
+            <div class="bold" style="font-size: ${parseInt(fontSize) + 6}px;">${templateSettings?.header.businessName || 'WEPESI MART'}</div>
+            <div class="mb-1">${templateSettings?.header.address}</div>
+            <div class="mb-1">${templateSettings?.header.phone}</div>
+            ${templateSettings?.header.email ? `<div class="mb-1">${templateSettings.header.email}</div>` : ''}
           </div>
           
           <div class="divider"></div>
@@ -398,14 +405,14 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
           <div class="divider"></div>
           
           <div class="center mb-2">
-            <div class="bold">${receiptSettings?.footerText || 'Thank you for your purchase!'}</div>
+            <div class="bold">${templateSettings?.footer.thankYouMessage || 'Thank you for your purchase!'}</div>
           </div>
           
           <div class="divider"></div>
           
           <div class="center">
             <div class="bold mb-1">Return Policy</div>
-            <div class="mb-1">Returns accepted within 7 days</div>
+            <div class="mb-1">${templateSettings?.footer.returnPolicy || 'Returns accepted within 7 days'}</div>
             <div>with original receipt</div>
           </div>
         </div>
@@ -414,16 +421,15 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
         
         <div class="receipt">
           <div class="center mb-2">
-            ${receiptSettings?.backImage ? `<img src="${receiptSettings.backImage}" style="max-width: 100%; height: auto; margin: 0 auto 10px;" alt="Back of Receipt">` : ''}
-            <div class="bold mb-1">${backReceiptData?.title || receiptSettings?.backReceiptTitle || "Return Policy"}</div>
-            <div class="mb-2">${backReceiptData?.text || receiptSettings?.backReceiptText || "Returns accepted within 7 days with original receipt"}</div>
+            <div class="bold mb-1">${backReceiptData?.title || "Return Policy"}</div>
+            <div class="mb-2">${backReceiptData?.text || "Returns accepted within 7 days with original receipt"}</div>
           </div>
           
           <div class="divider"></div>
           
           <div class="center">
             <div class="bold mb-1">Contact Us</div>
-            <div>Email: ${backReceiptData?.email || receiptSettings?.backContactEmail || "support@mybusiness.com"}</div>
+            <div>Email: ${backReceiptData?.email || templateSettings?.header.email || "support@mybusiness.com"}</div>
           </div>
         </div>
       </body>
@@ -433,18 +439,9 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
 
   const generateReceiptHTML = () => {
     const width = selectedTemplate === "thermal-58mm" ? "58mm" : "80mm"
-    const fontSize = receiptSettings?.fontSize === 'small' ? '10px' : receiptSettings?.fontSize === 'large' ? '14px' : '12px'
-    const template = receiptSettings?.templateType || 'classic'
+    const fontSize = templateSettings?.body.fontSize || '12px'
     
-    switch (template) {
-      case 'compact':
-        return generateCompactReceiptHTML(width, fontSize)
-      case 'modern':
-        return generateModernReceiptHTML(width, fontSize)
-      case 'classic':
-      default:
-        return generateClassicReceiptHTML(width, fontSize)
-    }
+    return generateClassicReceiptHTML(width, fontSize)
   }
 
   const handlePrint = () => {
@@ -493,120 +490,71 @@ export function ReceiptPreviewPopup({ isOpen, onClose, selectedTemplate, backRec
         {/* Header */}
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-border">
           <h2 className="text-base sm:text-lg font-semibold text-foreground">Receipt Preview</h2>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsFlipped(!isFlipped)}
-              className="h-8 px-2 sm:px-3 border-border text-foreground hover:bg-muted text-xs sm:text-sm"
-            >
-              <RotateCw className="h-4 w-4 mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">{isFlipped ? "Front" : "Back"}</span>
-              <span className="sm:hidden">{isFlipped ? "F" : "B"}</span>
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-8 w-8 p-0 hover:bg-muted"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="h-8 w-8 p-0 hover:bg-muted"
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Content */}
         <div className="p-3 sm:p-6">
-          <div className="flex justify-center perspective-1000">
+          <div className="flex justify-center">
             <div 
               ref={receiptRef}
-              className={`relative transition-transform duration-500 transform-style-3d ${isFlipped ? "rotate-y-180" : ""}`}
-              style={{ transformStyle: "preserve-3d", transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+              className={`${selectedTemplate === "thermal-58mm" ? "w-48 sm:w-56" : "w-64 sm:w-80"} bg-card border border-border rounded-lg p-3 sm:p-4 shadow-sm`}
             >
-              {/* Front Side */}
-              <div 
-                className={`${selectedTemplate === "thermal-58mm" ? "w-48 sm:w-56" : "w-64 sm:w-80"} bg-card border border-border rounded-lg p-3 sm:p-4 shadow-sm backface-hidden`}
-                style={{ backfaceVisibility: "hidden" }}
-              >
-                <div className={`text-center mb-3 sm:mb-4 ${getFontSizeClass()}`}>
-                  {receiptSettings?.showLogo && receiptSettings.logo && (
-                    <img src={receiptSettings.logo} alt="Logo" className="h-10 sm:h-12 w-auto mx-auto mb-2" />
-                  )}
-                  <div className="font-bold text-base sm:text-lg mb-1 text-foreground">{receiptSettings?.businessName || 'MY BUSINESS'}</div>
-                  {receiptSettings?.showContactInfo && (
-                    <>
-                      <div className="text-muted-foreground">{receiptSettings.address}</div>
-                      <div className="text-muted-foreground">{receiptSettings.phone}</div>
-                      {receiptSettings.email && <div className="text-muted-foreground">{receiptSettings.email}</div>}
-                    </>
-                  )}
+              <div className={`text-center mb-3 sm:mb-4 ${getFontSizeClass()}`}>
+                {templateSettings?.header.logo && (
+                  <img src={templateSettings.header.logo} alt="Logo" className="h-10 sm:h-12 w-auto mx-auto mb-2" />
+                )}
+                <div className="font-bold text-base sm:text-lg mb-1 text-foreground">{templateSettings?.header.businessName || 'MY BUSINESS'}</div>
+                <div className="text-muted-foreground">{templateSettings?.header.address}</div>
+                <div className="text-muted-foreground">{templateSettings?.header.phone}</div>
+                {templateSettings?.header.email && <div className="text-muted-foreground">{templateSettings.header.email}</div>}
+              </div>
+              <div className={`border-t border-b border-border py-1.5 sm:py-2 mb-3 sm:mb-4 ${getFontSizeClass()}`}>
+                <div className="flex justify-between text-xs">
+                  <span>Receipt #: 12345</span>
+                  <span>Date: {formatDate()}</span>
                 </div>
-                <div className={`border-t border-b border-border py-1.5 sm:py-2 mb-3 sm:mb-4 ${getFontSizeClass()}`}>
-                  <div className="flex justify-between text-xs">
-                    <span>Receipt #: 12345</span>
-                    <span>Date: {formatDate()}</span>
-                  </div>
-                  <div className="flex justify-between mt-1 text-xs">
-                    <span>Cashier: Alex</span>
-                    <span>Time: {formatTime()}</span>
-                  </div>
-                </div>
-                <div className={`space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 ${getFontSizeClass()}`}>
-                  <div className="flex justify-between text-xs">
-                    <span>Coca Cola 500ml x2</span>
-                    <span>KSh 240</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span>Bread Loaf x1</span>
-                    <span>KSh 80</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span>Milk 1L x1</span>
-                    <span>KSh 120</span>
-                  </div>
-                  <div className="flex justify-between text-muted-foreground text-xs">
-                    <span>Subtotal</span>
-                    <span>KSh 440</span>
-                  </div>
-                  <div className="flex justify-between text-muted-foreground text-xs">
-                    <span>Tax (16%)</span>
-                    <span>KSh 70.40</span>
-                  </div>
-                  <div className="flex justify-between font-bold text-sm sm:text-base border-t border-border pt-2 text-foreground">
-                    <span>TOTAL</span>
-                    <span>KSh 510.40</span>
-                  </div>
-                </div>
-                <div className={`border-t border-border pt-1.5 sm:pt-2 text-center text-muted-foreground ${getFontSizeClass()}`}>
-                  <div className="mb-1 text-xs">Paid: Cash</div>
-                  <div className="text-xs">{receiptSettings?.footerText || 'Thank you for your business!'}</div>
+                <div className="flex justify-between mt-1 text-xs">
+                  <span>Cashier: Alex</span>
+                  <span>Time: {formatTime()}</span>
                 </div>
               </div>
-
-              {/* Back Side */}
-              <div
-                className={`${selectedTemplate === "thermal-58mm" ? "w-48 sm:w-56" : "w-64 sm:w-80"} bg-card border border-border rounded-lg p-3 sm:p-4 shadow-sm absolute top-0 left-0 backface-hidden`}
-                style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-              >
-                <div className="text-center py-6 sm:py-8">
-                  {receiptSettings?.backImage ? (
-                    <img src={receiptSettings.backImage} alt="Back of Receipt" className="w-full h-auto rounded-lg mb-3 sm:mb-4" />
-                  ) : (
-                    <div className="border-2 border-dashed border-border rounded-lg p-4 sm:p-6 mb-3 sm:mb-4">
-                      <div className="text-muted-foreground text-xs mb-2">Back of Receipt</div>
-                      <div className="text-muted-foreground/40 text-3xl sm:text-4xl mb-2">📄</div>
-                      <div className="text-muted-foreground text-xs">Custom back image or text</div>
-                    </div>
-                  )}
-                  <div className="text-xs text-muted-foreground space-y-1">
-                    <div className="font-semibold text-foreground">{backReceiptData?.title || receiptSettings?.backReceiptTitle || "Return Policy"}</div>
-                    <div>{backReceiptData?.text || receiptSettings?.backReceiptText || "Returns accepted within 7 days with original receipt"}</div>
-                  </div>
-                  <div className="mt-4 text-xs text-muted-foreground">
-                    <div className="font-semibold text-foreground mb-1">Contact Us</div>
-                    <div>Email: {backReceiptData?.email || receiptSettings?.backContactEmail || "support@mybusiness.com"}</div>
-                  </div>
+              <div className={`space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 ${getFontSizeClass()}`}>
+                <div className="flex justify-between text-xs">
+                  <span>Coca Cola 500ml x2</span>
+                  <span>KSh 240</span>
                 </div>
+                <div className="flex justify-between text-xs">
+                  <span>Bread Loaf x1</span>
+                  <span>KSh 80</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span>Milk 1L x1</span>
+                  <span>KSh 120</span>
+                </div>
+                <div className="flex justify-between text-muted-foreground text-xs">
+                  <span>Subtotal</span>
+                  <span>KSh 440</span>
+                </div>
+                <div className="flex justify-between text-muted-foreground text-xs">
+                  <span>Tax (16%)</span>
+                  <span>KSh 70.40</span>
+                </div>
+                <div className="flex justify-between font-bold text-sm sm:text-base border-t border-border pt-2 text-foreground">
+                  <span>TOTAL</span>
+                  <span>KSh 510.40</span>
+                </div>
+              </div>
+              <div className={`border-t border-border pt-1.5 sm:pt-2 text-center text-muted-foreground ${getFontSizeClass()}`}>
+                <div className="mb-1 text-xs">Paid: Cash</div>
+                <div className="text-xs">{templateSettings?.footer.thankYouMessage || 'Thank you for your business!'}</div>
               </div>
             </div>
           </div>

@@ -9,10 +9,18 @@ import { X } from "lucide-react"
 interface AddStockFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (stockData: any) => void
+  products: Array<{ id: string | number; name: string; sku: string }>
+  onSubmit: (stockData: {
+    productId: string
+    productName: string
+    quantity: number
+    unitCost: number
+    supplier: string
+    notes: string
+  }) => Promise<void> | void
 }
 
-export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
+export function AddStockForm({ isOpen, onClose, products, onSubmit }: AddStockFormProps) {
   const [formData, setFormData] = useState({
     productId: "",
     productName: "",
@@ -21,34 +29,42 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
     supplier: "",
     notes: ""
   })
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    const stockData = {
-      ...formData,
-      quantity: parseInt(formData.quantity),
-      unitCost: parseFloat(formData.unitCost),
-      id: Date.now()
+
+    const quantity = parseInt(formData.quantity, 10)
+    const unitCost = parseFloat(formData.unitCost)
+    if (!formData.productId || !Number.isInteger(quantity) || quantity <= 0 || !Number.isFinite(unitCost) || unitCost < 0) {
+      setError("Select a product and enter a valid quantity and unit cost.")
+      return
     }
-    
-    onSubmit(stockData)
-    
-    // Reset form
-    setFormData({
-      productId: "",
-      productName: "",
-      quantity: "",
-      unitCost: "",
-      supplier: "",
-      notes: ""
-    })
-    onClose()
+
+    setError(null)
+    setIsSubmitting(true)
+    try {
+      await onSubmit({
+        productId: formData.productId,
+        productName: formData.productName,
+        quantity,
+        unitCost,
+        supplier: formData.supplier.trim(),
+        notes: formData.notes.trim(),
+      })
+      setFormData({ productId: "", productName: "", quantity: "", unitCost: "", supplier: "", notes: "" })
+      onClose()
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : "Unable to add stock.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (!isOpen) return null
@@ -72,25 +88,33 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {error && (
+            <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+              {error}
+            </p>
+          )}
           {/* Product Selection */}
           <div>
             <Label htmlFor="productName" className="text-sm font-semibold text-foreground mb-1.5 block">Product *</Label>
             <select
-              id="productName"
-              name="productName"
-              value={formData.productName}
-              onChange={handleInputChange}
+              id="productId"
+              name="productId"
+              value={formData.productId}
+              onChange={(event) => {
+                const selectedProduct = products.find((product) => String(product.id) === event.target.value)
+                setFormData(prev => ({
+                  ...prev,
+                  productId: event.target.value,
+                  productName: selectedProduct?.name || "",
+                }))
+              }}
               className="h-10 w-full px-3 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               required
             >
               <option value="">Select Product</option>
-              <option value="Coca Cola 500ml">Coca Cola 500ml</option>
-              <option value="Bread Loaf">Bread Loaf</option>
-              <option value="Milk 1L">Milk 1L</option>
-              <option value="Lays Chips 150g">Lays Chips 150g</option>
-              <option value="A4 Copy Paper">A4 Copy Paper</option>
-              <option value="Colgate Toothpaste">Colgate Toothpaste</option>
-              <option value="Dettol Soap">Dettol Soap</option>
+              {products.map((product) => (
+                <option key={product.id} value={product.id}>{product.name} ({product.sku})</option>
+              ))}
             </select>
           </div>
 
@@ -165,9 +189,10 @@ export function AddStockForm({ isOpen, onClose, onSubmit }: AddStockFormProps) {
             </Button>
             <Button
               type="submit"
+              disabled={isSubmitting || products.length === 0}
               className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Add Stock
+              {isSubmitting ? "Saving..." : "Add Stock"}
             </Button>
           </div>
         </form>

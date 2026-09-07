@@ -1,12 +1,11 @@
 "use client"
 
-import { useState, useEffect, createContext, useContext, Suspense } from "react"
+import { useState, useEffect, createContext, useContext } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { AdminHeader } from "@/components/admin/layout/admin-header"
 import { AdminSidebar } from "@/components/admin/layout/admin-sidebar"
-import { isSuperAdminLoggedIn } from "@/lib/auth"
+import { validateSuperAdminSession } from "@/lib/auth"
 import { cn } from "@/lib/utils"
-import AdminLoading from "@/components/admin/views/loading"
 
 interface FullscreenContextType {
   isAppFullscreen: boolean
@@ -30,16 +29,21 @@ export default function AdminLayout({
 }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isAppFullscreen, setIsAppFullscreen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
 
   useEffect(() => {
-    // Check if user is authenticated as super admin
-    const authenticated = isSuperAdminLoggedIn()
-    setIsAuthenticated(authenticated)
-    
+    // Check if user is authenticated as super admin in background
+    const checkAuth = async () => {
+      const { valid } = await validateSuperAdminSession()
+
+      if (!valid) {
+        router.push("/super-admin-login")
+      }
+    }
+    checkAuth()
+
     // Load app fullscreen state from localStorage
     try {
       const savedFullscreen = localStorage.getItem('appFullscreenMode')
@@ -48,10 +52,6 @@ export default function AdminLayout({
       }
     } catch (e) {
       // Ignore localStorage errors (e.g., in private browsing)
-    }
-    
-    if (!authenticated) {
-      router.push("/super-admin-login")
     }
   }, [router])
 
@@ -64,11 +64,6 @@ export default function AdminLayout({
     } catch (e) {
       // Ignore localStorage errors
     }
-  }
-
-  // Don't render if not authenticated (will redirect)
-  if (!isAuthenticated) {
-    return null
   }
 
   const handleMenuClick = () => {
@@ -97,9 +92,7 @@ export default function AdminLayout({
           {!isAppFullscreen && <AdminHeader onMenuClick={handleMenuClick} />}
           
           <main className={cn("flex-1 overflow-y-auto bg-slate-50", isAppFullscreen ? "p-0" : "p-4 md:p-6")}>
-            <Suspense fallback={<AdminLoading />}>
-              {children}
-            </Suspense>
+            {children}
           </main>
         </div>
       </div>

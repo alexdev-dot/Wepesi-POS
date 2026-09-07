@@ -3,22 +3,25 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ShoppingBag, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, ArrowLeft } from "lucide-react"
+import { ShoppingBag, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { validateUser, setCurrentUser } from "@/lib/auth"
+import { signInWithGoogle } from "@/lib/supabase/auth"
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const router = useRouter()
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError("")
+    setIsLoading(true)
 
     const form = e.target as HTMLFormElement
     const email = (form.elements.namedItem('email') as HTMLInputElement).value
@@ -27,22 +30,53 @@ export function LoginForm() {
     // Validation
     if (!email || !password) {
       setError("Please fill in all fields")
+      setIsLoading(false)
       return
     }
 
-    // Validate credentials
-    const user = validateUser(email, password)
-    if (!user) {
-      setError("Invalid email or password")
-      return
-    }
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      })
 
-    // Set current user and redirect to onboarding if not onboarded, else dashboard
-    setCurrentUser(user)
-    if (!user.onboarded) {
-      router.push("/onboarding")
-    } else {
-      router.push("/dashboard")
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        // Store user data in localStorage for session
+        localStorage.setItem('user_id', data.user.id)
+        localStorage.setItem('user_email', data.user.email)
+        localStorage.setItem('user_name', data.user.name)
+        localStorage.setItem('user_onboarded', data.user.onboarded.toString())
+        
+        // Redirect to onboarding if not onboarded, else dashboard
+        if (!data.user.onboarded) {
+          router.push("/onboarding")
+        } else {
+          router.push("/dashboard")
+        }
+      } else {
+        setError(data.error || "Invalid email or password")
+      }
+    } catch (err) {
+      setError("Network error. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    setIsGoogleLoading(true)
+    setError("")
+    
+    try {
+      await signInWithGoogle()
+    } catch (err) {
+      setError("Failed to sign in with Google. Please try again.")
+      setIsGoogleLoading(false)
     }
   }
 
@@ -135,9 +169,22 @@ export function LoginForm() {
         </div>
 
         {/* Submit */}
-        <Button type="submit" className="group h-10 sm:h-12 rounded-full bg-[#30B54A] hover:bg-[#25913b] text-sm sm:text-base font-semibold shadow-sm transition-all">
-          Sign In
-          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        <Button 
+          type="submit" 
+          disabled={isLoading}
+          className="group h-10 sm:h-12 rounded-full bg-[#30B54A] hover:bg-[#25913b] text-sm sm:text-base font-semibold shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Signing in...
+            </>
+          ) : (
+            <>
+              Sign In
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </>
+          )}
         </Button>
 
         {/* Divider */}
@@ -151,10 +198,21 @@ export function LoginForm() {
         <Button
           type="button"
           variant="outline"
-          className="h-10 sm:h-12 rounded-full border-slate-200 bg-white text-sm sm:text-base font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all"
+          disabled={isGoogleLoading}
+          onClick={handleGoogleSignIn}
+          className="h-10 sm:h-12 rounded-full border-slate-200 bg-white text-sm sm:text-base font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <GoogleIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-          Sign in with Google
+          {isGoogleLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+              Connecting...
+            </>
+          ) : (
+            <>
+              <GoogleIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              Sign in with Google
+            </>
+          )}
         </Button>
       </form>
 

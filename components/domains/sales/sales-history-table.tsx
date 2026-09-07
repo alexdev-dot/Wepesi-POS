@@ -1,11 +1,12 @@
 "use client"
 
-import { Search, MoreVertical, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, MoreVertical, ChevronLeft, ChevronRight, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 
 export interface Sale {
   id: string
+  uuid: string
   date: string
   customer: string
   cashier: string
@@ -25,6 +26,7 @@ interface SalesHistoryTableProps {
   onPageChange: (page: number) => void
   totalPages: number
   loading?: boolean
+  onDeleteSale?: (saleUuid: string, receiptNumber: string) => void
 }
 
 export function SalesHistoryTable({
@@ -36,7 +38,8 @@ export function SalesHistoryTable({
   currentPage,
   onPageChange,
   totalPages,
-  loading = false
+  loading = false,
+  onDeleteSale
 }: SalesHistoryTableProps) {
   const getPaymentMethodColor = (method: string) => {
     switch (method) {
@@ -186,9 +189,25 @@ export function SalesHistoryTable({
                     </motion.span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
-                    <motion.button whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }} className="text-muted-foreground hover:text-foreground p-1 hover:bg-muted rounded transition-colors" onClick={(e) => e.stopPropagation()}>
-                      <MoreVertical className="h-4 w-4" />
-                    </motion.button>
+                    <div className="flex items-center gap-1">
+                      <motion.button whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }} className="text-muted-foreground hover:text-foreground p-1 hover:bg-muted rounded transition-colors" onClick={(e) => e.stopPropagation()}>
+                        <MoreVertical className="h-4 w-4" />
+                      </motion.button>
+                      {onDeleteSale && (
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="text-red-600 hover:text-red-700 p-1 hover:bg-red-50 rounded transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onDeleteSale(sale.uuid, sale.id)
+                          }}
+                          title="Delete sale"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </motion.button>
+                      )}
+                    </div>
                   </td>
                 </motion.tr>
               ))
@@ -225,9 +244,25 @@ export function SalesHistoryTable({
                     <p className="text-xs text-muted-foreground mt-0.5">{sale.date}</p>
                   </div>
                 </div>
-                <motion.button whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }} className="text-muted-foreground hover:text-foreground p-1" onClick={(e) => e.stopPropagation()}>
-                  <MoreVertical className="h-4 w-4" />
-                </motion.button>
+                <div className="flex items-center gap-1">
+                  <motion.button whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }} className="text-muted-foreground hover:text-foreground p-1" onClick={(e) => e.stopPropagation()}>
+                    <MoreVertical className="h-4 w-4" />
+                  </motion.button>
+                  {onDeleteSale && (
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="text-red-600 hover:text-red-700 p-1 hover:bg-red-50 rounded transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onDeleteSale(sale.uuid, sale.id)
+                      }}
+                      title="Delete sale"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </motion.button>
+                  )}
+                </div>
               </div>
               
               <div className="grid grid-cols-2 gap-3 mb-3">

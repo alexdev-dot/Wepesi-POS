@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 import { OptimizedImage } from "@/components/ui/optimized-image"
 
 export interface CartItem {
-  id: number
+  id: string | number
   name: string
   price: number
   quantity: number
@@ -28,9 +28,9 @@ interface CartSidebarProps {
   phoneNumber: string
   collapsed: boolean
   onToggleCollapse: () => void
-  onItemDelete: (id: number) => void
-  onItemIncrement: (id: number) => void
-  onItemDecrement: (id: number) => void
+  onItemDelete: (id: string | number) => void
+  onItemIncrement: (id: string | number) => void
+  onItemDecrement: (id: string | number) => void
   onClearCart: () => void
   onAmountChange: (amount: number) => void
   onPaymentMethodChange: (method: string) => void

@@ -9,21 +9,49 @@ import { InventoryTable, InventoryItem } from "@/components/domains/inventory/in
 import { AddStockForm } from "@/components/domains/inventory/add-stock-form"
 import { Package, AlertTriangle, TrendingUp, DollarSign, Plus, Upload, Download, Filter, Search, FileText } from "lucide-react"
 import { useMobile } from "@/lib/hooks/use-mobile"
+import { getSupabaseClient } from "@/lib/supabase/client"
+import { getBusinessId, type ProductRecord } from "@/lib/supabase/database"
 
 export default function InventoryPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [isAddStockOpen, setIsAddStockOpen] = useState(false)
   const isMobile = useMobile()
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([
-    { id: 1, image: "/products/Coca cola 500ml.jpg", name: "Coca Cola 500ml", sku: "CC500", category: "Beverages", currentStock: 120, reorderLevel: 50, unitCost: 60, totalValue: 7200, lastRestock: "2024-01-15" },
-    { id: 2, image: "/products/bread loaf.avif", name: "Bread Loaf", sku: "BRD400", category: "Bakery", currentStock: 85, reorderLevel: 30, unitCost: 45, totalValue: 3825, lastRestock: "2024-01-14" },
-    { id: 3, image: "/products/Milk 1l.avif", name: "Milk 1L", sku: "MLK1L", category: "Dairy", currentStock: 64, reorderLevel: 40, unitCost: 70, totalValue: 4480, lastRestock: "2024-01-13" },
-    { id: 4, image: "/products/indomie chicken noodles.avif", name: "Lays Chips 150g", sku: "LAY150", category: "Snacks", currentStock: 45, reorderLevel: 50, unitCost: 55, totalValue: 2475, lastRestock: "2024-01-12" },
-    { id: 5, image: "/products/A4 copy paper.jpg", name: "A4 Copy Paper", sku: "A4R500", category: "Stationery", currentStock: 40, reorderLevel: 20, unitCost: 450, totalValue: 18000, lastRestock: "2024-01-10" },
-    { id: 6, image: "/products/colgate toothpaste.avif", name: "Colgate Toothpaste", sku: "CLG100", category: "Personal Care", currentStock: 0, reorderLevel: 25, unitCost: 85, totalValue: 0, lastRestock: "2024-01-08" },
-    { id: 7, image: "/products/dettol soap 170g.jpg", name: "Dettol Soap", sku: "DTL175", category: "Personal Care", currentStock: 0, reorderLevel: 30, unitCost: 95, totalValue: 0, lastRestock: "2024-01-05" },
-  ])
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([])
+  const [stockProducts, setStockProducts] = useState<Array<{ id: string | number; name: string; sku: string }>>([])
+
+  const mapInventoryItem = (product: ProductRecord): InventoryItem => ({
+    id: product.id,
+    image: product.image_url || "",
+    name: product.name,
+    sku: product.sku,
+    category: product.category,
+    currentStock: product.current_stock,
+    reorderLevel: product.reorder_level,
+    unitCost: Number(product.cost_price),
+    totalValue: product.current_stock * Number(product.cost_price),
+    lastRestock: new Date(product.updated_at).toISOString().slice(0, 10),
+  })
+
+  useEffect(() => {
+    const loadInventory = async () => {
+      const businessId = getBusinessId()
+      if (!businessId) return
+
+      const response = await fetch(`/api/inventory?businessId=${encodeURIComponent(businessId)}`)
+      const result = await response.json() as { inventory?: ProductRecord[]; error?: string }
+      if (!response.ok || !result.inventory) {
+        console.warn("Inventory could not be loaded:", result.error)
+        return
+      }
+
+      const products = result.inventory
+      setInventoryItems(products.map(mapInventoryItem))
+      setStockProducts(products.map((product) => ({ id: product.id, name: product.name, sku: product.sku })))
+    }
+
+    void loadInventory()
+  }, [])
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed)
@@ -46,11 +74,13 @@ export default function InventoryPage() {
   }
 
   // Stats data
+  const lowStockCount = inventoryItems.filter((item) => item.currentStock > 0 && item.currentStock <= item.reorderLevel).length
+  const stockValue = inventoryItems.reduce((total, item) => total + item.totalValue, 0)
   const inventoryStats = [
-    { title: "Total Items", value: "1,248", description: "All products", icon: Package, color: "text-blue-600", bgColor: "bg-blue-100" },
-    { title: "Low Stock", value: "32", description: "Below reorder level", icon: AlertTriangle, color: "text-orange-600", bgColor: "bg-orange-100" },
-    { title: "Stock Value", value: "KSh 1,245,780", description: "Total inventory value", icon: DollarSign, color: "text-purple-600", bgColor: "bg-purple-100" },
-    { title: "Stock Movement", value: "+12.5%", description: "This month", icon: TrendingUp, color: "text-green-600", bgColor: "bg-green-100" },
+    { title: "Total Items", value: inventoryItems.length.toLocaleString(), description: "Saved products", icon: Package, color: "text-blue-600", bgColor: "bg-blue-100" },
+    { title: "Low Stock", value: lowStockCount.toLocaleString(), description: "Below reorder level", icon: AlertTriangle, color: "text-orange-600", bgColor: "bg-orange-100" },
+    { title: "Stock Value", value: `KSh ${stockValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, description: "Total inventory value", icon: DollarSign, color: "text-purple-600", bgColor: "bg-purple-100" },
+    { title: "Stock Movement", value: "-", description: "Movement history", icon: TrendingUp, color: "text-green-600", bgColor: "bg-green-100" },
   ]
 
   const handleEditItem = (item: InventoryItem) => {
@@ -58,14 +88,55 @@ export default function InventoryPage() {
     // TODO: Implement edit functionality
   }
 
-  const handleDeleteItem = (item: InventoryItem) => {
-    console.log("Delete item:", item)
-    // TODO: Implement delete functionality
+  const handleDeleteItem = async (item: InventoryItem) => {
+    if (!window.confirm(`Archive ${item.name}? It will be removed from Inventory, Products, and POS.`)) return
+
+    const businessId = getBusinessId()
+    if (!businessId) return
+
+    const response = await fetch("/api/products", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ businessId, id: item.id }),
+    })
+
+    if (!response.ok) {
+      const result = await response.json() as { error?: string }
+      window.alert(result.error || "Unable to archive inventory item.")
+      return
+    }
+
+    setInventoryItems((currentItems) => currentItems.filter((currentItem) => currentItem.id !== item.id))
+    setStockProducts((currentProducts) => currentProducts.filter((product) => product.id !== item.id))
   }
 
-  const handleAddStock = (stockData: any) => {
-    console.log("Add stock:", stockData)
-    // TODO: Implement add stock functionality - update inventory
+  const handleAddStock = async (stockData: {
+    productId: string
+    productName: string
+    quantity: number
+    unitCost: number
+    supplier: string
+    notes: string
+  }) => {
+    const supabase = getSupabaseClient()
+    const businessId = getBusinessId()
+
+    if (!supabase || !businessId) throw new Error("Database is not available. Check your Supabase configuration.")
+
+    const { data, error } = await supabase.rpc("receive_stock", {
+      movement_business_id: businessId,
+      movement_product_id: stockData.productId,
+      movement_quantity: stockData.quantity,
+      movement_unit_cost: stockData.unitCost,
+      movement_supplier: stockData.supplier,
+      movement_notes: stockData.notes,
+    })
+
+    if (error || !data) throw new Error(error?.message || "Unable to add stock.")
+
+    const updatedItem = mapInventoryItem(data as ProductRecord)
+    setInventoryItems(prev => prev.map((item) => item.id === updatedItem.id ? updatedItem : item))
+    setStockProducts(prev => prev.map((product) => product.id === updatedItem.id ? { ...product, name: updatedItem.name, sku: updatedItem.sku } : product))
   }
 
   return (
@@ -191,6 +262,7 @@ export default function InventoryPage() {
       <AddStockForm
         isOpen={isAddStockOpen}
         onClose={() => setIsAddStockOpen(false)}
+        products={stockProducts.length > 0 ? stockProducts : inventoryItems.map((item) => ({ id: item.id, name: item.name, sku: item.sku }))}
         onSubmit={handleAddStock}
       />
     </div>

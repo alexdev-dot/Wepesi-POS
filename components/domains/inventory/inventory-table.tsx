@@ -6,7 +6,7 @@ import { MoreHorizontal, Edit, Trash } from "lucide-react"
 import Image from "next/image"
 
 export interface InventoryItem {
-  id: number
+  id: string | number
   image: string
   name: string
   sku: string

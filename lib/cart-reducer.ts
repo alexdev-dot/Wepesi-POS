@@ -10,9 +10,9 @@ export interface CartState {
 
 export type CartAction =
   | { type: 'ADD_ITEM'; payload: any }
-  | { type: 'INCREMENT_ITEM'; payload: number }
-  | { type: 'DECREMENT_ITEM'; payload: number }
-  | { type: 'DELETE_ITEM'; payload: number }
+  | { type: 'INCREMENT_ITEM'; payload: string | number }
+  | { type: 'DECREMENT_ITEM'; payload: string | number }
+  | { type: 'DELETE_ITEM'; payload: string | number }
   | { type: 'CLEAR_CART' }
   | { type: 'SET_DISCOUNT'; payload: number }
   | { type: 'SET_AMOUNT_RECEIVED'; payload: number }

@@ -21,7 +21,11 @@ import {
   X,
   TrendingUp,
   Star,
-  Sparkles
+  Sparkles,
+  MessageCircle,
+  Share2,
+  Globe,
+  Send
 } from "lucide-react"
 import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion"
 
@@ -660,8 +664,9 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer id="support" className="border-t border-slate-200 bg-white py-16">
+      <footer id="support" className="bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 text-white pt-16 pb-8">
         <div className="container mx-auto px-6 lg:px-8">
+          {/* Main Footer Content */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -669,18 +674,62 @@ export default function LandingPage() {
             transition={{ delay: 0.2 }}
             className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12"
           >
-            {/* Contact */}
+            {/* Brand & Description */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
+              className="lg:col-span-1"
             >
-              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Contact</h3>
-              <ul className="space-y-3">
-                <li className="text-sm sm:text-base text-slate-600">wepesipos@gmail.com</li>
-                <li className="text-sm sm:text-base text-slate-600">+254 712345678</li>
-                <li className="text-sm sm:text-base text-slate-600">+254 712345678</li>
+              <div className="mb-6">
+                <Image
+                  src="/logo.png"
+                  alt="POS System Logo"
+                  width={200}
+                  height={67}
+                  className="h-16 w-auto object-contain brightness-0 invert"
+                  priority
+                />
+              </div>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                Transform your business with our powerful POS system. Manage sales, inventory, and customers with ease.
+              </p>
+            </motion.div>
+
+            {/* Quick Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+            >
+              <h3 className="font-heading text-lg font-bold mb-6">Quick Links</h3>
+              <ul className="space-y-4">
+                <li>
+                  <Link href="#features" className="text-slate-300 hover:text-primary transition-colors text-sm sm:text-base flex items-center gap-2 group">
+                    <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#pricing" className="text-slate-300 hover:text-primary transition-colors text-sm sm:text-base flex items-center gap-2 group">
+                    <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-slate-300 hover:text-primary transition-colors text-sm sm:text-base flex items-center gap-2 group">
+                    <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-slate-300 hover:text-primary transition-colors text-sm sm:text-base flex items-center gap-2 group">
+                    <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    Blog
+                  </Link>
+                </li>
               </ul>
             </motion.div>
 
@@ -689,63 +738,90 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-            >
-              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Support</h3>
-              <ul className="space-y-3">
-                <li className="text-sm sm:text-base text-slate-600">24/7 Customer Support</li>
-                <li className="text-sm sm:text-base text-slate-600">Free Setup & Training</li>
-                <li className="text-sm sm:text-base text-slate-600">Video Tutorials</li>
-              </ul>
-            </motion.div>
-
-            {/* Features */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.5 }}
             >
-              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Features</h3>
-              <ul className="space-y-3">
-                <li className="text-sm sm:text-base text-slate-600">Point of Sale</li>
-                <li className="text-sm sm:text-base text-slate-600">Inventory Management</li>
-                <li className="text-sm sm:text-base text-slate-600">M-PESA Payments</li>
+              <h3 className="font-heading text-lg font-bold mb-6">Support</h3>
+              <ul className="space-y-4">
+                <li className="text-slate-300 text-sm sm:text-base flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  24/7 Customer Support
+                </li>
+                <li className="text-slate-300 text-sm sm:text-base flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  Free Setup & Training
+                </li>
+                <li className="text-slate-300 text-sm sm:text-base flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  Video Tutorials
+                </li>
+                <li className="text-slate-300 text-sm sm:text-base flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                  Data Migration Help
+                </li>
               </ul>
             </motion.div>
 
-            {/* Company */}
+            {/* Contact & Newsletter */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
             >
-              <h3 className="font-heading text-base sm:text-lg font-bold text-slate-900 mb-4">Company</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link href="#" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">About Us</Link>
+              <h3 className="font-heading text-lg font-bold mb-6">Contact Us</h3>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start gap-3">
+                  <Mail className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-slate-300 text-sm sm:text-base">wepesipos@gmail.com</span>
                 </li>
-                <li>
-                  <Link href="/privacy-policy" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Privacy Policy</Link>
-                </li>
-                <li>
-                  <Link href="/terms-of-use" className="text-sm sm:text-base text-slate-600 hover:text-primary transition-colors">Terms of Service</Link>
+                <li className="flex items-start gap-3">
+                  <Smartphone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-slate-300 text-sm sm:text-base">+254 712345678</span>
                 </li>
               </ul>
+              
+              {/* Newsletter Signup */}
+              <div className="bg-white/5 rounded-xl p-4 backdrop-blur-sm">
+                <h4 className="font-semibold text-sm mb-3">Stay Updated</h4>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    className="flex-1 rounded-lg px-4 py-2 text-sm bg-white/10 border text-white transition-colors focus:border-primary focus:outline-none"
+                    suppressHydrationWarning
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-primary hover:bg-primary/90 rounded-lg px-3 py-2 transition-colors"
+                  >
+                    <Send className="h-4 w-4" />
+                  </motion.button>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
 
-          {/* Copyright */}
+          {/* Bottom Bar */}
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.7 }}
-            className="border-t border-slate-200 pt-8"
+            className="border-t border-white/10 pt-8"
           >
-            <div className="text-sm sm:text-base text-slate-600 text-center">
-              © 2026 POS System. All rights reserved.
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="text-sm text-slate-400 text-center md:text-left">
+                © 2026 Wepesi POS. All rights reserved.
+              </div>
+              <div className="flex gap-6">
+                <Link href="/privacy-policy" className="text-sm text-slate-400 hover:text-primary transition-colors">
+                  Privacy Policy
+                </Link>
+                <Link href="/terms-of-use" className="text-sm text-slate-400 hover:text-primary transition-colors">
+                  Terms of Service
+                </Link>
+              </div>
             </div>
           </motion.div>
         </div>

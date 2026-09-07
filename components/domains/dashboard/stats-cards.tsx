@@ -1,78 +1,86 @@
 "use client"
 
-import { ShoppingCart, TrendingUp, FileText, Coins, ArrowUp } from "lucide-react"
+import { ShoppingCart, TrendingUp, FileText, Coins, ArrowUp, ArrowDown } from "lucide-react"
 import { motion } from "framer-motion"
 
-const stats = [
-  {
-    title: "Total Sales",
-    subtitle: "Today's revenue",
-    value: "KSh 45,678.00",
-    change: "+18.5%",
-    changeLabel: "vs yesterday",
-    icon: ShoppingCart,
-    iconBg: "bg-blue-100",
-    iconColor: "text-blue-600",
-    trend: "up",
-  },
-  {
-    title: "Total Profit",
-    subtitle: "Today's profit",
-    value: "KSh 15,230.00",
-    change: "+12.4%",
-    changeLabel: "vs yesterday",
-    icon: TrendingUp,
-    iconBg: "bg-green-100",
-    iconColor: "text-green-600",
-    trend: "up",
-  },
-  {
-    title: "Transactions",
-    subtitle: "Today's orders",
-    value: "128",
-    change: "+8.7%",
-    changeLabel: "vs yesterday",
-    icon: FileText,
-    iconBg: "bg-purple-100",
-    iconColor: "text-purple-600",
-    trend: "up",
-  },
-  {
-    title: "Avg. Order Value",
-    subtitle: "Average per order",
-    value: "KSh 356.86",
-    change: "+6.3%",
-    changeLabel: "vs yesterday",
-    icon: Coins,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    trend: "up",
-  },
-]
-
-export function StatsCardsSkeleton() {
-  return (
-    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full font-sans">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-          <div className="flex items-start justify-between mb-3 sm:mb-4">
-            <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
-            <div className="h-6 w-16 rounded-full bg-muted/70 animate-pulse" />
-          </div>
-          <div className="h-4 bg-muted/70 rounded w-1/2 mb-2 animate-pulse" />
-          <div className="h-3 bg-muted/70 rounded w-1/3 mb-2 animate-pulse" />
-          <div className="h-7 bg-muted/70 rounded w-2/3 mb-2 animate-pulse" />
-          <div className="h-3 bg-muted/70 rounded w-1/4 animate-pulse" />
-        </div>
-      ))}
-    </div>
-  )
+interface StatsData {
+  totalSales: { value: number; change: number }
+  totalProfit: { value: number; change: number }
+  transactions: { value: number; change: number }
+  avgOrderValue: { value: number; change: number }
 }
 
-export function StatsCards() {
+interface StatsCardsProps {
+  data?: StatsData | null
+  isLoading?: boolean
+}
+
+export function StatsCards({ data, isLoading = true }: StatsCardsProps) {
+  const stats = data
+
+  const formatCurrency = (value: number) => {
+    return `KSh ${value.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  }
+
+  const formatChange = (change: number) => {
+    const sign = change >= 0 ? '+' : ''
+    return `${sign}${change.toFixed(1)}%`
+  }
+
+  const statsConfig = [
+    {
+      title: "Total Sales",
+      subtitle: "Today's revenue",
+      value: stats ? formatCurrency(stats.totalSales.value) : "KSh 0.00",
+      change: stats ? formatChange(stats.totalSales.change ?? 0) : "+0%",
+      changeLabel: "vs yesterday",
+      icon: ShoppingCart,
+      iconBg: "bg-blue-100",
+      iconColor: "text-blue-600",
+      trend: (stats?.totalSales.change ?? 0) >= 0 ? "up" : "down",
+    },
+    {
+      title: "Total Profit",
+      subtitle: "Today's profit",
+      value: stats ? formatCurrency(stats.totalProfit.value) : "KSh 0.00",
+      change: stats ? formatChange(stats.totalProfit.change ?? 0) : "+0%",
+      changeLabel: "vs yesterday",
+      icon: TrendingUp,
+      iconBg: "bg-green-100",
+      iconColor: "text-green-600",
+      trend: (stats?.totalProfit.change ?? 0) >= 0 ? "up" : "down",
+    },
+    {
+      title: "Transactions",
+      subtitle: "Today's orders",
+      value: stats?.transactions.value.toString() || "0",
+      change: stats ? formatChange(stats.transactions.change ?? 0) : "+0%",
+      changeLabel: "vs yesterday",
+      icon: FileText,
+      iconBg: "bg-purple-100",
+      iconColor: "text-purple-600",
+      trend: (stats?.transactions.change ?? 0) >= 0 ? "up" : "down",
+    },
+    {
+      title: "Avg. Order Value",
+      subtitle: "Average per order",
+      value: stats ? formatCurrency(stats.avgOrderValue.value) : "KSh 0.00",
+      change: stats ? formatChange(stats.avgOrderValue.change ?? 0) : "+0%",
+      changeLabel: "vs yesterday",
+      icon: Coins,
+      iconBg: "bg-amber-100",
+      iconColor: "text-amber-600",
+      trend: (stats?.avgOrderValue.change ?? 0) >= 0 ? "up" : "down",
+    },
+  ]
+
+  if (isLoading) {
+    return <StatsCardsSkeleton />
+  }
+
   return (
     <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full font-sans">
-      {stats.map((stat, index) => (
+      {statsConfig.map((stat, index: number) => (
         <motion.div
           key={stat.title}
           initial={{ opacity: 0, y: 20 }}
@@ -94,9 +102,13 @@ export function StatsCards() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.3, delay: 0.2 + index * 0.1, type: "spring" }}
-              className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600 border border-green-200"
+              className={`flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold border ${
+                stat.trend === 'up' 
+                  ? 'bg-green-50 text-green-600 border-green-200' 
+                  : 'bg-red-50 text-red-600 border-red-200'
+              }`}
             >
-              <ArrowUp className="h-3 w-3" />
+              {stat.trend === 'up' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
               <span>{stat.change}</span>
             </motion.div>
           </div>
@@ -137,6 +149,25 @@ export function StatsCards() {
             </motion.p>
           </div>
         </motion.div>
+      ))}
+    </div>
+  )
+}
+
+export function StatsCardsSkeleton() {
+  return (
+    <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full font-sans">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+          <div className="flex items-start justify-between mb-3 sm:mb-4">
+            <div className="h-11 w-11 rounded-xl bg-muted/70 animate-pulse" />
+            <div className="h-6 w-16 rounded-full bg-muted/70 animate-pulse" />
+          </div>
+          <div className="h-4 bg-muted/70 rounded w-1/2 mb-2 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/3 mb-2 animate-pulse" />
+          <div className="h-7 bg-muted/70 rounded w-2/3 mb-2 animate-pulse" />
+          <div className="h-3 bg-muted/70 rounded w-1/4 animate-pulse" />
+        </div>
       ))}
     </div>
   )

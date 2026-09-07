@@ -1,5 +1,3 @@
-import withPWA from 'next-pwa'
-
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
@@ -22,49 +20,21 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'd16zmt6hgq1jhj.cloudfront.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'hthjpanikaxhrhxtoszz.supabase.co',
+        pathname: '/storage/v1/object/public/product-images/**',
+      },
     ],
   },
   turbopack: {},
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
+  },
   allowedDevOrigins: ['10.1.1.3'],
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
 }
 
-export default withPWA({
-  dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
-  register: true,
-  skipWaiting: true,
-  runtimeCaching: [
-    {
-      urlPattern: /^https?.*/,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'offlineCache',
-        expiration: {
-          maxEntries: 200,
-        },
-        networkTimeoutSeconds: 15,
-      },
-    },
-    {
-      urlPattern: /\.(?:js|css|html|json)$/,
-      handler: 'StaleWhileRevalidate',
-      options: {
-        cacheName: 'static-resources',
-      },
-    },
-    {
-      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'image-cache',
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-        },
-      },
-    },
-  ],
-})(nextConfig)
+export default nextConfig

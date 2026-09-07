@@ -66,7 +66,7 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
     setCurrentTime(new Date())
     const timer = setInterval(() => {
       setCurrentTime(new Date())
-    }, 1000)
+    }, 60_000)
     return () => clearInterval(timer)
   }, [])
 
@@ -78,7 +78,6 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
       hour12: true
     }
     return date.toLocaleDateString('en-US', options)
