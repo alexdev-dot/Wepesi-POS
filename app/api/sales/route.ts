@@ -3,19 +3,42 @@ import { getSupabaseServerClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   const businessId = new URL(request.url).searchParams.get("businessId")
+  const page = parseInt(new URL(request.url).searchParams.get("page") || "1")
+  const limit = parseInt(new URL(request.url).searchParams.get("limit") || "50")
   const supabase = getSupabaseServerClient()
 
   if (!businessId) return NextResponse.json({ error: "businessId is required." }, { status: 400 })
   if (!supabase) return NextResponse.json({ error: "Supabase is not configured." }, { status: 500 })
+
+  // Get total count for pagination
+  const { count, error: countError } = await supabase
+    .from("sales")
+    .select("*", { count: "exact", head: true })
+    .eq("business_id", businessId)
+
+  if (countError) return NextResponse.json({ error: countError.message }, { status: 502 })
+
+  // Get paginated data
+  const from = (page - 1) * limit
+  const to = from + limit - 1
 
   const { data, error } = await supabase
     .from("sales")
     .select("id, receipt_number, cashier, customer, subtotal, discount, tax, total, payment_method, amount_paid, change_amount, status, created_at, sale_items(*)")
     .eq("business_id", businessId)
     .order("created_at", { ascending: false })
+    .range(from, to)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 502 })
-  return NextResponse.json({ sales: data })
+  return NextResponse.json({
+    sales: data,
+    pagination: {
+      page,
+      limit,
+      total: count || 0,
+      totalPages: Math.ceil((count || 0) / limit)
+    }
+  })
 }
 
 export async function POST(request: Request) {
