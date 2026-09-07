@@ -4,6 +4,10 @@ import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
 export async function POST(request: NextRequest) {
   try {
     const { 
+      // OAuth data
+      oauthName,
+      oauthEmail,
+      oauthProvider,
       // Registration data from localStorage
       pendingName,
       pendingEmail,
@@ -24,7 +28,10 @@ export async function POST(request: NextRequest) {
     } = await request.json()
 
     // Validate required fields
-    if (!pendingName || !pendingEmail || !pendingPasswordHash) {
+    const isOAuth = !!(oauthName && oauthEmail && oauthProvider === 'google')
+    const isRegularSignup = !!(pendingName && pendingEmail && pendingPasswordHash)
+
+    if (!isOAuth && !isRegularSignup) {
       return NextResponse.json(
         { error: 'Missing registration data. Please complete signup first.' },
         { status: 400 }
@@ -46,11 +53,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Determine email and name based on signup method
+    const email = isOAuth ? oauthEmail : pendingEmail
+    const name = isOAuth ? oauthName : pendingName
+
     // Check if user already exists (double-check)
     const { data: existingUser } = await supabase
       .from('users')
       .select('id')
-      .eq('email', pendingEmail.toLowerCase())
+      .eq('email', email.toLowerCase())
       .single()
 
     if (existingUser) {
@@ -64,9 +75,9 @@ export async function POST(request: NextRequest) {
     const { data: user, error: userError } = await supabase
       .from('users')
       .insert({
-        email: pendingEmail.toLowerCase(),
-        password_hash: pendingPasswordHash,
-        name: pendingName,
+        email: email.toLowerCase(),
+        password_hash: isOAuth ? '' : pendingPasswordHash, // OAuth users don't have password
+        name,
         onboarded: true,
         is_active: true
       })

@@ -38,40 +38,25 @@ export async function GET(request: Request) {
     let onboarded: boolean
 
     if (existingUser) {
-      // User exists
+      // User exists - redirect appropriately
       userId = existingUser.id
       onboarded = existingUser.onboarded
-    } else {
-      // New user - create user record
-      if (!email) {
-        return NextResponse.redirect(new URL('/login?error=no_email', request.url))
-      }
 
-      const { data: newUser, error: createError } = await supabase
-        .from('users')
-        .insert({
-          email,
-          name,
-          password_hash: '', // OAuth users don't have password
-          onboarded: false,
-          is_active: true,
-        })
-        .select('id')
-        .single()
-
-      if (createError || !newUser) {
-        console.error('Error creating user:', createError)
-        return NextResponse.redirect(new URL('/login?error=user_creation_failed', request.url))
-      }
-
-      userId = newUser.id
-      onboarded = false
+      const redirectUrl = onboarded ? '/dashboard' : '/onboarding'
+      return NextResponse.redirect(
+        new URL(`${redirectUrl}?user_id=${userId}&user_email=${encodeURIComponent(email || '')}&user_name=${encodeURIComponent(name)}&user_onboarded=${onboarded}`, request.url)
+      )
     }
 
-    // Redirect with user data as URL params to set in localStorage on client side
-    const redirectUrl = onboarded ? '/dashboard' : '/onboarding'
+    // New user - defer account creation until after onboarding/subscription
+    // Store OAuth data in localStorage via URL params
+    if (!email) {
+      return NextResponse.redirect(new URL('/login?error=no_email', request.url))
+    }
+
+    // Redirect to onboarding with OAuth data (will be stored in localStorage)
     const response = NextResponse.redirect(
-      new URL(`${redirectUrl}?user_id=${userId}&user_email=${encodeURIComponent(email || '')}&user_name=${encodeURIComponent(name)}&user_onboarded=${onboarded}`, request.url)
+      new URL(`/onboarding?oauth_name=${encodeURIComponent(name)}&oauth_email=${encodeURIComponent(email)}&oauth_provider=google`, request.url)
     )
 
     return response

@@ -40,31 +40,52 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check for pending registration data from signup
+    const searchParams = new URLSearchParams(window.location.search)
+    
+    // Check for OAuth data from Google login
+    const oauthName = searchParams.get('oauth_name')
+    const oauthEmail = searchParams.get('oauth_email')
+    const oauthProvider = searchParams.get('oauth_provider')
+
+    // Check for pending registration data from regular signup
     const pendingName = localStorage.getItem('pending_registration_name')
     const pendingEmail = localStorage.getItem('pending_registration_email')
     const pendingPasswordHash = localStorage.getItem('pending_registration_password_hash')
     const pendingTimestamp = localStorage.getItem('pending_registration_timestamp')
 
-    // Redirect to signup if no pending registration or expired (1 hour)
-    if (!pendingName || !pendingEmail || !pendingPasswordHash || !pendingTimestamp) {
-      router.replace("/signup")
+    // Handle OAuth signup
+    if (oauthName && oauthEmail && oauthProvider === 'google') {
+      // Store OAuth data in localStorage
+      localStorage.setItem('oauth_name', oauthName)
+      localStorage.setItem('oauth_email', oauthEmail)
+      localStorage.setItem('oauth_provider', oauthProvider)
+      localStorage.setItem('oauth_timestamp', Date.now().toString())
+      
+      // Clean URL
+      window.history.replaceState({}, '', '/onboarding')
+      setIsLoading(false)
       return
     }
 
-    const timestamp = parseInt(pendingTimestamp)
-    const oneHour = 60 * 60 * 1000
-    if (Date.now() - timestamp > oneHour) {
-      // Clear expired data and redirect
-      localStorage.removeItem('pending_registration_name')
-      localStorage.removeItem('pending_registration_email')
-      localStorage.removeItem('pending_registration_password_hash')
-      localStorage.removeItem('pending_registration_timestamp')
-      router.replace("/signup")
+    // Handle regular signup
+    if (pendingName && pendingEmail && pendingPasswordHash && pendingTimestamp) {
+      const timestamp = parseInt(pendingTimestamp)
+      const oneHour = 60 * 60 * 1000
+      if (Date.now() - timestamp > oneHour) {
+        // Clear expired data and redirect
+        localStorage.removeItem('pending_registration_name')
+        localStorage.removeItem('pending_registration_email')
+        localStorage.removeItem('pending_registration_password_hash')
+        localStorage.removeItem('pending_registration_timestamp')
+        router.replace("/signup")
+        return
+      }
+      setIsLoading(false)
       return
     }
 
-    setIsLoading(false)
+    // No valid registration data - redirect to signup
+    router.replace("/signup")
   }, [router])
 
   function updateForm(field: keyof OnboardingForm, value: string | boolean) {
@@ -94,12 +115,20 @@ export default function OnboardingPage() {
   }
 
   async function finishOnboarding() {
-    // Get pending registration data from localStorage
+    // Check for OAuth data
+    const oauthName = localStorage.getItem('oauth_name')
+    const oauthEmail = localStorage.getItem('oauth_email')
+    const oauthProvider = localStorage.getItem('oauth_provider')
+
+    // Check for pending registration data from regular signup
     const pendingName = localStorage.getItem('pending_registration_name')
     const pendingEmail = localStorage.getItem('pending_registration_email')
     const pendingPasswordHash = localStorage.getItem('pending_registration_password_hash')
 
-    if (!pendingName || !pendingEmail || !pendingPasswordHash) {
+    const isOAuth = !!(oauthName && oauthEmail && oauthProvider === 'google')
+    const isRegularSignup = !!(pendingName && pendingEmail && pendingPasswordHash)
+
+    if (!isOAuth && !isRegularSignup) {
       setError("Registration data not found. Please start over.")
       router.replace("/signup")
       return
@@ -115,10 +144,14 @@ export default function OnboardingPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          // Registration data
-          pendingName,
-          pendingEmail,
-          pendingPasswordHash,
+          // OAuth data
+          oauthName: isOAuth ? oauthName : undefined,
+          oauthEmail: isOAuth ? oauthEmail : undefined,
+          oauthProvider: isOAuth ? oauthProvider : undefined,
+          // Regular signup data
+          pendingName: isRegularSignup ? pendingName : undefined,
+          pendingEmail: isRegularSignup ? pendingEmail : undefined,
+          pendingPasswordHash: isRegularSignup ? pendingPasswordHash : undefined,
           // Onboarding data
           ...form,
           taxRate: form.taxEnabled ? Number(form.taxRate) : undefined,
@@ -128,11 +161,15 @@ export default function OnboardingPage() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        // Clear pending registration data
+        // Clear all registration data
         localStorage.removeItem('pending_registration_name')
         localStorage.removeItem('pending_registration_email')
         localStorage.removeItem('pending_registration_password_hash')
         localStorage.removeItem('pending_registration_timestamp')
+        localStorage.removeItem('oauth_name')
+        localStorage.removeItem('oauth_email')
+        localStorage.removeItem('oauth_provider')
+        localStorage.removeItem('oauth_timestamp')
 
         // Store user session
         localStorage.setItem('user_id', data.user.id)
