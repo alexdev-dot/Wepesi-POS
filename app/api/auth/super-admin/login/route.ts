@@ -9,7 +9,13 @@ const MAX_ATTEMPTS = 5
 const LOCKOUT_TIME = 15 * 60 * 1000 // 15 minutes
 
 // Session secret for signing tokens (in production, use a proper secret from env)
-const SESSION_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex')
+const SESSION_SECRET = process.env.JWT_SECRET || (() => {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable is required in production')
+  }
+  // Development fallback
+  return 'dev-secret-do-not-use-in-production'
+})()
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now()

@@ -3,7 +3,13 @@ import crypto from 'crypto'
 import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
 
 // Session secret for signing tokens (in production, use a proper secret from env)
-const SESSION_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex')
+const SESSION_SECRET = process.env.JWT_SECRET || (() => {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable is required in production')
+  }
+  // Development fallback
+  return 'dev-secret-do-not-use-in-production'
+})()
 
 export async function GET(request: NextRequest) {
   try {
