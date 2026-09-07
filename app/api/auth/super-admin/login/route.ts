@@ -2,11 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
-
-// Rate limiting: Store attempts in memory (in production, use Redis)
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
-const MAX_ATTEMPTS = 5
-const LOCKOUT_TIME = 15 * 60 * 1000 // 15 minutes
+import { checkRateLimit, resetRateLimit, getRateLimitInfo } from '@/lib/rate-limit'
 
 // Session secret for signing tokens (in production, use a proper secret from env)
 const SESSION_SECRET = process.env.JWT_SECRET || (() => {
@@ -16,28 +12,6 @@ const SESSION_SECRET = process.env.JWT_SECRET || (() => {
   // Development fallback
   return 'dev-secret-do-not-use-in-production'
 })()
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now()
-  const record = rateLimitMap.get(ip)
-
-  if (!record) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + LOCKOUT_TIME })
-    return true
-  }
-
-  if (now > record.resetTime) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + LOCKOUT_TIME })
-    return true
-  }
-
-  if (record.count >= MAX_ATTEMPTS) {
-    return false
-  }
-
-  record.count++
-  return true
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -123,7 +97,7 @@ export async function POST(request: NextRequest) {
 
       // Lock account after 5 failed attempts
       if (newFailedAttempts >= 5) {
-        updateData.account_locked_until = new Date(Date.now() + LOCKOUT_TIME).toISOString()
+        updateData.account_locked_until = new Date(Date.now() + 15 * 60 * 1000).toISOString()
       }
 
       await supabase
@@ -148,6 +122,9 @@ export async function POST(request: NextRequest) {
         account_locked_until: null
       })
       .eq('id', admin.id)
+
+    // Reset rate limit for this IP on successful login
+    resetRateLimit(ip)
 
     // Log successful login
     await logAuditLog(supabase, admin.id, 'LOGIN_SUCCESS', 'super_admin', { email }, ip, request.headers.get('user-agent'), true)

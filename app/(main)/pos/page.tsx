@@ -34,10 +34,25 @@ export default function POSPage() {
   const [amountReceived, setAmountReceived] = useState(0)
   const [paymentMethod, setPaymentMethod] = useState("cash")
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [customer, setCustomer] = useState("Walk-in Customer")
   const isMobile = useMobile()
   const [showPaymentPopup, setShowPaymentPopup] = useState(false)
   const [showReceiptPopup, setShowReceiptPopup] = useState(false)
   const [products, setProducts] = useState<POSProduct[]>([])
+  const [suspendedSales, setSuspendedSales] = useState<any[]>([])
+
+  // Load suspended sales from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('suspendedSales')
+    if (saved) {
+      try {
+        setSuspendedSales(JSON.parse(saved))
+      } catch (e) {
+        console.error('Failed to load suspended sales:', e)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -61,6 +76,68 @@ export default function POSPage() {
     void loadProducts()
   }, [])
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in input fields
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      switch (e.key) {
+        case 'F1':
+          e.preventDefault()
+          // Focus on search input
+          const searchInput = document.querySelector('input[placeholder="Search products..."]') as HTMLInputElement
+          searchInput?.focus()
+          break
+        case 'F2':
+          e.preventDefault()
+          const customerName = prompt('Enter customer name:', customer)
+          if (customerName) {
+            setCustomer(customerName)
+          }
+          break
+        case 'F3':
+          e.preventDefault()
+          // TODO: Hold sale
+          break
+        case 'F4':
+          e.preventDefault()
+          handleSuspendSale()
+          break
+        case 'F5':
+          e.preventDefault()
+          // TODO: Open discount input
+          break
+        case 'F6':
+          e.preventDefault()
+          setCartCollapsed(!cartCollapsed)
+          break
+        case 'F9':
+          e.preventDefault()
+          if (cartItems.length > 0) {
+            setShowPaymentPopup(true)
+          }
+          break
+        case 'Escape':
+          e.preventDefault()
+          if (showPaymentPopup) {
+            setShowPaymentPopup(false)
+          } else if (showReceiptPopup) {
+            setShowReceiptPopup(false)
+            handleClearCart()
+          } else if (cartItems.length > 0) {
+            handleClearCart()
+          }
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [cartCollapsed, cartItems, showPaymentPopup, showReceiptPopup])
+
   const categories = useMemo(() => {
     const counts = products.reduce<Record<string, number>>((result, product) => {
       result[product.category] = (result[product.category] || 0) + 1
@@ -75,13 +152,22 @@ export default function POSPage() {
     ]
   }, [products])
 
-  // Filter products based on selected category
-  const filteredProducts = useMemo(() => 
-    selectedCategory === "All Products"
+  // Filter products based on selected category and search query
+  const filteredProducts = useMemo(() => {
+    let filtered = selectedCategory === "All Products"
       ? products
-      : products.filter(product => product.category === selectedCategory),
-    [products, selectedCategory]
-  )
+      : products.filter(product => product.category === selectedCategory)
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query)
+      )
+    }
+    
+    return filtered
+  }, [products, selectedCategory, searchQuery])
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed)
@@ -154,6 +240,38 @@ export default function POSPage() {
     setCartItems([])
     setDiscount(0)
     setAmountReceived(0)
+  }
+
+  const handleSuspendSale = () => {
+    if (cartItems.length === 0) return
+
+    const suspendedSale = {
+      id: Date.now().toString(),
+      items: cartItems,
+      discount,
+      subtotal,
+      tax,
+      total,
+      timestamp: new Date().toISOString(),
+    }
+
+    const updatedSuspendedSales = [...suspendedSales, suspendedSale]
+    setSuspendedSales(updatedSuspendedSales)
+    localStorage.setItem('suspendedSales', JSON.stringify(updatedSuspendedSales))
+    handleClearCart()
+  }
+
+  const handleResumeSale = (saleId: string) => {
+    const sale = suspendedSales.find(s => s.id === saleId)
+    if (!sale) return
+
+    setCartItems(sale.items)
+    setDiscount(sale.discount)
+    setAmountReceived(0)
+
+    const updatedSuspendedSales = suspendedSales.filter(s => s.id !== saleId)
+    setSuspendedSales(updatedSuspendedSales)
+    localStorage.setItem('suspendedSales', JSON.stringify(updatedSuspendedSales))
   }
 
   const handleCompletePayment = async (paymentData: { amountReceived: number; paymentMethod: string; phoneNumber: string }) => {
@@ -236,6 +354,12 @@ export default function POSPage() {
                     onViewModeChange={setViewMode}
                     onAddToCart={handleAddToCart}
                     onClearCart={handleClearCart}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    onSuspendSale={handleSuspendSale}
+                    suspendedSales={suspendedSales}
+                    onResumeSale={handleResumeSale}
+                    customer={customer}
                   />
                 </div>
 
@@ -268,6 +392,7 @@ export default function POSPage() {
                   onPaymentMethodChange={setPaymentMethod}
                   onPhoneNumberChange={setPhoneNumber}
                   onPaymentClick={() => setShowPaymentPopup(true)}
+                  onDiscountChange={setDiscount}
                 />
               </div>
             </div>
@@ -324,6 +449,7 @@ export default function POSPage() {
               onPaymentMethodChange={setPaymentMethod}
               onPhoneNumberChange={setPhoneNumber}
               onPaymentClick={() => setShowPaymentPopup(true)}
+              onDiscountChange={setDiscount}
             />
           </div>
         </div>

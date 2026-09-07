@@ -19,6 +19,10 @@ export default function ProductsPage() {
   const isMobile = useMobile()
   const [products, setProducts] = useState<Product[]>([])
   const [categoryOptions, setCategoryOptions] = useState<string[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("All Categories")
+  const [selectedStatus, setSelectedStatus] = useState("All Status")
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
   const mapProduct = (product: ProductRecord): Product => ({
     id: product.id,
@@ -89,9 +93,140 @@ export default function ProductsPage() {
     { title: "Total Value", value: `KSh ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, description: "Stock value", icon: DollarSign, color: "text-purple-600", bgColor: "bg-purple-100" },
   ]
 
+  // Filter products based on search, category, and status
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = searchQuery === "" || 
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.barcode.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    const matchesCategory = selectedCategory === "All Categories" || product.category === selectedCategory
+    const matchesStatus = selectedStatus === "All Status" || product.status === selectedStatus
+    
+    return matchesSearch && matchesCategory && matchesStatus
+  })
+
   const handleEditProduct = (product: Product) => {
-    console.log("Edit product:", product)
-    // TODO: Implement edit functionality
+    setEditingProduct(product)
+    setIsAddProductOpen(true)
+  }
+
+  const handleUpdateProduct = async (updatedProduct: {
+    name: string
+    barcode: string
+    category: string
+    costPrice: number
+    sellingPrice: number
+    stockQty: number
+    image: File | null
+  }) => {
+    const supabase = getSupabaseClient()
+    const businessId = getBusinessId()
+
+    if (!supabase || !businessId || !editingProduct) throw new Error("Database is not available. Check your Supabase configuration.")
+
+    let imageUrl = editingProduct.image
+    if (updatedProduct.image) {
+      const uploadForm = new FormData()
+      uploadForm.append("file", updatedProduct.image)
+      uploadForm.append("businessId", businessId)
+
+      let uploadResponse: Response
+      try {
+        uploadResponse = await fetch("/api/product-image", { method: "POST", body: uploadForm })
+      } catch {
+        throw new Error("Image upload could not reach the server. Check that the app is running and try again.")
+      }
+
+      const uploadResult = await uploadResponse.json() as { path?: string; imageUrl?: string; error?: string }
+      if (!uploadResponse.ok || !uploadResult.path || !uploadResult.imageUrl) {
+        throw new Error(uploadResult.error || "Image upload failed.")
+      }
+
+      imageUrl = uploadResult.imageUrl
+    }
+
+    const { data, error } = await supabase
+      .from("products")
+      .update({
+        name: updatedProduct.name,
+        barcode: updatedProduct.barcode,
+        category: updatedProduct.category,
+        cost_price: updatedProduct.costPrice,
+        selling_price: updatedProduct.sellingPrice,
+        image_url: imageUrl,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", editingProduct.id)
+      .eq("business_id", businessId)
+      .select()
+      .single()
+
+    if (error) throw new Error(error.message || "Unable to update the product.")
+
+    // Update stock if changed
+    if (updatedProduct.stockQty !== editingProduct.stockQty) {
+      const { error: stockError } = await supabase
+        .from("inventory")
+        .update({
+          current_stock: updatedProduct.stockQty,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("product_id", editingProduct.id)
+        .eq("business_id", businessId)
+
+      if (stockError) throw new Error(stockError.message || "Unable to update stock.")
+    }
+
+    setProducts((currentProducts) =>
+      currentProducts.map((item) =>
+        item.id === editingProduct.id
+          ? { ...item, ...mapProduct(data as ProductRecord) }
+          : item
+      )
+    )
+    setEditingProduct(null)
+  }
+
+  const handleExportProducts = () => {
+    const csvContent = [
+      ["Name", "SKU", "Barcode", "Category", "Cost Price", "Selling Price", "Stock", "Status"].join(","),
+      ...filteredProducts.map((p) =>
+        [p.name, p.sku, p.barcode, p.category, p.costPrice, p.sellingPrice, p.stockQty, p.status].join(",")
+      ),
+    ].join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `products-${new Date().toISOString().split("T")[0]}.csv`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportProducts = () => {
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept = ".csv"
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (!file) return
+
+      const text = await file.text()
+      const lines = text.split("\n").slice(1) // Skip header
+      const importedProducts = lines
+        .filter((line) => line.trim())
+        .map((line) => {
+          const [name, sku, barcode, category, costPrice, sellingPrice, stockQty] = line.split(",")
+          return { name, sku, barcode, category, costPrice: Number(costPrice), sellingPrice: Number(sellingPrice), stockQty: Number(stockQty) }
+        })
+
+      alert(`Imported ${importedProducts.length} products. (Note: Import functionality needs backend implementation)`)
+    }
+    input.click()
   }
 
   const handleDeleteProduct = async (product: Product) => {
@@ -124,6 +259,12 @@ export default function ProductsPage() {
     stockQty: number
     image: File | null
   }) => {
+    // If editing, use update handler
+    if (editingProduct) {
+      await handleUpdateProduct(newProduct)
+      return
+    }
+
     const supabase = getSupabaseClient()
     const businessId = getBusinessId()
 
@@ -174,6 +315,11 @@ export default function ProductsPage() {
     }
 
     setProducts(prev => [mapProduct(data as ProductRecord), ...prev])
+  }
+
+  const handleCloseForm = () => {
+    setIsAddProductOpen(false)
+    setEditingProduct(null)
   }
 
   return (
@@ -230,6 +376,8 @@ export default function ProductsPage() {
                   <Input
                     type="text"
                     placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="h-10 pl-9 sm:pl-10 text-sm border bg-muted focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
@@ -238,12 +386,20 @@ export default function ProductsPage() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   {/* Filters */}
                   <div className="flex flex-wrap gap-2">
-                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
+                    <select 
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35"
+                    >
                       <option>All Categories</option>
                       {categoryOptions.map((category) => <option key={category}>{category}</option>)}
                     </select>
 
-                    <select className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35">
+                    <select 
+                      value={selectedStatus}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                      className="h-10 px-3 sm:px-4 text-sm border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all min-w-35"
+                    >
                       <option>All Status</option>
                       <option>In Stock</option>
                       <option>Low Stock</option>
@@ -258,11 +414,11 @@ export default function ProductsPage() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 sm:ml-auto">
-                    <Button variant="outline" size="sm" className="h-10 text-sm border-border text-foreground hover:bg-muted transition-all">
+                    <Button variant="outline" size="sm" className="h-10 text-sm border-border text-foreground hover:bg-muted transition-all" onClick={handleImportProducts}>
                       <Upload className="h-4 w-4 mr-2" />
                       Import
                     </Button>
-                    <Button variant="outline" size="sm" className="h-10 text-sm border-border text-foreground hover:bg-muted transition-all">
+                    <Button variant="outline" size="sm" className="h-10 text-sm border-border text-foreground hover:bg-muted transition-all" onClick={handleExportProducts}>
                       <Download className="h-4 w-4 mr-2" />
                       Export
                     </Button>
@@ -273,7 +429,7 @@ export default function ProductsPage() {
 
             {/* Products Table */}
             <ProductTable 
-              products={products}
+              products={filteredProducts}
               onEdit={handleEditProduct}
               onDelete={handleDeleteProduct}
             />
@@ -284,9 +440,10 @@ export default function ProductsPage() {
       {/* Add Product Form Modal */}
       <AddProductForm
         isOpen={isAddProductOpen}
-        onClose={() => setIsAddProductOpen(false)}
+        onClose={handleCloseForm}
         categories={categoryOptions}
         onSubmit={handleAddProduct}
+        editingProduct={editingProduct}
       />
     </div>
   )

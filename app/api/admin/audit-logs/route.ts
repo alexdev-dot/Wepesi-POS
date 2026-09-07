@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
+import { validateAdminSession, unauthorizedResponse } from '@/lib/admin-auth'
+import { validateCSRF, csrfErrorResponse } from '@/lib/csrf'
 
 export async function GET(request: NextRequest) {
+  // Validate admin session
+  const session = await validateAdminSession(request)
+  if (!session.valid) {
+    return unauthorizedResponse(session.error)
+  }
   try {
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
@@ -77,6 +84,18 @@ export async function GET(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  // Validate admin session
+  const session = await validateAdminSession(request)
+  if (!session.valid) {
+    return unauthorizedResponse(session.error)
+  }
+
+  // Validate CSRF token for state-changing operation
+  const csrfValidation = validateCSRF(request)
+  if (!csrfValidation.valid) {
+    return csrfErrorResponse(csrfValidation.error)
+  }
+
   try {
     const searchParams = request.nextUrl.searchParams
     const id = searchParams.get('id')

@@ -1,8 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
+import { validateAdminSession, unauthorizedResponse } from '@/lib/admin-auth'
+import { validateCSRF, csrfErrorResponse } from '@/lib/csrf'
 
 export async function POST(request: NextRequest) {
+  // Validate admin session
+  const session = await validateAdminSession(request)
+  if (!session.valid) {
+    return unauthorizedResponse(session.error)
+  }
+
+  // Validate CSRF token for state-changing operation
+  const csrfValidation = validateCSRF(request)
+  if (!csrfValidation.valid) {
+    return csrfErrorResponse(csrfValidation.error)
+  }
+
   try {
     const { currentPassword, newPassword } = await request.json()
 
@@ -31,23 +45,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get current admin from session (using the session cookie)
-    const sessionToken = request.cookies.get('super_admin_session')?.value
-    if (!sessionToken) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
-
-    // Decode session token to get admin ID
-    const adminId = Buffer.from(sessionToken, 'base64').toString().split(':')[0]
-
-    // Fetch admin from database
+    // Fetch admin from database using session adminId
     const { data: admin, error: fetchError } = await supabase
       .from('super_admins')
       .select('*')
-      .eq('id', adminId)
+      .eq('id', session.adminId)
       .single()
 
     if (fetchError || !admin) {

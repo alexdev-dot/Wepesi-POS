@@ -181,9 +181,12 @@ interface TopActionBarProps {
   onSuspendSale?: () => void
   onHoldSale?: () => void
   onClearCart?: () => void
+  suspendedSales?: any[]
+  onResumeSale?: (saleId: string) => void
+  customer?: string
 }
 
-export function TopActionBar({ onAddCustomer, onSuspendSale, onHoldSale, onClearCart }: TopActionBarProps) {
+export function TopActionBar({ onAddCustomer, onSuspendSale, onHoldSale, onClearCart, suspendedSales = [], onResumeSale, customer = "Walk-in Customer" }: TopActionBarProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -196,7 +199,7 @@ export function TopActionBar({ onAddCustomer, onSuspendSale, onHoldSale, onClear
           whileHover={{ scale: 1.02, borderColor: "rgba(59, 130, 246, 0.3)" }}
           className="hidden sm:flex items-center gap-2 rounded-md border border-border bg-muted/50 px-4 py-2.5 transition-colors cursor-pointer"
         >
-          <span className="text-sm font-medium text-card-foreground tracking-tight">Walk-in Customer</span>
+          <span className="text-sm font-medium text-card-foreground tracking-tight">{customer}</span>
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </motion.div>
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -208,6 +211,13 @@ export function TopActionBar({ onAddCustomer, onSuspendSale, onHoldSale, onClear
         </motion.div>
       </div>
       <div className="flex items-center gap-2">
+        {suspendedSales && suspendedSales.length > 0 && (
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <Button variant="outline" size="sm" className="h-9 text-xs font-medium hidden sm:block" onClick={() => onResumeSale?.(suspendedSales[0]?.id)}>
+              Resume Sale ({suspendedSales.length})
+            </Button>
+          </motion.div>
+        )}
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
           <Button variant="outline" size="sm" className="h-9 text-xs font-medium hidden sm:block" onClick={onSuspendSale}>
             Suspend Sale
@@ -249,9 +259,15 @@ interface ProductGridProps {
   itemsPerPage?: number
   onPageChange?: (page: number) => void
   onItemsPerPageChange?: (items: number) => void
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
+  onSuspendSale?: () => void
+  suspendedSales?: any[]
+  onResumeSale?: (saleId: string) => void
+  customer?: string
 }
 
-export function ProductGrid({ products, viewMode, onViewModeChange, onAddToCart, onClearCart, loading = false, itemsPerPage = 12, onPageChange, onItemsPerPageChange }: ProductGridProps) {
+export function ProductGrid({ products, viewMode, onViewModeChange, onAddToCart, onClearCart, loading = false, itemsPerPage = 12, onPageChange, onItemsPerPageChange, searchQuery = "", onSearchChange, onSuspendSale, suspendedSales = [], onResumeSale, customer = "Walk-in Customer" }: ProductGridProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [localItemsPerPage, setLocalItemsPerPage] = useState(itemsPerPage)
 
@@ -276,7 +292,13 @@ export function ProductGrid({ products, viewMode, onViewModeChange, onAddToCart,
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Top Action Bar */}
-      <TopActionBar onClearCart={onClearCart} />
+      <TopActionBar 
+        onClearCart={onClearCart}
+        onSuspendSale={onSuspendSale}
+        suspendedSales={suspendedSales}
+        onResumeSale={onResumeSale}
+        customer={customer}
+      />
 
       {/* Search and Filter Bar */}
       <motion.div
@@ -290,6 +312,8 @@ export function ProductGrid({ products, viewMode, onViewModeChange, onAddToCart,
           <Input
             type="text"
             placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => onSearchChange?.(e.target.value)}
             className="h-10 w-full rounded-md border bg-muted/50 pl-10 text-sm font-medium"
           />
         </div>

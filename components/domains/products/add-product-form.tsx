@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,9 +19,10 @@ interface AddProductFormProps {
     stockQty: number
     image: File | null
   }) => Promise<void> | void
+  editingProduct?: any
 }
 
-export function AddProductForm({ isOpen, onClose, categories, onSubmit }: AddProductFormProps) {
+export function AddProductForm({ isOpen, onClose, categories, onSubmit, editingProduct }: AddProductFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     barcode: "",
@@ -35,6 +36,33 @@ export function AddProductForm({ isOpen, onClose, categories, onSubmit }: AddPro
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Populate form when editing
+  useEffect(() => {
+    if (editingProduct) {
+      setFormData({
+        name: editingProduct.name || "",
+        barcode: editingProduct.barcode || editingProduct.sku || "",
+        category: editingProduct.category || "",
+        costPrice: editingProduct.costPrice?.toString() || "",
+        sellingPrice: editingProduct.sellingPrice?.toString() || "",
+        stockQty: editingProduct.stockQty?.toString() || "",
+        image: null
+      })
+      setImagePreview(editingProduct.image || null)
+    } else {
+      setFormData({
+        name: "",
+        barcode: "",
+        category: "",
+        costPrice: "",
+        sellingPrice: "",
+        stockQty: "",
+        image: null
+      })
+      setImagePreview(null)
+    }
+  }, [editingProduct, isOpen])
 
   const selectImage = (file: File | undefined) => {
     if (!file) return
@@ -116,8 +144,8 @@ export function AddProductForm({ isOpen, onClose, categories, onSubmit }: AddPro
         {/* Header */}
         <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-foreground">Add New Product</h2>
-            <p className="text-sm text-muted-foreground">Fill in the product details below</p>
+            <h2 className="text-xl font-bold text-foreground">{editingProduct ? "Edit Product" : "Add New Product"}</h2>
+            <p className="text-sm text-muted-foreground">{editingProduct ? "Update the product details below" : "Fill in the product details below"}</p>
           </div>
           <button
             onClick={onClose}
@@ -288,7 +316,7 @@ export function AddProductForm({ isOpen, onClose, categories, onSubmit }: AddPro
               disabled={isSubmitting}
               className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white"
             >
-              {isSubmitting ? "Saving..." : "Add Product"}
+              {isSubmitting ? "Saving..." : (editingProduct ? "Update Product" : "Add Product")}
             </Button>
           </div>
         </form>

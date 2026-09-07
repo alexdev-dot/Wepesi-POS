@@ -36,6 +36,7 @@ interface CartSidebarProps {
   onPaymentMethodChange: (method: string) => void
   onPhoneNumberChange: (phone: string) => void
   onPaymentClick?: () => void
+  onDiscountChange?: (discount: number) => void
 }
 
 export const CartSidebar = memo(function CartSidebar({
@@ -57,7 +58,8 @@ export const CartSidebar = memo(function CartSidebar({
   onAmountChange,
   onPaymentMethodChange,
   onPhoneNumberChange,
-  onPaymentClick
+  onPaymentClick,
+  onDiscountChange
 }: CartSidebarProps) {
   const [paymentDropdownOpen, setPaymentDropdownOpen] = useState(false)
 
@@ -187,12 +189,23 @@ export const CartSidebar = memo(function CartSidebar({
                     <span className="font-semibold text-foreground">KSh {tax.toFixed(2)}</span>
                   </div>
                 )}
-                {discount > 0 && (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Discount</span>
-                    <span className="font-semibold text-orange-600">-KSh {discount.toFixed(2)}</span>
+                <div className="flex items-center justify-between text-sm gap-2">
+                  <span className="text-muted-foreground">Discount</span>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={discount || ''}
+                      onChange={(e) => onDiscountChange?.(parseFloat(e.target.value) || 0)}
+                      className="h-7 w-24 text-right text-sm"
+                      placeholder="0.00"
+                    />
+                    {discount > 0 && (
+                      <span className="font-semibold text-orange-600 text-sm">-KSh {discount.toFixed(2)}</span>
+                    )}
                   </div>
-                )}
+                </div>
                 <div className="flex items-center justify-between pt-2 border-t border-border">
                   <span className="text-base font-semibold text-foreground">Total</span>
                   <span className="text-xl font-bold text-foreground">KSh {total.toFixed(2)}</span>
@@ -310,12 +323,23 @@ export const CartSidebar = memo(function CartSidebar({
                   </div>
                 )}
 
-                {discount > 0 && (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Discount</span>
-                    <span className="font-semibold text-orange-600">-KSh {discount.toFixed(2)}</span>
+                <div className="flex items-center justify-between text-sm gap-2">
+                  <span className="text-muted-foreground">Discount</span>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={discount || ''}
+                      onChange={(e) => onDiscountChange?.(parseFloat(e.target.value) || 0)}
+                      className="h-7 w-24 text-right text-sm"
+                      placeholder="0.00"
+                    />
+                    {discount > 0 && (
+                      <span className="font-semibold text-orange-600 text-sm">-KSh {discount.toFixed(2)}</span>
+                    )}
                   </div>
-                )}
+                </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-border">
                   <span className="text-base font-semibold text-foreground">Total</span>

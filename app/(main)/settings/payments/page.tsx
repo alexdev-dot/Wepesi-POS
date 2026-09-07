@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/core/layout/sidebar"
 import { Header } from "@/components/core/layout/header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { CreditCard, Smartphone, DollarSign, Building2, Plus, Edit, Trash2, MoreVertical, CheckCircle, XCircle } from "lucide-react"
+import { CreditCard, Plus, Edit, Trash2, CheckCircle, XCircle } from "lucide-react"
 
 export default function PaymentMethodsPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -32,50 +32,13 @@ export default function PaymentMethodsPage() {
     }
   }
 
-  const paymentMethods = [
+  const paymentProviders = [
     {
       id: 1,
-      name: "Cash",
-      icon: DollarSign,
-      color: "text-green-600",
-      bgColor: "bg-green-100",
-      borderColor: "border-green-200",
-      description: "Physical cash payments",
+      name: "M-Pesa",
+      description: "Safaricom mobile money payments",
       enabled: true,
       isDefault: true,
-    },
-    {
-      id: 2,
-      name: "M-Pesa",
-      icon: Smartphone,
-      color: "text-blue-600",
-      bgColor: "bg-blue-100",
-      borderColor: "border-blue-200",
-      description: "Mobile money payments",
-      enabled: true,
-      isDefault: false,
-    },
-    {
-      id: 3,
-      name: "Card",
-      icon: CreditCard,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
-      borderColor: "border-purple-200",
-      description: "Credit/Debit card payments",
-      enabled: true,
-      isDefault: false,
-    },
-    {
-      id: 4,
-      name: "Bank Transfer",
-      icon: Building2,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100",
-      borderColor: "border-orange-200",
-      description: "Direct bank transfers",
-      enabled: false,
-      isDefault: false,
     },
   ]
 
@@ -119,14 +82,14 @@ export default function PaymentMethodsPage() {
           {/* Main Content */}
           <div className="flex-1 overflow-auto px-4 sm:px-6 pb-6">
             <div className="max-w-7xl mx-auto">
-              {/* Payment Methods Grid */}
+              {/* Payment Providers Grid */}
               <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                {paymentMethods.map((method) => (
+                {paymentProviders.map((provider) => (
                   <div
-                    key={method.id}
-                    className={`rounded-xl border-2 ${method.borderColor} bg-card p-5 shadow-sm hover:shadow-md transition-all duration-200 relative`}
+                    key={provider.id}
+                    className={`rounded-xl border-2 ${provider.enabled ? 'border-teal-200' : 'border-border'} bg-card p-5 shadow-sm hover:shadow-md transition-all duration-200 relative`}
                   >
-                    {method.isDefault && (
+                    {provider.isDefault && (
                       <div className="absolute -top-2 right-4">
                         <span className="bg-teal-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow-sm">
                           Default
@@ -134,8 +97,8 @@ export default function PaymentMethodsPage() {
                       </div>
                     )}
                     <div className="flex items-center justify-between mb-4">
-                      <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${method.bgColor} ${method.color} shadow-sm bg-opacity-30`}>
-                        <method.icon className="h-6 w-6" strokeWidth={2} />
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${provider.enabled ? 'bg-teal-100 text-teal-600' : 'bg-muted text-muted-foreground'} shadow-sm bg-opacity-30`}>
+                        <CreditCard className="h-6 w-6" strokeWidth={2} />
                       </div>
                       <div className="flex items-center gap-1">
                         <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all">
@@ -146,20 +109,20 @@ export default function PaymentMethodsPage() {
                         </button>
                       </div>
                     </div>
-                    <h3 className="text-base font-semibold text-foreground mb-1">{method.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4">{method.description}</p>
+                    <h3 className="text-base font-semibold text-foreground mb-1">{provider.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">{provider.description}</p>
                     <div className="flex items-center justify-between pt-3 border-t border-border">
                       <div className="flex items-center gap-2">
-                        {method.enabled ? (
+                        {provider.enabled ? (
                           <CheckCircle className="h-4 w-4 text-green-600" strokeWidth={2} />
                         ) : (
                           <XCircle className="h-4 w-4 text-muted-foreground" strokeWidth={2} />
                         )}
-                        <span className={`text-xs font-medium ${method.enabled ? "text-green-600" : "text-muted-foreground"}`}>
-                          {method.enabled ? "Enabled" : "Disabled"}
+                        <span className={`text-xs font-medium ${provider.enabled ? "text-green-600" : "text-muted-foreground"}`}>
+                          {provider.enabled ? "Enabled" : "Disabled"}
                         </span>
                       </div>
-                      {!method.isDefault && method.enabled && (
+                      {!provider.isDefault && provider.enabled && (
                         <button className="text-xs text-teal-600 hover:text-teal-700 font-medium">
                           Set Default
                         </button>
@@ -175,13 +138,10 @@ export default function PaymentMethodsPage() {
                 <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-1.5">
-                      Default Payment Method
+                      Default Payment Provider
                     </label>
                     <select className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all">
-                      <option>Cash</option>
                       <option>M-Pesa</option>
-                      <option>Card</option>
-                      <option>Bank Transfer</option>
                     </select>
                   </div>
                   <div>
@@ -260,33 +220,6 @@ export default function PaymentMethodsPage() {
                 </div>
               </div>
 
-              {/* Card Payment Configuration */}
-              <div className="mt-6 rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
-                <h3 className="text-base font-semibold text-foreground mb-4">Card Payment Configuration</h3>
-                <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">
-                      Payment Gateway
-                    </label>
-                    <select className="w-full px-3 py-2.5 text-sm border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all">
-                      <option>Stripe</option>
-                      <option>PayPal</option>
-                      <option>Flutterwave</option>
-                      <option>Interswitch</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">
-                      API Key
-                    </label>
-                    <Input
-                      type="password"
-                      placeholder="Enter API key"
-                      className="h-10 px-3 text-sm border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </main>
