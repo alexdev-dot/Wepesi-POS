@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
 import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
 
 // Rate limiting: Store attempts in memory (in production, use Redis)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 const MAX_ATTEMPTS = 5
 const LOCKOUT_TIME = 15 * 60 * 1000 // 15 minutes
+
+// Session secret for signing tokens (in production, use a proper secret from env)
+const SESSION_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex')
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now()
@@ -142,8 +146,11 @@ export async function POST(request: NextRequest) {
     // Log successful login
     await logAuditLog(supabase, admin.id, 'LOGIN_SUCCESS', 'super_admin', { email }, ip, request.headers.get('user-agent'), true)
 
-    // Create session token (in production, use JWT)
-    const sessionToken = Buffer.from(`${admin.id}:${Date.now()}`).toString('base64')
+    // Create secure session token using HMAC
+    const timestamp = Date.now()
+    const tokenData = `${admin.id}:${timestamp}`
+    const hmac = crypto.createHmac('sha256', SESSION_SECRET).update(tokenData).digest('hex')
+    const sessionToken = `${tokenData}:${hmac}`
 
     // Create response with httpOnly cookie
     const response = NextResponse.json({

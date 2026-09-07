@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { ArrowUpRight, BarChart3, PackagePlus, ShoppingCart } from "lucide-react"
 import { Sidebar } from "@/components/core/layout/sidebar"
@@ -105,7 +105,9 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-screen bg-background font-sans overflow-hidden">
-      <AuthSessionHandler />
+      <Suspense fallback={null}>
+        <AuthSessionHandler />
+      </Suspense>
       <Sidebar
         collapsed={sidebarCollapsed}
         currentPath="/dashboard"

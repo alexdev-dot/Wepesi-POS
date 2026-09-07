@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
 import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
+
+// Session secret for signing tokens (in production, use a proper secret from env)
+const SESSION_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex')
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,12 +18,29 @@ export async function GET(request: NextRequest) {
 
     // Decode and validate session token
     try {
-      const decoded = Buffer.from(sessionToken, 'base64').toString('utf-8')
-      const [adminId, timestamp] = decoded.split(':')
-
-      if (!adminId || !timestamp) {
+      const parts = sessionToken.split(':')
+      if (parts.length !== 3) {
         return NextResponse.json(
           { valid: false, error: 'Invalid session format' },
+          { status: 401 }
+        )
+      }
+
+      const [adminId, timestamp, hmac] = parts
+
+      if (!adminId || !timestamp || !hmac) {
+        return NextResponse.json(
+          { valid: false, error: 'Invalid session format' },
+          { status: 401 }
+        )
+      }
+
+      // Verify HMAC signature
+      const tokenData = `${adminId}:${timestamp}`
+      const expectedHmac = crypto.createHmac('sha256', SESSION_SECRET).update(tokenData).digest('hex')
+      if (hmac !== expectedHmac) {
+        return NextResponse.json(
+          { valid: false, error: 'Invalid session signature' },
           { status: 401 }
         )
       }

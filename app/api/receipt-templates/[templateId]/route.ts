@@ -3,9 +3,10 @@ import { getSupabaseServerClient } from '@/lib/supabase/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: Promise<{ templateId: string }> }
 ) {
   try {
+    const { templateId } = await params
     const supabase = getSupabaseServerClient()
     const userId = request.headers.get('x-user-id')
 
@@ -21,7 +22,7 @@ export async function GET(
       .from('receipt_templates')
       .select('settings')
       .eq('user_id', userId)
-      .eq('template_id', params.templateId)
+      .eq('template_id', templateId)
       .single()
 
     if (error) {
