@@ -13,7 +13,7 @@ CREATE INDEX IF NOT EXISTS idx_sales_business_id_created_at_status ON sales(busi
 
 -- Sale items table indexes
 CREATE INDEX IF NOT EXISTS idx_sale_items_product_id ON sale_items(product_id);
-CREATE INDEX IF NOT EXISTS idx_sale_items_sales_id ON sale_items(sales_id);
+CREATE INDEX IF NOT EXISTS idx_sale_items_sale_id ON sale_items(sale_id);
 
 -- Inventory movements indexes
 CREATE INDEX IF NOT EXISTS idx_inventory_movements_business_id ON inventory_movements(business_id);
