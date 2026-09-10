@@ -776,7 +776,7 @@ export default function LandingPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <Smartphone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-slate-300 text-sm sm:text-base">+254 712345678</span>
+                  <span className="text-slate-300 text-sm sm:text-base">+254 117411547</span>
                 </li>
               </ul>
               

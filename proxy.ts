@@ -71,7 +71,7 @@ async function validateAdminSession(request: NextRequest): Promise<{ valid: bool
   }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Protect admin routes
