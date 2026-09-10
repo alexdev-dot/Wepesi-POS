@@ -306,7 +306,7 @@ export default function PaymentsPage() {
                     <span className="text-sm text-slate-600">{payment.customer}</span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
-                    <span className="text-sm font-medium text-slate-800">Ksh {payment.amount.toLocaleString()}</span>
+                    <span className="text-sm font-medium text-slate-800">Ksh {payment.amount.toLocaleString('en-US')}</span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
                     <div className="flex items-center gap-2">
@@ -362,7 +362,7 @@ export default function PaymentsPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-slate-500">Amount</span>
-                  <span className="text-sm font-medium text-slate-800">Ksh {payment.amount.toLocaleString()}</span>
+                  <span className="text-sm font-medium text-slate-800">Ksh {payment.amount.toLocaleString('en-US')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-slate-500">Method</span>
@@ -436,7 +436,7 @@ export default function PaymentsPage() {
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-sm text-slate-500">Amount</span>
-                  <span className="text-sm font-bold text-slate-800">Ksh {selectedPayment.amount.toLocaleString()}</span>
+                  <span className="text-sm font-bold text-slate-800">Ksh {selectedPayment.amount.toLocaleString('en-US')}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-sm text-slate-500">Method</span>

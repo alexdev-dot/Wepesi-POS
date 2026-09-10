@@ -3,14 +3,9 @@ import { getSupabaseServiceRoleClient } from '@/lib/supabase/server'
 
 export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const businessId = searchParams.get('businessId')
     const userId = request.headers.get('x-user-id')
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 401 }
-      )
-    }
 
     const supabase = getSupabaseServiceRoleClient()
     if (!supabase) {
@@ -20,12 +15,32 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch tenant data for the user
-    const { data: tenant, error } = await supabase
-      .from('tenants')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
+    let tenant
+    let error
+
+    // Support fetching by businessId (for POS) or userId (for dashboard)
+    if (businessId) {
+      const result = await supabase
+        .from('tenants')
+        .select('*')
+        .eq('id', businessId)
+        .single()
+      tenant = result.data
+      error = result.error
+    } else if (userId) {
+      const result = await supabase
+        .from('tenants')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+      tenant = result.data
+      error = result.error
+    } else {
+      return NextResponse.json(
+        { error: 'User ID or Business ID is required' },
+        { status: 400 }
+      )
+    }
 
     if (error || !tenant) {
       return NextResponse.json(
@@ -34,17 +49,22 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch user data
-    const { data: user } = await supabase
-      .from('users')
-      .select('id, email, name, onboarded')
-      .eq('id', userId)
-      .single()
+    // If fetching by userId, also fetch user data
+    if (userId) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('id, email, name, onboarded')
+        .eq('id', userId)
+        .single()
 
-    return NextResponse.json({
-      tenant,
-      user
-    })
+      return NextResponse.json({
+        tenant,
+        user
+      })
+    }
+
+    // For businessId queries, return just tenant info
+    return NextResponse.json({ tenant })
 
   } catch (error) {
     console.error('Tenant fetch error:', error)

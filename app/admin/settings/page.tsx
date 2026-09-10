@@ -298,6 +298,7 @@ export default function SettingsPage() {
                     onChange={(e) => setSettings(prev => ({ ...prev, companyName: e.target.value }))}
                     className="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base"
                     placeholder="Enter company name"
+                    suppressHydrationWarning
                   />
                 </div>
 
@@ -312,6 +313,7 @@ export default function SettingsPage() {
                     onChange={(e) => setSettings(prev => ({ ...prev, tagline: e.target.value }))}
                     className="w-full px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm sm:text-base"
                     placeholder="Enter tagline"
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
@@ -345,6 +347,7 @@ export default function SettingsPage() {
                       value={headerBgColor}
                       onChange={(e) => setHeaderBgColor(e.target.value)}
                       className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -366,6 +369,7 @@ export default function SettingsPage() {
                       value={headerTextColor}
                       onChange={(e) => setHeaderTextColor(e.target.value)}
                       className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -387,6 +391,7 @@ export default function SettingsPage() {
                       value={primaryColor}
                       onChange={(e) => setPrimaryColor(e.target.value)}
                       className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -408,6 +413,7 @@ export default function SettingsPage() {
                       value={secondaryColor}
                       onChange={(e) => setSecondaryColor(e.target.value)}
                       className="flex-1 px-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base uppercase"
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -478,6 +484,7 @@ export default function SettingsPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, website: e.target.value }))}
                       className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
                       placeholder="https://example.com"
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -513,6 +520,7 @@ export default function SettingsPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, supportPhone: e.target.value }))}
                       className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all text-sm sm:text-base"
                       placeholder="+1 (555) 123-4567"
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -636,6 +644,7 @@ export default function SettingsPage() {
                           onChange={(e) => setCredentials({ ...credentials, currentPassword: e.target.value })}
                           className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
                           placeholder="Enter current password"
+                          suppressHydrationWarning
                         />
                         <button
                           type="button"
@@ -655,6 +664,7 @@ export default function SettingsPage() {
                           onChange={(e) => setCredentials({ ...credentials, newPassword: e.target.value })}
                           className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
                           placeholder="Enter new password (min 8 characters)"
+                          suppressHydrationWarning
                         />
                         <button
                           type="button"
@@ -674,6 +684,7 @@ export default function SettingsPage() {
                           onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
                           className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
                           placeholder="Confirm new password"
+                          suppressHydrationWarning
                         />
                         <button
                           type="button"

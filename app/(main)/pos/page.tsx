@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils"
 import { keyboardShortcuts } from "@/lib/pos-data"
 import { useMobile } from "@/lib/hooks/use-mobile"
 import { getBusinessId, type ProductRecord } from "@/lib/supabase/database"
+import { BUSINESS_TYPE_CONFIGS, type POSLayoutConfig } from "@/lib/pos-layout-config"
 
 interface POSProduct {
   id: string
@@ -41,6 +42,8 @@ export default function POSPage() {
   const [showReceiptPopup, setShowReceiptPopup] = useState(false)
   const [products, setProducts] = useState<POSProduct[]>([])
   const [suspendedSales, setSuspendedSales] = useState<any[]>([])
+  const [businessType, setBusinessType] = useState<string>('retail')
+  const [layoutConfig, setLayoutConfig] = useState<POSLayoutConfig>(BUSINESS_TYPE_CONFIGS.retail)
 
   // Load suspended sales from localStorage on mount
   useEffect(() => {
@@ -74,6 +77,21 @@ export default function POSPage() {
     }
 
     void loadProducts()
+  }, [])
+
+  useEffect(() => {
+    const fetchBusinessType = async () => {
+      const businessId = getBusinessId()
+      if (!businessId) return
+
+      const response = await fetch(`/api/tenant?businessId=${encodeURIComponent(businessId)}`)
+      const data = await response.json()
+      if (data.tenant?.business_type) {
+        setBusinessType(data.tenant.business_type)
+        setLayoutConfig(BUSINESS_TYPE_CONFIGS[data.tenant.business_type] || BUSINESS_TYPE_CONFIGS.retail)
+      }
+    }
+    void fetchBusinessType()
   }, [])
 
   // Keyboard shortcuts

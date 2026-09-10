@@ -28,6 +28,17 @@ interface Tenant {
   }
 }
 
+const BUSINESS_TYPE_LABELS: Record<string, string> = {
+  retail: 'Retail Store',
+  supermarket: 'Supermarket',
+  restaurant: 'Restaurant',
+  cafe: 'Cafe/Coffee Shop',
+  hardware: 'Hardware Store',
+  kiosk: 'Self-Service Kiosk',
+  salon: 'Salon/Spa',
+  pharmacy: 'Pharmacy'
+}
+
 export default function TenantsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
@@ -305,6 +316,7 @@ export default function TenantsPage() {
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Business</th>
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Type</th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Plan</th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
                 <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Users</th>
@@ -317,7 +329,7 @@ export default function TenantsPage() {
             <tbody className="divide-y divide-slate-200">
               {filteredTenants.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 sm:px-6 py-8 text-center">
+                  <td colSpan={9} className="px-4 sm:px-6 py-8 text-center">
                     <p className="text-slate-600">No tenants found</p>
                   </td>
                 </tr>
@@ -329,6 +341,9 @@ export default function TenantsPage() {
                         <p className="text-sm font-medium text-slate-800">{tenant.business_name}</p>
                         <p className="text-xs text-slate-500">{tenant.users.email}</p>
                       </div>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4">
+                      <span className="text-sm text-slate-700">{BUSINESS_TYPE_LABELS[tenant.business_type] || tenant.business_type}</span>
                     </td>
                     <td className="px-4 sm:px-6 py-4">
                       {getPlanBadge(tenant.subscription_plan)}
@@ -412,6 +427,10 @@ export default function TenantsPage() {
                 <div className="space-y-2 pt-3 border-t border-slate-100">
                   <div className="flex items-center justify-between text-xs sm:text-sm text-slate-600">
                     <div className="flex items-center gap-4">
+                      <div>
+                        <p className="text-xs text-slate-500">Type</p>
+                        <p className="text-sm font-semibold text-slate-900">{BUSINESS_TYPE_LABELS[tenant.business_type] || tenant.business_type}</p>
+                      </div>
                       <div>
                         <p className="text-xs text-slate-500">Plan</p>
                         {getPlanBadge(tenant.subscription_plan)}

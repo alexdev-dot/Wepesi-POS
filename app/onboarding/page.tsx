@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AuthSessionHandler } from "@/components/auth/auth-session-handler"
+import { BUSINESS_TYPE_SELECTION } from "@/lib/pos-layout-config"
 
 const steps = [
   { title: "Your business", icon: Building2 },
@@ -263,9 +264,37 @@ export default function OnboardingPage() {
 function BusinessStep({ form, updateForm }: { form: OnboardingForm; updateForm: (field: keyof OnboardingForm, value: string | boolean) => void }) {
   return <div className="space-y-6">
     <Field label="Business name" id="businessName"><Input id="businessName" value={form.businessName} onChange={(event) => updateForm("businessName", event.target.value)} placeholder="e.g. Wepesi Market" /></Field>
-    <Field label="Business type" id="businessType"><select id="businessType" value={form.businessType} onChange={(event) => updateForm("businessType", event.target.value)} className="flex h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-[#30B54A]">
-      <option value="retail">Retail store</option><option value="grocery">Grocery store</option><option value="restaurant">Restaurant</option><option value="wholesale">Wholesale</option><option value="other">Other</option>
-    </select></Field>
+    <Field label="Business type" id="businessType">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {BUSINESS_TYPE_SELECTION.map((type) => {
+          const IconComponent = type.icon
+          return (
+            <label
+              key={type.value}
+              className={`cursor-pointer rounded-xl border-2 p-4 transition-colors ${
+                form.businessType === type.value
+                  ? "border-[#30B54A] bg-[#f1fbf3]"
+                  : "border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              <input
+                type="radio"
+                name="businessType"
+                value={type.value}
+                checked={form.businessType === type.value}
+                onChange={(event) => updateForm("businessType", event.target.value)}
+                className="sr-only"
+              />
+              <div className="flex justify-center mb-2">
+                {IconComponent && <IconComponent className="h-8 w-8 text-[#30B54A]" />}
+              </div>
+              <span className="block font-bold text-slate-900 text-sm text-center">{type.title}</span>
+              <span className="mt-1 block text-xs text-slate-500 text-center">{type.description}</span>
+            </label>
+          )
+        })}
+      </div>
+    </Field>
   </div>
 }
 

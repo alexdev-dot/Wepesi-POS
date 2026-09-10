@@ -443,6 +443,7 @@ export default function SubscriptionsPage() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                suppressHydrationWarning
               />
             </div>
 

@@ -110,7 +110,7 @@ const monthlyRevenue = [
 
 export default function RevenuePage() {
   const formatCurrency = (value: number) => {
-    return `Ksh ${value.toLocaleString()}`
+    return `Ksh ${value.toLocaleString('en-US')}`
   }
 
   const maxBars = 8

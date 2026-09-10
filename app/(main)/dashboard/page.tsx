@@ -15,11 +15,13 @@ import { RecentTransactions } from "@/components/domains/dashboard/recent-transa
 import { TopProducts } from "@/components/domains/dashboard/top-products"
 import { LowStockAlerts } from "@/components/domains/dashboard/low-stock-alerts"
 import { BusinessStats } from "@/components/domains/dashboard/business-stats"
+import { BUSINESS_TYPE_CONFIGS } from "@/lib/pos-layout-config"
 
 export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [businessName, setBusinessName] = useState("")
+  const [businessType, setBusinessType] = useState("")
   const [userName, setUserName] = useState("")
   const [dashboardData, setDashboardData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -54,6 +56,7 @@ export default function DashboardPage() {
 
         if (tenantResponse.ok && tenantData.tenant) {
           setBusinessName(tenantData.tenant.business_name)
+          setBusinessType(tenantData.tenant.business_type || 'retail')
           const actualBusinessId = tenantData.tenant.id
 
           // Now fetch dashboard data using the tenant's business_id as query parameter
@@ -96,12 +99,14 @@ export default function DashboardPage() {
     }
   }
 
-  const currentDate = new Date().toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   })
+
+  const businessTypeConfig = BUSINESS_TYPE_CONFIGS[businessType] || BUSINESS_TYPE_CONFIGS.retail
 
   return (
     <div className="flex h-screen bg-background font-sans overflow-hidden">
@@ -126,6 +131,9 @@ export default function DashboardPage() {
                   <p className="mb-2 text-sm font-medium text-[#a8e3b5]">{currentDate}</p>
                   <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Good afternoon, {userName}</h1>
                   <p className="mt-2 max-w-xl text-sm text-white/70 sm:text-base">Here&apos;s what&apos;s happening across {businessName || 'your store'} today.</p>
+                  <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white">
+                    <span className="capitalize">{businessTypeConfig.name}</span>
+                  </div>
                 </div>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
                   <Link href="/pos" className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-[#30B54A] px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#3bc957]"><ShoppingCart className="h-4 w-4" /> New sale</Link>

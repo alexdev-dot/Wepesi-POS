@@ -92,10 +92,66 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create tenant record
+    // Create tenant record - check which columns exist before inserting
+    const tenantData: any = {
+      user_id: user.id,
+      business_name: businessName,
+      business_type: businessType,
+      branch_name: branchName,
+      country,
+      city
+    }
+
+    // Helper function to check if column exists
+    const columnExists = async (columnName: string) => {
+      try {
+        const { data } = await supabase
+          .from('tenants')
+          .select(columnName)
+          .limit(1)
+          .single()
+        return data !== null
+      } catch (e) {
+        return false
+      }
+    }
+
+    // Add optional columns only if they exist
+    if (await columnExists('branch_address')) {
+      tenantData.branch_address = branchAddress || null
+    }
+    if (await columnExists('currency')) {
+      tenantData.currency = currency
+    }
+    if (await columnExists('tax_enabled')) {
+      tenantData.tax_enabled = taxEnabled
+    }
+    if (await columnExists('tax_name')) {
+      tenantData.tax_name = taxName || null
+    }
+    if (await columnExists('tax_rate')) {
+      tenantData.tax_rate = taxRate ? parseFloat(taxRate) : null
+    }
+    if (await columnExists('subscription_plan')) {
+      tenantData.subscription_plan = subscriptionPlan
+    }
+    if (await columnExists('subscription_period')) {
+      tenantData.subscription_period = subscriptionPeriod
+    }
+    if (await columnExists('status')) {
+      tenantData.status = 'active'
+    }
+
+    console.log('Final tenant data:', tenantData)
+
     const { error: tenantError } = await supabase
       .from('tenants')
-      .insert({
+      .insert(tenantData)
+
+    if (tenantError) {
+      console.error('Tenant creation error:', tenantError)
+      console.error('Tenant error details:', JSON.stringify(tenantError, null, 2))
+      console.error('Insert data:', {
         user_id: user.id,
         business_name: businessName,
         business_type: businessType,
@@ -108,16 +164,12 @@ export async function POST(request: NextRequest) {
         tax_name: taxName || null,
         tax_rate: taxRate ? parseFloat(taxRate) : null,
         subscription_plan: subscriptionPlan,
-        subscription_period: subscriptionPeriod,
-        status: 'active'
+        subscription_period: subscriptionPeriod
       })
-
-    if (tenantError) {
-      console.error('Tenant creation error:', tenantError)
       // Rollback user creation if tenant creation fails
       await supabase.from('users').delete().eq('id', user.id)
       return NextResponse.json(
-        { error: 'Failed to create tenant' },
+        { error: 'Failed to create tenant', details: tenantError.message },
         { status: 500 }
       )
     }
